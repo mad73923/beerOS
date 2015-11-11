@@ -54,9 +54,6 @@ ISR(DISPISRVEC, ISR_NAKED){
 					"IN R0, 0x003C ;EIND\n\t"
 					"PUSH R0\n\t"
 				);
-				
-				 
-	// SREG (Statuswort)
 	// Stack
 	// Modus (Running, Waiting, Killed ....)
 	// Prioritaet (je nach Scheduling Verfahren)
@@ -67,19 +64,19 @@ ISR(DISPISRVEC, ISR_NAKED){
 	 
 	// write registers of new thread
 	asm volatile(	"POP R0\n\t"
-					"OUT 0x003C, R0 ;EIND\n\t" 
+					"OUT 0x003C, R0 ;EIND\n\t"
 					"POP R0\n\t"
-					"OUT 0x003B, R0 ;RAMPZ\n\t" 
+					"OUT 0x003B, R0 ;RAMPZ\n\t"
 					"POP R0\n\t"
-					"OUT 0x003A, R0 ;RAMPY\n\t" 
+					"OUT 0x003A, R0 ;RAMPY\n\t"
 					"POP R0\n\t"
-					"OUT 0x0039, R0 ;RAMPX\n\t" 
+					"OUT 0x0039, R0 ;RAMPX\n\t"
 					"POP R0\n\t"
-					"OUT 0x0038, R0 ;RAMPD\n\t" 
+					"OUT 0x0038, R0 ;RAMPD\n\t"
 					"POP R0\n\t"
-					"OUT __SREG__, R0\n\t" 
+					"OUT __SREG__, R0\n\t"
 					"POP R31\n\t"
-					"POP R30\n\t"	
+					"POP R30\n\t"
 					"POP R29\n\t"
 					"POP R28\n\t"
 					"POP R27\n\t"

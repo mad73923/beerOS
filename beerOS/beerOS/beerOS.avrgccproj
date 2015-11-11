@@ -68,10 +68,10 @@
     </ToolchainSettings>
     <MemorySettings>
       <MemorySegments>
-  <InitialStack IsEnabled="0">
-    <Address>0x2000</Address>
-  </InitialStack>
-</MemorySegments>
+        <InitialStack IsEnabled="0">
+          <Address>0x2000</Address>
+        </InitialStack>
+      </MemorySegments>
     </MemorySettings>
     <GenerateHexFile>True</GenerateHexFile>
     <GenerateMapFile>True</GenerateMapFile>
@@ -91,10 +91,22 @@
     <Compile Include="dispatcher.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="dummyTask.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="dummyTask.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="hardware.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="hardware.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="task.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="task.h">
       <SubType>compile</SubType>
     </Compile>
   </ItemGroup>

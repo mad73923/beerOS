@@ -10,6 +10,7 @@
 #define DISPATCHER_H_
 
 #include "hardware.h"
+#include "task.h"
 
 
 #endif /* DISPATCHER_H_ */

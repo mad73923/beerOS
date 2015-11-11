@@ -5,6 +5,14 @@
  *  Author: matweis
  */ 
 
+#include "beerOS.h"
+
+taskControlBlock task1;
+uint8_t task1Stack[512];
+
+taskControlBlock task2;
+uint8_t task2Stack[512];
+
 int main(void)
 {
 	
