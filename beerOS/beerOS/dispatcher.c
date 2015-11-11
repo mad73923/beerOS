@@ -43,7 +43,19 @@ ISR(DISPISRVEC, ISR_NAKED){
 					"PUSH R31\n\t"
 					"IN R0, __SREG__\n\t"
 					"PUSH R0\n\t"
+					"IN R0, 0x0038 ;RAMPD\n\t"
+					"PUSH R0\n\t"
+					"IN R0, 0x0039 ;RAMPX\n\t"
+					"PUSH R0\n\t"
+					"IN R0, 0x003A ;RAMPY\n\t"
+					"PUSH R0\n\t"
+					"IN R0, 0x003B ;RAMPZ\n\t"
+					"PUSH R0\n\t"
+					"IN R0, 0x003C ;EIND\n\t"
+					"PUSH R0\n\t"
 				);
+				
+				 
 	// SREG (Statuswort)
 	// Stack
 	// Modus (Running, Waiting, Killed ....)
@@ -55,6 +67,16 @@ ISR(DISPISRVEC, ISR_NAKED){
 	 
 	// write registers of new thread
 	asm volatile(	"POP R0\n\t"
+					"OUT 0x003C, R0 ;EIND\n\t" 
+					"POP R0\n\t"
+					"OUT 0x003B, R0 ;RAMPZ\n\t" 
+					"POP R0\n\t"
+					"OUT 0x003A, R0 ;RAMPY\n\t" 
+					"POP R0\n\t"
+					"OUT 0x0039, R0 ;RAMPX\n\t" 
+					"POP R0\n\t"
+					"OUT 0x0038, R0 ;RAMPD\n\t" 
+					"POP R0\n\t"
 					"OUT __SREG__, R0\n\t" 
 					"POP R31\n\t"
 					"POP R30\n\t"	
