@@ -7,17 +7,17 @@
 
 #include "beerOS.h"
 
-taskControlBlock task1;
-uint8_t task1Stack[512];
-
-taskControlBlock task2;
-uint8_t task2Stack[512];
+uint8_t task1Stack[64];
+uint8_t task2Stack[64];
+taskControlBlock tcb[4];
 
 int main(void)
 {
 	
-	initHardware();
 	
+	initTask(&tcb[0], 1, task1Stack, dummyTask);
+	initTask(&tcb[1], 2, task2Stack, dummyTask);
+	initHardware();	
 	
     while(1)
     {

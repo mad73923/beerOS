@@ -13,11 +13,9 @@
 
 typedef volatile struct taskControlBlock{
 	volatile uint8_t prio;
-	volatile uint8_t* stackP;
-	
-	
+	volatile uint8_t* stack;	
 }taskControlBlock;
 
-void initTask(taskControlBlock* cb, uint8_t prio, uint8_t* stackP, void* taskFunction);
+void initTask(taskControlBlock* cb, uint8_t prio, uint8_t* stack, void* taskFunction);
 
 #endif /* TASK_H_ */
