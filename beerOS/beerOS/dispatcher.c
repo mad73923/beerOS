@@ -48,8 +48,6 @@ ISR(DISPISRVEC, ISR_NAKED){
 					"PUSH R0\n\t"
 					"IN R0, 0x003C ;EIND\n\t"
 					"PUSH R0\n\t"
-					"IN R0, __SP_H__\n\t"
-					"IN R1, __SP_L__\n\t"
 				);
 				
 	

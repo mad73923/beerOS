@@ -15,10 +15,10 @@ int main(void)
 {
 	
 	
-	initTask(&tcb[0], 1, task1Stack, dummyTask);
-	initTask(&tcb[1], 2, task2Stack, dummyTask);
+	initTask(&tcb[0], 1, task1Stack, dummyTask, 64);
+	initTask(&tcb[1], 2, task2Stack, dummyTask, 64);
 	initHardware();
-	SP = &task1Stack[60];
+	SP = &tcb[0].stackBeginn[tcb[0].stackSize-4];
 
 	asm volatile ("ret");
 	
