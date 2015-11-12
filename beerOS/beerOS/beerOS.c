@@ -17,7 +17,10 @@ int main(void)
 	
 	initTask(&tcb[0], 1, task1Stack, dummyTask);
 	initTask(&tcb[1], 2, task2Stack, dummyTask);
-	initHardware();	
+	initHardware();
+	SP = &task1Stack[60];
+
+	asm volatile ("ret");
 	
     while(1)
     {
