@@ -19,7 +19,6 @@ void initTask(taskControlBlock* cb, uint8_t prio, uint8_t* stack, void* taskFunc
 	cb->stackSize = stackSize;
 	cb->stackBeginn = stack;
 	cb->stack = stack + (stackSize-32-2-3-1); // stacksize-32 reg - sreg - eind - 3x progcnt - index 0
-	//cb->stack = stack + 26;
 	stack[stackSize-1] = ptr.u8[0]; 
 	stack[stackSize-2] = ptr.u8[1];
 	stack[stackSize-3] = ptr.u8[2];
