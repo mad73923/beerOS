@@ -52,17 +52,18 @@ ISR(DISPISRVEC, ISR_NAKED){
 				
 	
 	
-	// Stack
 	// Modus (Running, Waiting, Killed ....)
 	// Prioritaet (je nach Scheduling Verfahren)
+	
+	//rescue stack pointer
 	tcb[task].stack = SP;
-	task = (task + 1) % 2;
-	SP = tcb[task].stack;
 	// call scheduler
+	task = (task + 1) % 2;
+	// reassign stackpointer
+	SP = tcb[task].stack;
 	
 	asm volatile ("nop");
 	
-	// reassign stackpointer
 	 
 	// write registers of new thread
 	asm volatile(	"POP R0\n\t"
