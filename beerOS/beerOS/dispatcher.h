@@ -10,6 +10,8 @@
 #define DISPATCHER_H_
 
 #include "hardware.h"
+#include "task.h"
 
+extern taskControlBlock tcb[4];
 
 #endif /* DISPATCHER_H_ */

@@ -32,7 +32,7 @@ void setSystemClock32MHZ(){
 void initDispatcherTimer(){
 	TCF0.CTRLB = TC_WGMODE_NORMAL_gc;
 	// adapt period here
-	TCF0.PER = 0xFF;
+	TCF0.PER = 0xFFF;
 	TCF0.INTCTRLA = TC_OVFINTLVL_HI_gc;
 }
 

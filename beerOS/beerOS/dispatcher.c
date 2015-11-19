@@ -7,10 +7,12 @@
 
 #include "dispatcher.h"
 
+uint8_t task = 0;
+
 ISR(DISPISRVEC, ISR_NAKED){
 	
-	asm volatile(
-					"PUSH R0\n\t"
+	// rescue registers	
+	asm volatile(	"PUSH R0\n\t"
 					"PUSH R1\n\t"
 					"PUSH R2\n\t"
 					"PUSH R3\n\t"
@@ -42,22 +44,34 @@ ISR(DISPISRVEC, ISR_NAKED){
 					"PUSH R29\n\t"
 					"PUSH R30\n\t"
 					"PUSH R31\n\t"
+					"IN R0, __SREG__\n\t"
+					"PUSH R0\n\t"
+					"IN R0, 0x003C ;EIND\n\t"
+					"PUSH R0\n\t"
 				);
-	// rescue registers
-	// Alle Register
-	// SREG (Statuswort)
-	// Stack
+				
+	
+	
 	// Modus (Running, Waiting, Killed ....)
 	// Prioritaet (je nach Scheduling Verfahren)
 	
+	//rescue stack pointer
+	tcb[task].stack = SP;
 	// call scheduler
-	
+	task = (task + 1) % 2;
 	// reassign stackpointer
+	SP = tcb[task].stack;
+	
+	asm volatile ("nop");
+	
 	 
 	// write registers of new thread
-	asm volatile(
+	asm volatile(	"POP R0\n\t"
+					"OUT 0x003C, R0 ;EIND\n\t"
+					"POP R0\n\t"
+					"OUT __SREG__, R0\n\t"
 					"POP R31\n\t"
-					"POP R30\n\t"	
+					"POP R30\n\t"
 					"POP R29\n\t"
 					"POP R28\n\t"
 					"POP R27\n\t"
@@ -89,6 +103,7 @@ ISR(DISPISRVEC, ISR_NAKED){
 					"POP R1\n\t"
 					"POP R0\n\t"					
 				);
+	enableInterrupts();
 	asm volatile ("nop");
 	asm volatile ("reti");
 }
