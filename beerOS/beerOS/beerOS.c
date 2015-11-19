@@ -14,8 +14,8 @@ int main(void)
 {
 	
 	
-	initTask(&tcb[0], 1, task1Stack, dummyTask, 128);
-	initTask(&tcb[1], 2, task2Stack, dummyTask, 128);
+	initTask(1, task1Stack, dummyTask, 128);
+	initTask(2, task2Stack, dummyTask, 128);
 	initHardware();
 	
 	//set stack pointer of starting task next to taskaddress

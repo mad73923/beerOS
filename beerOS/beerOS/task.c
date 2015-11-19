@@ -3,31 +3,32 @@
 uint8_t numberOfTasks = 0;
 // 32 reg - sreg - eind - 3x progcnt - index 0
 const uint8_t numberOfRegister = 32-2-3-1; 
-
+taskControlBlock tcb[4];
+uint8_t maxNumberOfTasks = 4;
 typedef union {
 	uint32_t u24;
 	uint8_t u8[4];
-} ByteAccesUnion;
+} ByteAccessUnion;
 
 void initTaskControlBlock(uint8_t prio, uint8_t* stack, uint32_t stackSize);
-void placeStartAdressOnStack(uint8_t* stack, void* taskFunction);
+void placeStartAdressOnStack(uint8_t* stack, void* taskFunction, uint32_t stackSize);
 
 void initTask(uint8_t prio, uint8_t* stack, void* taskFunction, uint32_t stackSize){
-	initTaskControlBlock(prio, stack, stacksize);
-	placeStartAdressOnStack(stack, taskFunction);	
+	initTaskControlBlock(prio, stack, stackSize);
+	placeStartAdressOnStack(stack, taskFunction, stackSize);	
 }
 
 void initTaskControlBlock(uint8_t prio, uint8_t* stack, uint32_t stackSize){
 	taskControlBlock cb = tcb[numberOfTasks];
 	numberOfTasks++;
 	
-	cb->prio = prio;
-	cb->stackSize = stackSize;
-	cb->stackBeginn = stack;
-	cb->stack = stack + (stackSize - numberOfRegister); 
+	cb.prio = prio;
+	cb.stackSize = stackSize;
+	cb.stackBeginn = stack;
+	cb.stack = stack + (stackSize - numberOfRegister); 
 }
 
-void placeStartAdressOnStack(uint8_t* stack, void* taskFunction){
+void placeStartAdressOnStack(uint8_t* stack, void* taskFunction, uint32_t stackSize){
 	ByteAccessUnion byteAccessUnion;
 	byteAccessUnion.u24 = (uint32_t) taskFunction;
 	
