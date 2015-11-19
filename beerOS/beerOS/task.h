@@ -11,11 +11,15 @@
 
 #include "hardware.h"
 
+typedef enum {READY, RUNNING, WAITING, KILLED} taskstate;
+
 typedef volatile struct taskControlBlock{
 	volatile uint8_t prio;
 	volatile uint8_t* stack;
 	volatile uint8_t* stackBeginn;
 	volatile uint32_t stackSize;
+	
+	volatile taskstate state;
 }taskControlBlock;
 
 void initTask(taskControlBlock* cb, uint8_t prio, uint8_t* stack, void* taskFunction, uint32_t stackSize);
