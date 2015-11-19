@@ -20,6 +20,8 @@ typedef volatile struct taskControlBlock{
 	volatile uint32_t stackSize;
 	
 	volatile taskstate state;
+	
+	volatile taskControlBlock semaNextWaiting;
 }taskControlBlock;
 
 void initTask(taskControlBlock* cb, uint8_t prio, uint8_t* stack, void* taskFunction, uint32_t stackSize);
