@@ -21,6 +21,7 @@ int main(void)
 	
 	//set stack pointer of starting task next to taskaddress
 	SP = &tcb[0].stackBeginn[tcb[0].stackSize-4];
+	tcb[0].state = RUNNING;
 	//start task
 	asm volatile ("ret");
 	

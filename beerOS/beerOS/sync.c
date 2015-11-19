@@ -14,6 +14,3 @@ void enterCriticalSection(){
 void leaveCriticalSection(){
 	enableInterrupts();
 }
-
-
-void leaveCriticalSection();

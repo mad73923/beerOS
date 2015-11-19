@@ -24,4 +24,5 @@ void initTask(taskControlBlock* cb, uint8_t prio, uint8_t* stack, void* taskFunc
 	stack[stackSize-2] = ptr.u8[1];
 	stack[stackSize-3] = ptr.u8[2];
 	
+	cb->state = READY;
 }

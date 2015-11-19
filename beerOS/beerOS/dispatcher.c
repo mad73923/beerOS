@@ -57,10 +57,14 @@ ISR(DISPISRVEC, ISR_NAKED){
 	
 	//rescue stack pointer
 	tcb[task].stack = SP;
+	// set task state
+	tcb[task].state = READY;
 	// call scheduler
 	task = (task + 1) % 2;
 	// reassign stackpointer
 	SP = tcb[task].stack;
+	// set task state
+	tcb[task].state = RUNNING;
 	
 	asm volatile ("nop");
 	
