@@ -9,7 +9,6 @@
 
 uint8_t task1Stack[128];
 uint8_t task2Stack[128];
-taskControlBlock tcb[4];
 
 int main(void)
 {

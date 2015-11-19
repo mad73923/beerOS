@@ -18,6 +18,8 @@ typedef volatile struct taskControlBlock{
 	volatile uint32_t stackSize;
 }taskControlBlock;
 
-void initTask(taskControlBlock* cb, uint8_t prio, uint8_t* stack, void* taskFunction, uint32_t stackSize);
+void initTask(uint8_t prio, uint8_t* stack, void* taskFunction, uint32_t stackSize);
+uint8_t maxNumberOfTasks = 4;
+taskControlBlock tcb[maxNumberOfTasks];
 
 #endif /* TASK_H_ */
