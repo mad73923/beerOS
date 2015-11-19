@@ -19,13 +19,13 @@ void initTask(uint8_t prio, uint8_t* stack, void* taskFunction, uint32_t stackSi
 }
 
 void initTaskControlBlock(uint8_t prio, uint8_t* stack, uint32_t stackSize){
-	taskControlBlock cb = tcb[numberOfTasks];
+	taskControlBlock *cb = &tcb[numberOfTasks];
 	numberOfTasks++;
 	
-	cb.prio = prio;
-	cb.stackSize = stackSize;
-	cb.stackBeginn = stack;
-	cb.stack = stack + (stackSize - numberOfRegister); 
+	cb->prio = prio;
+	cb->stackSize = stackSize;
+	cb->stackBeginn = stack;
+	cb->stack = stack + (stackSize - numberOfRegister); 
 }
 
 void placeStartAdressOnStack(uint8_t* stack, void* taskFunction, uint32_t stackSize){
