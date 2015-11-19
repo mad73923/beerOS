@@ -18,7 +18,6 @@ typedef volatile struct taskControlBlock{
 	volatile uint8_t* stack;
 	volatile uint8_t* stackBeginn;
 	volatile uint32_t stackSize;
-	
 	volatile taskstate state;
 }taskControlBlock;
 
