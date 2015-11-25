@@ -11,6 +11,9 @@
 
 #include "hardware.h"
 #include "task.h"
+#include "beerOS.h"
+
+extern taskControlBlock tcb[4]; 
 
 typedef volatile struct semaphore{
 	volatile uint16_t semaCnt;
@@ -22,7 +25,7 @@ void enterCriticalSection();
 void leaveCriticalSection();
 
 void initSemaphore(semaphore* sema, uint16_t cntInit);
-void waitSemaphore(semaphore* sema, taskControlBlock* task);
+void waitSemaphore(semaphore* sema);
 void releaseSemaphore(semaphore* sema);
 
 void yieldTask();

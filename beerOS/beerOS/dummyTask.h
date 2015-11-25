@@ -14,6 +14,5 @@
 void dummyTask();
 
 extern uint8_t task;
-extern taskControlBlock tcb[4];
 
 #endif /* DUMMYTASK_H_ */

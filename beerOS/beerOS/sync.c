@@ -20,10 +20,11 @@ void leaveCriticalSection(){
 void initSemaphore(semaphore* sema, uint16_t cntInit){
 	sema->semaCnt = cntInit;	
 }
-void waitSemaphore(semaphore* sema, taskControlBlock* task){
+
+void waitSemaphore(semaphore* sema){
 	enterCriticalSection();
 	if(sema->semaCnt == 0){
-		queueWaitingTask(sema->firstWaiting, task);		
+		queueWaitingTask(sema->firstWaiting, &tcb[task]);
 	}
 	while(sema->semaCnt == 0){
 		leaveCriticalSection();
