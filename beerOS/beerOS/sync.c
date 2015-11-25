@@ -8,15 +8,6 @@
 #include "sync.h"
 
 
-void enterCriticalSection(){
-	disableInterrupts();
-}
-
-void leaveCriticalSection(){
-	enableInterrupts();
-}
-
-
 void initSemaphore(semaphore* sema, uint16_t cntInit){
 	sema->semaCnt = cntInit;	
 }
@@ -25,11 +16,11 @@ void waitSemaphore(semaphore* sema){
 	enterCriticalSection();
 	if(sema->semaCnt == 0){
 		queueWaitingTask(sema->firstWaiting, &tcb[task]);
-	}
-	while(sema->semaCnt == 0){
-		leaveCriticalSection();
-		yieldTask();
-		enterCriticalSection();
+		while(sema->semaCnt == 0){
+			leaveCriticalSection();
+			yieldTask();
+			enterCriticalSection();
+		}
 	}
 	sema->semaCnt --;
 	leaveCriticalSection();
@@ -37,8 +28,21 @@ void waitSemaphore(semaphore* sema){
 void releaseSemaphore(semaphore* sema){
 	enterCriticalSection();
 	sema->semaCnt ++;
+	wakeupLinkedTasks(sema->firstWaiting);	
 	leaveCriticalSection();
-	wakeupLinkedTasks(sema->firstWaiting);
+}
+
+void waitSignal(signal* sig){
+	enterCriticalSection();
+	queueWaitingTask(sig->firstWaiting, &tcb[task]);
+	leaveCriticalSection();
+	yieldTask();
+}
+
+void sendSignal(signal* sig){
+	enterCriticalSection();
+	wakeupLinkedTasks(sig->firstWaiting);
+	leaveCriticalSection();
 }
 
 void yieldTask(){

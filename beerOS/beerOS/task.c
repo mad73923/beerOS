@@ -41,4 +41,5 @@ void queueWaitingTask(taskControlBlock* firstTask, taskControlBlock* newTask){
 	while(firstTask->semaNextWaiting != NULL)
 		firstTask = firstTask->semaNextWaiting;
 	firstTask->semaNextWaiting = newTask;
+	newTask->state = WAITING;
 }

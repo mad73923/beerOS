@@ -18,11 +18,19 @@
 
 #define DISPISRVEC TCF0_OVF_vect
 
+static inline void enableInterrupts(){
+	PMIC.CTRL = PMIC_HILVLEN_bm | PMIC_MEDLVLEN_bm | PMIC_LOLVLEN_bm;
+	sei();
+}
+
+static inline void disableInterrupts(){
+	cli();
+}
 
 #endif // __AVR_ATxmega128A1__
 
 void initHardware();
-void enableInterrupts();
-void disableInterrupts();
+
+
 
 #endif /* HARDWARE_H_ */

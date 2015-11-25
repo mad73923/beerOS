@@ -15,18 +15,31 @@
 
 extern taskControlBlock tcb[4]; 
 
-typedef volatile struct semaphore{
+typedef volatile struct{
 	volatile uint16_t semaCnt;
 	volatile taskControlBlock* firstWaiting;
 }semaphore;
 
+typedef volatile struct{
+	volatile taskControlBlock* firstWaiting;
+}signal;
 
-void enterCriticalSection();
-void leaveCriticalSection();
+
+static inline void enterCriticalSection(){
+	disableInterrupts();
+}
+
+static inline void leaveCriticalSection(){
+	enableInterrupts();
+}
 
 void initSemaphore(semaphore* sema, uint16_t cntInit);
 void waitSemaphore(semaphore* sema);
 void releaseSemaphore(semaphore* sema);
+
+void waitSignal(signal* sig);
+
+void sendSignal(signal* sig);
 
 void yieldTask();
 
