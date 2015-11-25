@@ -28,3 +28,11 @@ void initTask(taskControlBlock* cb, uint8_t prio, uint8_t* stack, void* taskFunc
 	
 	cb->semaNextWaiting = NULL;
 }
+
+void wakeupLinkedTasks(taskControlBlock* cb){
+	cb->state = READY;
+	if(cb->semaNextWaiting != NULL){
+		wakeupLinkedTasks(cb->semaNextWaiting);
+		cb->semaNextWaiting = NULL;
+	}
+}

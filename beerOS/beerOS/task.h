@@ -13,7 +13,7 @@
 
 typedef enum {READY, RUNNING, WAITING, KILLED} taskstate;
 
-typedef volatile struct taskControlBlock{
+typedef volatile struct strucTCB{
 	volatile uint8_t prio;
 	volatile uint8_t* stack;
 	volatile uint8_t* stackBeginn;
@@ -21,9 +21,11 @@ typedef volatile struct taskControlBlock{
 	
 	volatile taskstate state;
 	
-	volatile taskControlBlock semaNextWaiting;
+	volatile struct strucTCB* semaNextWaiting;
 }taskControlBlock;
 
 void initTask(taskControlBlock* cb, uint8_t prio, uint8_t* stack, void* taskFunction, uint32_t stackSize);
+
+void wakeupLinkedTasks(taskControlBlock* cb);
 
 #endif /* TASK_H_ */

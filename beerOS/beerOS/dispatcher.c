@@ -68,7 +68,6 @@ ISR(DISPISRVEC, ISR_NAKED){
 	
 	asm volatile ("nop");
 	
-	 
 	// write registers of new thread
 	asm volatile(	"POP R0\n\t"
 					"OUT 0x003C, R0 ;EIND\n\t"
@@ -107,7 +106,8 @@ ISR(DISPISRVEC, ISR_NAKED){
 					"POP R1\n\t"
 					"POP R0\n\t"					
 				);
-	enableInterrupts();
+	
+	sei();
 	asm volatile ("nop");
 	asm volatile ("reti");
 }

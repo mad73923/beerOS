@@ -10,6 +10,7 @@
 #define SYNC_H_
 
 #include "hardware.h"
+#include "task.h"
 
 typedef volatile struct semaphore{
 	volatile uint16_t semaCnt;
