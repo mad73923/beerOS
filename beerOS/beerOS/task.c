@@ -36,3 +36,9 @@ void wakeupLinkedTasks(taskControlBlock* cb){
 		cb->semaNextWaiting = NULL;
 	}
 }
+
+void queueWaitingTask(taskControlBlock* firstTask, taskControlBlock* newTask){
+	while(firstTask->semaNextWaiting != NULL)
+		firstTask = firstTask->semaNextWaiting;
+	firstTask->semaNextWaiting = newTask;
+}

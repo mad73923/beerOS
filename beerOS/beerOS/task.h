@@ -27,5 +27,6 @@ typedef volatile struct strucTCB{
 void initTask(taskControlBlock* cb, uint8_t prio, uint8_t* stack, void* taskFunction, uint32_t stackSize);
 
 void wakeupLinkedTasks(taskControlBlock* cb);
+void queueWaitingTask(taskControlBlock* firstTask, taskControlBlock* newTask);
 
 #endif /* TASK_H_ */

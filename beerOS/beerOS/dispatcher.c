@@ -59,11 +59,15 @@ ISR(DISPISRVEC, ISR_NAKED){
 	tcb[task].stack = SP;
 	// set task state
 	// if state = waiting, dont change!	
-	if(tcb[task].state = RUNNING){
+	if(tcb[task].state == RUNNING){
 		tcb[task].state = READY;		
 	}
+	
 	// call scheduler
-	task = (task + 1) % 2;
+	//do {
+		task = (task + 1) % 2;
+	//} while (tcb[task].state == WAITING);
+	
 	// reassign stackpointer
 	SP = tcb[task].stack;
 	// set task state

@@ -22,8 +22,10 @@ void initSemaphore(semaphore* sema, uint16_t cntInit){
 }
 void waitSemaphore(semaphore* sema, taskControlBlock* task){
 	enterCriticalSection();
-	while(sema->semaCnt = 0){
-		task->state = WAITING;
+	if(sema->semaCnt == 0){
+		queueWaitingTask(sema->firstWaiting, task);		
+	}
+	while(sema->semaCnt == 0){
 		leaveCriticalSection();
 		yieldTask();
 		enterCriticalSection();
