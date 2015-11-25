@@ -15,8 +15,6 @@
 
 #include "dummyTask.h"
 
-extern taskControlBlock tcb[4]; 
-
 
 
 #endif /* BEEROS_H_ */

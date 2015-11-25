@@ -7,6 +7,7 @@
 
 #include "sync.h"
 
+
 void enterCriticalSection(){
 	disableInterrupts();
 }

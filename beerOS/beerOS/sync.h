@@ -25,4 +25,6 @@ void initSemaphore(semaphore* sema, uint16_t cntInit);
 void waitSemaphore(semaphore* sema, taskControlBlock* task);
 void releaseSemaphore(semaphore* sema);
 
+void yieldTask();
+
 #endif /* SYNC_H_ */
