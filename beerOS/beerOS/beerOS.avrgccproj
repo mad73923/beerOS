@@ -103,6 +103,18 @@
     <Compile Include="hardware.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="linked_list.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="linked_list.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="scheduler.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="scheduler.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="sync.c">
       <SubType>compile</SubType>
     </Compile>

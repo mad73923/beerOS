@@ -9,14 +9,13 @@
 
 uint8_t task1Stack[128];
 uint8_t task2Stack[128];
-taskControlBlock tcb[4];
 
 int main(void)
 {
 	
 	
-	initTask(&tcb[0], 1, task1Stack, dummyTaskSignalTest, 128);
-	initTask(&tcb[1], 2, task2Stack, dummyTaskSignalTest, 128);
+	initTask(1, task1Stack, dummyTaskSignalTest, 128);
+	initTask(2, task2Stack, dummyTaskSignalTest, 128);
 	initHardware();
 	
 	startBeerOS(&tcb[0]);

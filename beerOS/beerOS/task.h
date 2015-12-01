@@ -24,7 +24,8 @@ typedef volatile struct strucTCB{
 	volatile struct strucTCB* semaNextWaiting;
 }taskControlBlock;
 
-void initTask(taskControlBlock* cb, uint8_t prio, uint8_t* stack, void* taskFunction, uint32_t stackSize);
+void initTask(uint8_t prio, uint8_t* stack, void* taskFunction, uint32_t stackSize);
+extern taskControlBlock tcb[4];
 
 void wakeupLinkedTasks(taskControlBlock* cb);
 void queueWaitingTask(taskControlBlock* firstTask, taskControlBlock* newTask);
