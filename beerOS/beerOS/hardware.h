@@ -18,12 +18,11 @@
 
 #define DISPISRVEC TCF0_OVF_vect
 
-static inline void enableInterrupts(){
-	PMIC.CTRL = PMIC_HILVLEN_bm | PMIC_MEDLVLEN_bm | PMIC_LOLVLEN_bm;
+static void __attribute__((always_inline)) enableInterrupts(){
 	sei();
 }
 
-static inline void disableInterrupts(){
+static void __attribute__((always_inline)) disableInterrupts(){
 	cli();
 }
 

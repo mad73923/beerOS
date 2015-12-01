@@ -25,11 +25,11 @@ typedef volatile struct{
 }signal;
 
 
-static inline void enterCriticalSection(){
+static void __attribute__((always_inline)) enterCriticalSection(){
 	disableInterrupts();
 }
 
-static inline void leaveCriticalSection(){
+static void __attribute__((always_inline)) leaveCriticalSection(){
 	enableInterrupts();
 }
 
