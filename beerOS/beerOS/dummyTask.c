@@ -10,7 +10,9 @@
 volatile semaphore dummySema;
 volatile semaphore dummySema2;
 
-void dummyTask(){
+volatile signal signal1;
+
+void dummyTaskSemaTest(){
 	
 	if(task == 0){
 		initSemaphore(&dummySema, 1);
@@ -41,4 +43,23 @@ void dummyTask(){
 		}
 	}
 	
+}
+
+void dummyTaskSignalTest(){
+	if(task == 0){
+		initSignal(&signal1);
+	}
+
+	while(1){
+		int i = 0;
+		if(task == 0){
+			while(i<100){
+				i++;
+			}
+			sendSignal(&signal1);
+		}else{
+			waitSignal(&signal1);
+			i++;
+		}
+	}
 }

@@ -15,8 +15,8 @@ int main(void)
 {
 	
 	
-	initTask(&tcb[0], 1, task1Stack, dummyTask, 128);
-	initTask(&tcb[1], 2, task2Stack, dummyTask, 128);
+	initTask(&tcb[0], 1, task1Stack, dummyTaskSignalTest, 128);
+	initTask(&tcb[1], 2, task2Stack, dummyTaskSignalTest, 128);
 	initHardware();
 	
 	startBeerOS(&tcb[0]);

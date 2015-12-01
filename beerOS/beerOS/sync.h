@@ -37,8 +37,8 @@ void initSemaphore(semaphore* sema, uint16_t cntInit);
 void waitSemaphore(semaphore* sema);
 void releaseSemaphore(semaphore* sema);
 
+void initSignal(signal* sig);
 void waitSignal(signal* sig);
-
 void sendSignal(signal* sig);
 
 void yieldTask();

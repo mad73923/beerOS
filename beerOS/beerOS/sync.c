@@ -9,7 +9,8 @@
 
 
 void initSemaphore(semaphore* sema, uint16_t cntInit){
-	sema->semaCnt = cntInit;	
+	sema->semaCnt = cntInit;
+	sema->firstWaiting = NULL;
 }
 
 void waitSemaphore(semaphore* sema){
@@ -30,6 +31,10 @@ void releaseSemaphore(semaphore* sema){
 	sema->semaCnt ++;
 	wakeupLinkedTasks(sema->firstWaiting);	
 	leaveCriticalSection();
+}
+
+void initSignal(signal* sig){
+	sig->firstWaiting = NULL;
 }
 
 void waitSignal(signal* sig){

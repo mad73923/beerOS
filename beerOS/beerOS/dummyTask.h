@@ -11,7 +11,9 @@
 
 #include "sync.h"
 
-void dummyTask();
+void dummyTaskSemaTest();
+void dummyTaskSignalTest();
+
 
 extern uint8_t task;
 
