@@ -19,14 +19,18 @@ int main(void)
 	initTask(&tcb[1], 2, task2Stack, dummyTask, 128);
 	initHardware();
 	
-	//set stack pointer of starting task next to taskaddress
-	SP = &tcb[0].stackBeginn[tcb[0].stackSize-4];
-	tcb[0].state = RUNNING;
-	//start task
-	asm volatile ("ret");
+	startBeerOS(&tcb[0]);
 	
     while(1)
     {
         //TODO:: Please write your application code 
     }
+}
+
+void startBeerOS(taskControlBlock* firstTask){
+	//set stack pointer of starting task next to taskaddress
+	SP = firstTask->stackBeginn+firstTask->stackSize-4;
+	firstTask->state = RUNNING;
+	//start task
+	asm volatile ("ret");
 }
