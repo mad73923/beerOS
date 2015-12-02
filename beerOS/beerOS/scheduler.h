@@ -6,8 +6,6 @@
 
 #define DISPISRVEC TCF0_OVF_vect
 
-#endif // __AVR_ATxmega128A1__
-
 void scheduleNextTask();
 
 #endif /* SCHEDULER_H_ */
