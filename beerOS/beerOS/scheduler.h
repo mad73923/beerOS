@@ -4,6 +4,9 @@
 
 #include "beerOS.h"
 
+
 void scheduleNextTask();
+
+void idleTask();
 
 #endif /* SCHEDULER_H_ */

@@ -12,6 +12,7 @@
 #include "hardware.h"
 #include "dispatcher.h"
 #include "task.h"
+#include "scheduler.h"
 
 #include "dummyTask.h"
 

@@ -64,9 +64,7 @@ ISR(DISPISRVEC, ISR_NAKED){
 	}
 	
 	// call scheduler
-	//do {
-		task = (task + 1) % 2;
-	//} while (tcb[task].state == WAITING);
+	scheduleNextTask();
 	
 	// reassign stackpointer
 	SP = tcb[task].stack;
