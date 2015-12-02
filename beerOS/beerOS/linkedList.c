@@ -17,6 +17,10 @@ uint8_t allocMem(ListItem** listItem){
 	return 0;
 }
 
+void freeMem(ListItem* listItem){
+	listItem->this = 0x0;
+}
+
 uint8_t init_linkedList(LinkedList *linkedList){
 	ListItem* listItem;
 	if(allocMem(&listItem)){
@@ -66,7 +70,10 @@ void remove_linkedList(LinkedList *linkedList){
 }
 
 void removeAt_linkedList(LinkedList *linkedList, uint8_t index){
-	//linkedList->
+	get_linkedList(linkedList, index - 1, 0x0);
+	ListItem *toRemove = linkedList->current->next;
+	linkedList->current->next = toRemove->next;
+	freeMem(toRemove);
 }
 
 //uint8_t next_linkedList(LinkedList *linkedList){
