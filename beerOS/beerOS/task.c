@@ -9,7 +9,7 @@
 
 uint8_t numberOfTasks = 0;
 // 32 reg - sreg - eind - 3x progcnt - index 0
-const uint8_t numberOfRegister = 32-2-3-1; 
+const uint8_t numberOfRegister = 32+2+3+1;
 taskControlBlock tcb[4];
 uint8_t maxNumberOfTasks = 4;
 typedef union {

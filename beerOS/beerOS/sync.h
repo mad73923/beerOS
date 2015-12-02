@@ -16,7 +16,7 @@
 extern taskControlBlock tcb[4]; 
 
 typedef volatile struct{
-	volatile uint16_t semaCnt;
+	volatile int16_t semaCnt;
 	volatile taskControlBlock* firstWaiting;
 }semaphore;
 
