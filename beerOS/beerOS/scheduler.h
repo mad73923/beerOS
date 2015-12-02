@@ -4,6 +4,7 @@
 
 #include "beerOS.h"
 
+extern uint8_t numberOfTasks;
 
 void scheduleNextTask();
 

@@ -15,8 +15,8 @@ int main(void)
 {
 	
 	
-	initTask(1, task1Stack, dummyTaskSemaTest, 128);
-	initTask(1, task2Stack, dummyTaskSemaTest, 128);
+	initTask(1, task1Stack, dummyTaskSignalTest, 128);
+	initTask(1, task2Stack, dummyTaskSignalTest, 128);
 	initTask(1, idleTaskStack, idleTask, 128);
 	initHardware();
 	

@@ -3,7 +3,7 @@
 
 void scheduleNextTask(){
 	do{
-		task = (task + 1) % 2;
+		task = (task + 1) % numberOfTasks;
 	}while (tcb[task].state == WAITING);
 }
 
