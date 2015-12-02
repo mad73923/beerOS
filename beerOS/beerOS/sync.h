@@ -10,10 +10,37 @@
 #define SYNC_H_
 
 #include "hardware.h"
+#include "task.h"
+#include "beerOS.h"
 
-void enterCriticalSection();
-void leaveCriticalSection();
+extern taskControlBlock tcb[4]; 
+
+typedef volatile struct{
+	volatile int16_t semaCnt;
+	volatile taskControlBlock* firstWaiting;
+}semaphore;
+
+typedef volatile struct{
+	volatile taskControlBlock* firstWaiting;
+}signal;
 
 
+static void __attribute__((always_inline)) enterCriticalSection(){
+	disableInterrupts();
+}
+
+static void __attribute__((always_inline)) leaveCriticalSection(){
+	enableInterrupts();
+}
+
+void initSemaphore(semaphore* sema, uint16_t cntInit);
+void waitSemaphore(semaphore* sema);
+void releaseSemaphore(semaphore* sema);
+
+void initSignal(signal* sig);
+void waitSignal(signal* sig);
+void sendSignal(signal* sig);
+
+void yieldTask();
 
 #endif /* SYNC_H_ */

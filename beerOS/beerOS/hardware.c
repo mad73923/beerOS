@@ -13,12 +13,14 @@ void setSystemClock32MHZ();
 void initDispatcherTimer();
 void startDispatcherTimer();
 void stopDispatcherTimer();
+void initInterrupts();
 
 void initHardware(){
 	
 	setSystemClock32MHZ();
 	initDispatcherTimer();
 	startDispatcherTimer();
+	initInterrupts();
 	enableInterrupts();
 }
 
@@ -43,17 +45,14 @@ void startDispatcherTimer(){
 	
 }
 
+void initInterrupts(){
+	PMIC.CTRL = PMIC_HILVLEN_bm | PMIC_MEDLVLEN_bm | PMIC_LOLVLEN_bm;
+}
+
 void stopDispatcherTimer(){
 	TCF0.CTRLA = TC_CLKSEL_OFF_gc;
 }
 
-void enableInterrupts(){
-	PMIC.CTRL = PMIC_HILVLEN_bm | PMIC_MEDLVLEN_bm | PMIC_LOLVLEN_bm;
-	sei();
-}
 
-void disableInterrupts(){
-	cli();
-}
 
 #endif // __AVR_ATxmega128A1__

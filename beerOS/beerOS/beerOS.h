@@ -15,4 +15,6 @@
 
 #include "dummyTask.h"
 
+void startBeerOS(taskControlBlock* firstTask);
+
 #endif /* BEEROS_H_ */

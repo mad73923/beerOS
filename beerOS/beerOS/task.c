@@ -2,7 +2,7 @@
 
 uint8_t numberOfTasks = 0;
 // 32 reg - sreg - eind - 3x progcnt - index 0
-const uint8_t numberOfRegister = 32-2-3-1; 
+const uint8_t numberOfRegister = 32+2+3+1;
 taskControlBlock tcb[4];
 uint8_t maxNumberOfTasks = 4;
 typedef union {
@@ -21,11 +21,14 @@ void initTask(uint8_t prio, uint8_t* stack, void* taskFunction, uint32_t stackSi
 void initTaskControlBlock(uint8_t prio, uint8_t* stack, uint32_t stackSize){
 	taskControlBlock *cb = &tcb[numberOfTasks];
 	numberOfTasks++;
-	
 	cb->prio = prio;
 	cb->stackSize = stackSize;
 	cb->stackBeginn = stack;
 	cb->stack = stack + (stackSize - numberOfRegister); 
+
+	cb->state = READY;
+	
+	cb->semaNextWaiting = NULL;
 }
 
 void placeStartAdressOnStack(uint8_t* stack, void* taskFunction, uint32_t stackSize){
@@ -35,4 +38,19 @@ void placeStartAdressOnStack(uint8_t* stack, void* taskFunction, uint32_t stackS
 	stack[stackSize-1] = byteAccessUnion.u8[0]; 
 	stack[stackSize-2] = byteAccessUnion.u8[1];
 	stack[stackSize-3] = byteAccessUnion.u8[2];
+}
+
+void wakeupLinkedTasks(taskControlBlock* cb){
+	cb->state = READY;
+	if(cb->semaNextWaiting != NULL){
+		wakeupLinkedTasks(cb->semaNextWaiting);
+		cb->semaNextWaiting = NULL;
+	}
+}
+
+void queueWaitingTask(taskControlBlock* firstTask, taskControlBlock* newTask){
+	while(firstTask->semaNextWaiting != NULL)
+		firstTask = firstTask->semaNextWaiting;
+	firstTask->semaNextWaiting = newTask;
+	newTask->state = WAITING;
 }

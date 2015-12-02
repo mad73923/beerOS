@@ -57,14 +57,24 @@ ISR(DISPISRVEC, ISR_NAKED){
 	
 	//rescue stack pointer
 	tcb[task].stack = SP;
+	// set task state
+	// if state = waiting, dont change!	
+	if(tcb[task].state == RUNNING){
+		tcb[task].state = READY;		
+	}
+	
 	// call scheduler
-	task = (task + 1) % 2;
+	//do {
+		task = (task + 1) % 2;
+	//} while (tcb[task].state == WAITING);
+	
 	// reassign stackpointer
 	SP = tcb[task].stack;
+	// set task state
+	tcb[task].state = RUNNING;
 	
 	asm volatile ("nop");
 	
-	 
 	// write registers of new thread
 	asm volatile(	"POP R0\n\t"
 					"OUT 0x003C, R0 ;EIND\n\t"
@@ -103,6 +113,7 @@ ISR(DISPISRVEC, ISR_NAKED){
 					"POP R1\n\t"
 					"POP R0\n\t"					
 				);
+	
 	enableInterrupts();
 	asm volatile ("nop");
 	asm volatile ("reti");

@@ -9,8 +9,12 @@
 #ifndef DUMMYTASK_H_
 #define DUMMYTASK_H_
 
-void dummyTask();
+#include "sync.h"
+
+void dummyTaskSemaTest();
+void dummyTaskSignalTest();
 
 
+extern uint8_t task;
 
 #endif /* DUMMYTASK_H_ */

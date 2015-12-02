@@ -14,17 +14,21 @@ int main(void)
 {
 	
 	
-	initTask(1, task1Stack, dummyTask, 128);
-	initTask(2, task2Stack, dummyTask, 128);
-	initHardware();
+	initTask(1, task1Stack, dummyTaskSemaTest, 128);
+	initTask(2, task2Stack, dummyTaskSemaTest, 128);	initHardware();
 	
-	//set stack pointer of starting task next to taskaddress
-	SP = &tcb[0].stackBeginn[tcb[0].stackSize-4];
-	//start task
-	asm volatile ("ret");
+	startBeerOS(&tcb[0]);
 	
     while(1)
     {
         //TODO:: Please write your application code 
     }
+}
+
+void startBeerOS(taskControlBlock* firstTask){
+	//set stack pointer of starting task next to taskaddress
+	SP = firstTask->stackBeginn+firstTask->stackSize-4;
+	firstTask->state = RUNNING;
+	//start task
+	asm volatile ("ret");
 }
