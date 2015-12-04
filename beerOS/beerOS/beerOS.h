@@ -12,6 +12,7 @@
 #include "beerOSTypes.h"
 #include "dummyTask.h"
 #include "scheduler.h"
+#include "task.h"
 
 void startBeerOS(taskControlBlock* firstTask);
 

@@ -12,6 +12,9 @@
 #include "beerOSTypes.h"
 #include "scheduler.h"
 
+extern const uint8_t magicStackNumber;
+extern const uint8_t progcntOffset;
+
 void initTask(uint8_t prio, uint8_t* stack, void* taskFunction, uint16_t stackSize);
 
 void wakeupLinkedTasks(likedSyncObject* syncObj);

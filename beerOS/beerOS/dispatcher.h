@@ -12,5 +12,6 @@
 #include "beerOSTypes.h"
 #include "scheduler.h"
 #include "hardware.h"
+#include "task.h"
 
 #endif /* DISPATCHER_H_ */

@@ -13,13 +13,11 @@ volatile semaphore dummySema2;
 volatile int task1Cnt = 0;
 volatile int task2Cnt = 0;
 
-void dummyTaskSemaTest(){
-	
+void dummyTaskSemaTest(){	
 	if(task == 0){
 		initSemaphore(&dummySema, 1);
 		initSemaphore(&dummySema2, 0);
-	}
-	
+	}	
 	asm volatile ("nop");
 	while(1){
 		if(task == 0){
@@ -35,8 +33,7 @@ void dummyTaskSemaTest(){
 		if(task1Cnt - task2Cnt > 1 || task1Cnt - task2Cnt < -1){
 			kernelPanic();
 		}
-	}
-	
+	}	
 }
 
 

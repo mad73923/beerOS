@@ -37,7 +37,7 @@ int main(void)
 
 void startBeerOS(taskControlBlock* firstTask){
 	//set stack pointer of starting task next to taskaddress
-	SP = firstTask->stackBeginn+firstTask->stackSize-4;
+	SP = firstTask->stackBeginn+firstTask->stackSize-progcntOffset;
 	firstTask->state = RUNNING;
 	//start task
 	asm volatile ("ret");

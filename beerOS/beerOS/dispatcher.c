@@ -65,6 +65,10 @@ ISR(DISPISRVEC, ISR_NAKED){
 	// call scheduler
 	scheduleNextTask();
 	
+	if(tcb[task].stackBeginn[tcb->stackSize-1] != magicStackNumber){
+		kernelPanic();
+	}
+	
 	// reassign stackpointer
 	SP = tcb[task].stackPointer;
 	// set task state
