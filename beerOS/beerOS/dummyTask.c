@@ -10,6 +10,9 @@
 volatile semaphore dummySema;
 volatile semaphore dummySema2;
 
+volatile int task1Cnt = 0;
+volatile int task2Cnt = 0;
+
 void dummyTaskSemaTest(){
 	
 	if(task == 0){
@@ -17,34 +20,26 @@ void dummyTaskSemaTest(){
 		initSemaphore(&dummySema2, 0);
 	}
 	
+	asm volatile ("nop");
 	while(1){
+		if(task == 0){
+			waitSemaphore(&dummySema);
+			task1Cnt++;
+			releaseSemaphore(&dummySema2);
+		}else{
+			waitSemaphore(&dummySema2);
+			task2Cnt++;
+			releaseSemaphore(&dummySema);
+		}
 		asm volatile ("nop");
-		asm volatile ("nop");
-		asm volatile ("nop");
-		asm volatile ("nop");
-		int i=0;
-		while(i<100){
-			if(task == 0){
-				waitSemaphore(&dummySema);
-			}else{
-				waitSemaphore(&dummySema2);
-			}
-
-			i++;
-			asm volatile ("nop");
-
-			if(task == 0){
-				releaseSemaphore(&dummySema2);
-			}else{
-				releaseSemaphore(&dummySema);
-			}
+		if(task1Cnt - task2Cnt > 1 || task1Cnt - task2Cnt < -1){
+			kernelPanic();
 		}
 	}
 	
 }
 
-volatile int task1Cnt = 0;
-volatile int task2Cnt = 0;
+
 volatile signal signal1;
 
 
@@ -61,6 +56,10 @@ void dummyTaskSignalTest(){
 		}else{
 			waitSignal(&signal1);
 			task2Cnt++;
+		}
+		asm volatile ("nop");
+		if(task1Cnt - task2Cnt > 1 || task1Cnt - task2Cnt < -1){
+			kernelPanic();
 		}
 	}
 }

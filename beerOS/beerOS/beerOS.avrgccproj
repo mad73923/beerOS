@@ -100,6 +100,12 @@
     <Compile Include="dummyTask.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="exceptions.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="exceptions.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="hardware.c">
       <SubType>compile</SubType>
     </Compile>

@@ -40,11 +40,11 @@ void placeStartAdressOnStack(uint8_t* stack, void* taskFunction, uint16_t stackS
 }
 
 void wakeupLinkedTasks(likedSyncObject* syncObj){
-	if(syncObj->firstWaiting != NULL){
+	while(syncObj->firstWaiting != NULL){
 		taskControlBlock* tb = syncObj->firstWaiting;
 		tb->state = READY;
-		wakeupLinkedTasks(tb->semaNextWaiting);
 		syncObj->firstWaiting = NULL;
+		syncObj->firstWaiting = tb->semaNextWaiting;
 	}
 }
 
