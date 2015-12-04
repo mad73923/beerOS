@@ -34,22 +34,23 @@ void placeStartAdressOnStack(uint8_t* stack, void* taskFunction, uint16_t stackS
 	ByteAccessUnion byteAccessUnion;
 	byteAccessUnion.u24 = (uint32_t) taskFunction;
 	
-	stack[stackSize-1] = byteAccessUnion.u8[0]; 
+	stack[stackSize-1] = byteAccessUnion.u8[0];
 	stack[stackSize-2] = byteAccessUnion.u8[1];
 	stack[stackSize-3] = byteAccessUnion.u8[2];
 }
 
-void wakeupLinkedTasks(taskControlBlock* cb){
-	cb->state = READY;
-	if(cb->semaNextWaiting != NULL){
-		wakeupLinkedTasks(cb->semaNextWaiting);
-		cb->semaNextWaiting = NULL;
+void wakeupLinkedTasks(likedSyncObject* syncObj){
+	if(syncObj->firstWaiting != NULL){
+		taskControlBlock* tb = syncObj->firstWaiting;
+		tb->state = READY;
+		wakeupLinkedTasks(tb->semaNextWaiting);
+		syncObj->firstWaiting = NULL;
 	}
 }
 
-void queueWaitingTask(likedSyncObject* syncObject, taskControlBlock* newTask){
-	while(syncObject->firstWaiting != NULL)
-		syncObject = syncObject->firstWaiting;
-	syncObject->firstWaiting = newTask;
+void queueWaitingTask(likedSyncObject* syncObj, taskControlBlock* newTask){
+	while(syncObj->firstWaiting != NULL)
+		syncObj = syncObj->firstWaiting;
+	syncObj->firstWaiting = newTask;
 	newTask->state = WAITING;
 }

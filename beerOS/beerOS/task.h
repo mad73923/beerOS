@@ -14,7 +14,7 @@
 
 void initTask(uint8_t prio, uint8_t* stack, void* taskFunction, uint16_t stackSize);
 
-void wakeupLinkedTasks(taskControlBlock* cb);
+void wakeupLinkedTasks(likedSyncObject* syncObj);
 void queueWaitingTask(likedSyncObject* syncObj, taskControlBlock* newTask);
 
 #endif /* TASK_H_ */

@@ -39,14 +39,14 @@ void initSignal(signal* sig){
 
 void waitSignal(signal* sig){
 	enterCriticalSection();
-	queueWaitingTask(sig->firstWaiting, &tcb[task]);
+	queueWaitingTask(sig, &tcb[task]);
 	leaveCriticalSection();
 	yieldTask();
 }
 
 void sendSignal(signal* sig){
 	enterCriticalSection();
-	wakeupLinkedTasks(sig->firstWaiting);
+	wakeupLinkedTasks(sig);
 	leaveCriticalSection();
 }
 
