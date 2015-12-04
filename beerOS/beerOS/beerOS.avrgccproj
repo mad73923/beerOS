@@ -85,6 +85,9 @@
     <Compile Include="beerOS.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="beerOSTypes.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="dispatcher.c">
       <SubType>compile</SubType>
     </Compile>

@@ -7,7 +7,6 @@
 
 #include "dispatcher.h"
 
-uint8_t task = 0;
 
 ISR(DISPISRVEC, ISR_NAKED){
 	
@@ -56,7 +55,7 @@ ISR(DISPISRVEC, ISR_NAKED){
 	// Prioritaet (je nach Scheduling Verfahren)
 	
 	//rescue stack pointer
-	tcb[task].stack = SP;
+	tcb[task].stackPointer = SP;
 	// set task state
 	// if state = waiting, dont change!	
 	if(tcb[task].state == RUNNING){
@@ -67,7 +66,7 @@ ISR(DISPISRVEC, ISR_NAKED){
 	scheduleNextTask();
 	
 	// reassign stackpointer
-	SP = tcb[task].stack;
+	SP = tcb[task].stackPointer;
 	// set task state
 	tcb[task].state = RUNNING;
 	

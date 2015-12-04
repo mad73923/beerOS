@@ -9,21 +9,9 @@
 #ifndef SYNC_H_
 #define SYNC_H_
 
+#include "beerOSTypes.h"
+#include "scheduler.h"
 #include "hardware.h"
-#include "task.h"
-#include "beerOS.h"
-
-extern taskControlBlock tcb[4]; 
-
-typedef volatile struct{
-	volatile int16_t semaCnt;
-	volatile taskControlBlock* firstWaiting;
-}semaphore;
-
-typedef volatile struct{
-	volatile taskControlBlock* firstWaiting;
-}signal;
-
 
 static void __attribute__((always_inline)) enterCriticalSection(){
 	disableInterrupts();

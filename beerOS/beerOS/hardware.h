@@ -9,12 +9,10 @@
 #ifndef HARDWARE_H_
 #define HARDWARE_H_
 
-#define NULL 0
+#include "beerOSTypes.h"
+
 
 #ifdef __AVR_ATxmega128A1__
-
-#include <avr/io.h>
-#include <avr/interrupt.h>
 
 #define DISPISRVEC TCF0_OVF_vect
 

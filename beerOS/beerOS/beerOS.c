@@ -12,11 +12,9 @@ uint8_t task2Stack[128];
 uint8_t idleTaskStack[128];
 
 int main(void)
-{
-	
-	
-	initTask(1, task1Stack, dummyTaskSignalTest, 128);
-	initTask(1, task2Stack, dummyTaskSignalTest, 128);
+{	
+	initTask(1, task1Stack, dummyTaskSemaTest, 128);
+	initTask(1, task2Stack, dummyTaskSemaTest, 128);
 	initTask(1, idleTaskStack, idleTask, 128);
 	initHardware();
 	

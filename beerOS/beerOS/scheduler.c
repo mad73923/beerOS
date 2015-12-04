@@ -1,5 +1,7 @@
 #include "scheduler.h"
 
+uint8_t task = 0;
+taskControlBlock tcb[4];
 
 void scheduleNextTask(){
 	do{

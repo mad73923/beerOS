@@ -9,7 +9,7 @@
 #ifndef DUMMYTASK_H_
 #define DUMMYTASK_H_
 
-#include "sync.h"
+#include "beerOSTypes.h"
 
 void dummyTaskSemaTest();
 void dummyTaskSignalTest();
