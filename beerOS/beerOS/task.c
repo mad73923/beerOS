@@ -47,9 +47,9 @@ void wakeupLinkedTasks(taskControlBlock* cb){
 	}
 }
 
-void queueWaitingTask(taskControlBlock* firstTask, taskControlBlock* newTask){
-	while(firstTask->semaNextWaiting != NULL)
-		firstTask = firstTask->semaNextWaiting;
-	firstTask->semaNextWaiting = newTask;
+void queueWaitingTask(likedSyncObject* syncObject, taskControlBlock* newTask){
+	while(syncObject->firstWaiting != NULL)
+		syncObject = syncObject->firstWaiting;
+	syncObject->firstWaiting = newTask;
 	newTask->state = WAITING;
 }
