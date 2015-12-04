@@ -9,7 +9,6 @@
 
 uint8_t task1Stack[128];
 uint8_t task2Stack[128];
-uint8_t idleTaskStack[128];
 
 //#define SemaTest
 #define SignalTest
@@ -25,7 +24,7 @@ int main(void)
 	initTask(1, task2Stack, dummyTaskSignalTest, 128);
 #endif // SignalTest
 
-	initTask(1, idleTaskStack, idleTask, 128);
+	initIdleTask();
 	initHardware();
 	
 	startBeerOS(&tcb[0]);
