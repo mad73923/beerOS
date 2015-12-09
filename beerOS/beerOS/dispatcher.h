@@ -9,9 +9,9 @@
 #ifndef DISPATCHER_H_
 #define DISPATCHER_H_
 
+#include "beerOSTypes.h"
+#include "scheduler.h"
 #include "hardware.h"
 #include "task.h"
-
-extern taskControlBlock tcb[4];
 
 #endif /* DISPATCHER_H_ */

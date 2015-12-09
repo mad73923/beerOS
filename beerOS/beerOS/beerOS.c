@@ -10,21 +10,35 @@
 uint8_t task1Stack[128];
 uint8_t task2Stack[128];
 
+//#define SemaTest
+#define SignalTest
+
 int main(void)
-{
-	
-	
-	initTask(1, task1Stack, dummyTask, 128);
-	initTask(2, task2Stack, dummyTask, 128);
+{	
+#ifdef SemaTest
+	initTask(1, task1Stack, dummyTaskSemaTest, 128);
+	initTask(1, task2Stack, dummyTaskSemaTest, 128);
+#endif // SemaTest
+#ifdef SignalTest
+	initTask(1, task1Stack, dummyTaskSignalTest, 128);
+	initTask(1, task2Stack, dummyTaskSignalTest, 128);
+#endif // SignalTest
+
+	initIdleTask();
 	initHardware();
 	
-	//set stack pointer of starting task next to taskaddress
-	SP = &tcb[0].stackBeginn[tcb[0].stackSize-4];
-	//start task
-	asm volatile ("ret");
+	startBeerOS(&tcb[0]);
 	
     while(1)
     {
         //TODO:: Please write your application code 
     }
+}
+
+void startBeerOS(taskControlBlock* firstTask){
+	//set stack pointer of starting task next to taskaddress
+	SP = firstTask->stackBeginn+firstTask->stackSize-progcntOffset;
+	firstTask->state = RUNNING;
+	//start task
+	asm volatile ("ret");
 }
