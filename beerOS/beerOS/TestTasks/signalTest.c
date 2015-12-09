@@ -3,14 +3,17 @@
  *
  * Created: 09.12.2015 18:53:21
  *  Author: anreinha
- */ 
+ */
+
+#include "testTasks.h"
+#include "../sync.h"
 
 volatile signal signal1;
 
 volatile int task1Cnt = 0;
 volatile int task2Cnt = 0;
 
-void dummyTaskSignalTest(){
+void signalTestTask(){
 	if(task == 0){
 		initSignal(&signal1);
 	}

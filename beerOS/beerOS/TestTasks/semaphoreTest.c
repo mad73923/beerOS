@@ -6,6 +6,7 @@
  */ 
 
 #include "testTasks.h"
+#include "../sync.h"
 
 volatile semaphore dummySema;
 volatile semaphore dummySema2;

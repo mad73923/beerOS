@@ -79,6 +79,9 @@
     <GenerateEepFile>True</GenerateEepFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="TestTasks\testTasks.h">
+      <SubType>compile</SubType>
+    </Compile>
     <None Include="beerOS.c">
       <SubType>compile</SubType>
     </None>
@@ -134,6 +137,12 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="task.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="TestTasks\semaphoreTest.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="TestTasks\signalTest.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="TestTasks\test.h">

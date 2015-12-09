@@ -10,9 +10,12 @@
 #define TESTTASKS_H_
 
 #include "../beerOSTypes.h"
+#include "../exceptions.h"
 
 void semaphoreTestTask();
 void signalTestTask();
+
+extern uint8_t task;
 
 
 

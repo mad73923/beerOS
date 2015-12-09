@@ -13,6 +13,7 @@
 #include "dummyTask.h"
 #include "scheduler.h"
 #include "task.h"
+#include "hardware.h"
 
 //void startBeerOS(taskControlBlock* firstTask);
 //int run();

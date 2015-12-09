@@ -7,7 +7,7 @@
 
 #include "dummyTask.h"
 
-void semaphoreTestTask(){
+void dummyTask(){
 	while(1){
 		asm volatile ("nop");	
 	}
