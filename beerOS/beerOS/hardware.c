@@ -35,12 +35,12 @@ void initDispatcherTimer(){
 	TCF0.CTRLB = TC_WGMODE_NORMAL_gc;
 	// adapt period here
 	TCF0.PER = 0xFFF;
+	//TCF0.PER = 0x7D00;
 	TCF0.INTCTRLA = TC_OVFINTLVL_HI_gc;
 }
 
 void startDispatcherTimer(){
 	// needs adaptions
-	//TCF0.CTRLA = TC_CLKSEL_DIV8_gc;
 	TCF0.CTRLA = TC_CLKSEL_DIV1_gc;
 	
 }

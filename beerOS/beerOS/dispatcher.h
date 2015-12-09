@@ -14,4 +14,6 @@
 #include "hardware.h"
 #include "task.h"
 
+extern volatile uint32_t systemTime_ms;
+
 #endif /* DISPATCHER_H_ */

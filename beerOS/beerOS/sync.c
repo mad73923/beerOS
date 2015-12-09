@@ -52,5 +52,6 @@ void sendSignal(signal* sig){
 
 void yieldTask(){
 	disableInterrupts();
+	hardwareISR = 0;
 	DISPISRVEC();
 }
