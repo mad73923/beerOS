@@ -6,27 +6,15 @@
  */ 
 
 
-#ifndef TEST
-
 #include "beerOS.h"
 
 uint8_t task1Stack[128];
 uint8_t task2Stack[128];
 
-//#define SemaTest
-#define SignalTest
 
 int run(void)
 {	
-#ifdef SemaTest
-	initTask(1, task1Stack, dummyTaskSemaTest, 128);
-	initTask(1, task2Stack, dummyTaskSemaTest, 128);
-#endif // SemaTest
-
-#ifdef SignalTest
-	initTask(1, task1Stack, dummyTaskSignalTest, 128);
-	initTask(1, task2Stack, dummyTaskSignalTest, 128);
-#endif // SignalTest
+	initTask(1, task1Stack, dummyTask, 128);
 
 	initIdleTask();
 	initHardware();
@@ -46,4 +34,3 @@ void startBeerOS(taskControlBlock* firstTask){
 	//start task
 	asm volatile ("ret");
 }
-#endif
