@@ -10,8 +10,8 @@
 
 volatile signal signal1;
 
-volatile int task1Cnt = 0;
-volatile int task2Cnt = 0;
+static volatile int task1Cnt = 0;
+static volatile int task2Cnt = 0;
 
 void signalTestTask(){
 	if(task == 0){

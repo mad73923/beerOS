@@ -11,8 +11,8 @@
 volatile semaphore dummySema;
 volatile semaphore dummySema2;
 
-volatile int task1Cnt = 0;
-volatile int task2Cnt = 0;
+static volatile int task1Cnt = 0;
+static volatile int task2Cnt = 0;
 
 void semaphoreTestTask(){	
 	if(task == 0){
