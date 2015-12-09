@@ -79,9 +79,12 @@
     <GenerateEepFile>True</GenerateEepFile>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="beerOS.c">
+    <Compile Include="TestTasks\testTasks.h">
       <SubType>compile</SubType>
     </Compile>
+    <None Include="beerOS.c">
+      <SubType>compile</SubType>
+    </None>
     <Compile Include="beerOS.h">
       <SubType>compile</SubType>
     </Compile>
@@ -118,6 +121,12 @@
     <Compile Include="hardware.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="init.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="init.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="scheduler.c">
       <SubType>compile</SubType>
     </Compile>
@@ -136,6 +145,21 @@
     <Compile Include="task.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="TestTasks\semaphoreTest.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="TestTasks\signalTest.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="TestTasks\test.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <None Include="TestTasks\test.c">
+      <SubType>compile</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="TestTasks" />
   </ItemGroup>
   <Import Project="$(AVRSTUDIO_EXE_PATH)\\Vs\\AvrGCC.targets" />
 </Project>

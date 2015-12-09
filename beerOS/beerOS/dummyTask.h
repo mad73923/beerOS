@@ -11,9 +11,7 @@
 
 #include "beerOSTypes.h"
 
-void dummyTaskSemaTest();
-void dummyTaskSignalTest();
-
+void dummyTask();
 
 extern uint8_t task;
 
