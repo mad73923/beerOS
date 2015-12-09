@@ -5,9 +5,6 @@
  *  Author: matweis
  */ 
 
-#ifdef TEST
-
-
 #include "test.h"
 
 uint8_t task1Stack[128];
@@ -18,6 +15,8 @@ uint8_t task2Stack[128];
 
 int run(void)
 {	
+	
+	
 #ifdef SemaTest
 	initTask(1, task1Stack, dummyTaskSemaTest, 128);
 	initTask(1, task2Stack, dummyTaskSemaTest, 128);
@@ -45,5 +44,3 @@ void startBeerOS(taskControlBlock* firstTask){
 	//start task
 	asm volatile ("ret");
 }
-
-#endif

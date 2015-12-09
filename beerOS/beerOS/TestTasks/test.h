@@ -10,7 +10,7 @@
 #define TEST_H_
 
 #include "../beerOSTypes.h"
-#include "../dummyTask.h"
+#include "testTasks.h"
 #include "../scheduler.h"
 #include "../task.h"
 
