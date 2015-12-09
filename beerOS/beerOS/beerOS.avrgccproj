@@ -79,6 +79,9 @@
     <GenerateEepFile>True</GenerateEepFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="TestTasks\linkedListTest.c">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="TestTasks\testTasks.h">
       <SubType>compile</SubType>
     </Compile>
@@ -113,7 +116,7 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="linkedList.h">
-	  <SubType>compile</SubType>
+      <SubType>compile</SubType>
     </Compile>
     <Compile Include="hardware.c">
       <SubType>compile</SubType>

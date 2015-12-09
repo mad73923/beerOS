@@ -1,11 +1,11 @@
 #ifndef LINKEDLIST_H_
 #define LINKEDLIST_H_
 
-#include <avr/io.h>
+#include "beerOSTypes.h"
 
-typedef struct {
-	void *next;
-	void *this;
+typedef struct ListItem{
+	struct ListItem *next;
+	uint8_t *this;
 }ListItem;
 
 typedef struct {
