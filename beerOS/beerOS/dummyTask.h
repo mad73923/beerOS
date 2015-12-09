@@ -13,6 +13,4 @@
 
 void dummyTask();
 
-extern uint8_t task;
-
 #endif /* DUMMYTASK_H_ */
