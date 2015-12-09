@@ -14,6 +14,7 @@
 #include "scheduler.h"
 #include "task.h"
 
-void startBeerOS(taskControlBlock* firstTask);
+//void startBeerOS(taskControlBlock* firstTask);
+//int run();
 
 #endif /* BEEROS_H_ */
