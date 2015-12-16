@@ -33,16 +33,16 @@ typedef volatile struct strucTCB{
 
 //SYNC
 typedef volatile struct{
-	volatile struct taskControlBlock* firstWaiting;
+	volatile taskControlBlock* firstWaiting;
 	volatile int16_t semaCnt;
 }semaphore;
 
 typedef volatile struct{
-	volatile struct taskControlBlock* firstWaiting;
+	volatile taskControlBlock* firstWaiting;
 }signal;
 
 typedef volatile struct{
-	volatile struct taskControlBlock* firstWaiting;
+	volatile taskControlBlock* firstWaiting;
 }likedSyncObject;
 
 

@@ -13,7 +13,7 @@
 #include "scheduler.h"
 #include "hardware.h"
 
-extern uint8_t hardwareISR;
+extern volatile uint8_t hardwareISR;
 
 static void __attribute__((always_inline)) enterCriticalSection(){
 	disableInterrupts();

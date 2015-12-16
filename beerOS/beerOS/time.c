@@ -14,7 +14,8 @@ void sleep_ms(uint32_t ms){
 	enterCriticalSection();
 	tcb[task].waitUntil = systemTime_ms + ms;
 	while((firstSleeping.firstWaiting != NULL)){
-		firstSleeping = firstSleeping.firstWaiting;
+		firstSleeping.firstWaiting = firstSleeping.firstWaiting->semaNextWaiting;
 	}
+	firstSleeping.firstWaiting = &tcb[task];
 	yieldTask();
 }

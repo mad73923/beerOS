@@ -67,12 +67,13 @@ ISR(DISPISRVEC, ISR_NAKED){
 	
 	if(hardwareISR == 1){
 		systemTime_ms ++;
-		if(firstSleeping.firstWaiting != 0){
-			if(((taskControlBlock*)(firstSleeping.firstWaiting))->waitUntil <= systemTime_ms){
-				((taskControlBlock*)(firstSleeping.firstWaiting))->state = READY;
-				((taskControlBlock*)(firstSleeping.firstWaiting))->waitUntil = 0;
-				firstSleeping.firstWaiting = firstSleeping.firstWaiting->semaNextWaiting;
-				((taskControlBlock*)(firstSleeping.firstWaiting))->semaNextWaiting = NULL;
+		if(firstSleeping.firstWaiting != NULL){
+			if(firstSleeping.firstWaiting->waitUntil <= systemTime_ms){
+				firstSleeping.firstWaiting->state = READY;
+				firstSleeping.firstWaiting->waitUntil = 0;
+				taskControlBlock* next = firstSleeping.firstWaiting->semaNextWaiting;
+				firstSleeping.firstWaiting->semaNextWaiting = NULL;				
+				firstSleeping.firstWaiting = next;
 			}
 		}
 	}
