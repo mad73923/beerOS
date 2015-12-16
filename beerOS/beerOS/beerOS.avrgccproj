@@ -79,6 +79,9 @@
     <GenerateEepFile>True</GenerateEepFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="TestTasks\sleepTest.c">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="TestTasks\testTasks.h">
       <SubType>compile</SubType>
     </Compile>

@@ -11,7 +11,8 @@ uint8_t task1Stack[128];
 uint8_t task2Stack[128];
 
 //#define SemaTest
-#define SignalTest
+//#define SignalTest
+#define sleepTest
 void startBeerOS(taskControlBlock* firstTask);
 
 int run(void)
@@ -25,6 +26,9 @@ int run(void)
 	initTask(1, task1Stack, signalTestTask, 128);
 	initTask(1, task2Stack, signalTestTask, 128);
 #endif // SignalTest
+#ifdef sleepTest
+	initTask(1, task1Stack, sleepTestTask, 128);
+#endif //sleepTest
 
 	initIdleTask();
 	initHardware();
