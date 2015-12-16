@@ -13,7 +13,9 @@
 #include "scheduler.h"
 #include "hardware.h"
 #include "task.h"
+#include "time.h"
 
 extern volatile uint32_t systemTime_ms;
+extern volatile likedSyncObject firstSleeping;
 
 #endif /* DISPATCHER_H_ */

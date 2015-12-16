@@ -66,8 +66,15 @@ ISR(DISPISRVEC, ISR_NAKED){
 	}
 	
 	if(hardwareISR == 1){
-		// wakeup pending tasks
 		systemTime_ms ++;
+		if(firstSleeping.firstWaiting != 0){
+			if(((taskControlBlock*)(firstSleeping.firstWaiting))->waitUntil <= systemTime_ms){
+				((taskControlBlock*)(firstSleeping.firstWaiting))->state = READY;
+				((taskControlBlock*)(firstSleeping.firstWaiting))->waitUntil = 0;
+				firstSleeping.firstWaiting = firstSleeping.firstWaiting->semaNextWaiting;
+				((taskControlBlock*)(firstSleeping.firstWaiting))->semaNextWaiting = NULL;
+			}
+		}
 	}
 	hardwareISR = 1;
 	

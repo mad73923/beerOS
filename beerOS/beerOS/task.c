@@ -30,6 +30,7 @@ void initTaskControlBlock(uint8_t prio, uint8_t* stack, uint16_t stackSize){
 	cb->stackPointer = stack + (stackSize - numberOfRegister);
 	cb->state = READY;	
 	cb->semaNextWaiting = NULL;
+	cb->waitUntil = 0;
 }
 
 void placeMagicNumberOnStack(uint8_t* stack, uint16_t stackSize){
