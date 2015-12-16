@@ -5,16 +5,26 @@
  *  Author: matweis
  */ 
 
-
-#include "beerOS.h"
+#include "test.h"
 
 uint8_t task1Stack[128];
 uint8_t task2Stack[128];
 
+//#define SemaTest
+#define SignalTest
+void startBeerOS(taskControlBlock* firstTask);
 
 int run(void)
 {	
-	initTask(1, task1Stack, dummyTask, 128);
+	
+#ifdef SemaTest
+	initTask(1, task1Stack, semaphoreTestTask, 128);
+	initTask(1, task2Stack, semaphoreTestTask, 128);
+#endif // SemaTest
+#ifdef SignalTest
+	initTask(1, task1Stack, signalTestTask, 128);
+	initTask(1, task2Stack, signalTestTask, 128);
+#endif // SignalTest
 
 	initIdleTask();
 	initHardware();
