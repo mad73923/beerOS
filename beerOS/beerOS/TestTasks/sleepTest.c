@@ -18,8 +18,8 @@ static volatile int task3Cnt = 0;
 
 void sleepTestTask(){
 	if(task == 0){
-		// lower timer period to 500us for faster testing
-		TCF0.PER = 0x4650;
+		// lower timer period to 200us for faster testing
+		TCF0.PER = 0x1C20;
 	}			
 	
 	while(1){
