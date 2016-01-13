@@ -50,6 +50,9 @@ uint8_t add_linkedList(LinkedList *linkedList, void *item, uint8_t index){
 	linkedList->current->next = newListItem;
 	
 	newLength = linkedList->length + 1;
+	if(newLength == 1){
+		linkedList->current = newListItem;
+	}
 	return 0;
 }
 
@@ -103,7 +106,7 @@ uint8_t get_linkedList(LinkedList *linkedList, uint8_t index, void **item){
 		linkedList->currentIndex++;
 		
 	}
-	*item = &linkedList->current->this;
+	*item = linkedList->current->this;
 	return 1;
 }
 
