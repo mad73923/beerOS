@@ -39,20 +39,23 @@ uint8_t add_linkedList(LinkedList *linkedList, void *item, uint8_t index){
 	
 	if(index != 0 && outOfBound(linkedList, index)){
 		return 1;
-	}	
+	}
+	
 	if(allocMem(&newListItem)){
 		return 1;
 	}
 	
-	get_linkedList(linkedList, index - 1, 0x0);
+	if(linkedList->length == 0){
+		linkedList->current = newListItem;
+	} else {
+		get_linkedList(linkedList, index - 1, NULL);
+		newListItem->next = (ListItem*) linkedList->current->next;
+		linkedList->current->next = newListItem;
+	}
+	
 	newListItem->this= item;
-	newListItem->next = (ListItem*) linkedList->current->next;
-	linkedList->current->next = newListItem;
 	
 	newLength = linkedList->length + 1;
-	if(newLength == 1){
-		linkedList->current = newListItem;
-	}
 	return 0;
 }
 
@@ -94,12 +97,13 @@ void removeAt_linkedList(LinkedList *linkedList, uint8_t index){
 //}
 //
 uint8_t get_linkedList(LinkedList *linkedList, uint8_t index, void **item){
-	if(linkedList->currentIndex < index){
+	index++;
+	if(linkedList->currentIndex + 1 < index){
 		linkedList->current = linkedList->list->next;
 		linkedList->currentIndex = 0;
 	}
-	while(linkedList->currentIndex != index){
-		if(linkedList->current->next == 0x0){
+	while(linkedList->currentIndex + 1 != index){
+		if(linkedList->current->next == NULL){
 			return 1;
 		}
 		linkedList->current = linkedList->current->next;
@@ -107,7 +111,7 @@ uint8_t get_linkedList(LinkedList *linkedList, uint8_t index, void **item){
 		
 	}
 	*item = linkedList->current->this;
-	return 1;
+	return 0;
 }
 
 uint8_t length_linkedList(LinkedList *linkedList){

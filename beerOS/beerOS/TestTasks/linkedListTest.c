@@ -15,15 +15,24 @@ static LinkedList linkedList;
 void linkedListTestTask(){
 	if(init_linkedList(&linkedList)){
 		kernelPanic();
+	}	
+	
+	int *value;
+	for(int i = 0; i < 5; i++){
+		if(append_linkedList(&linkedList, &testValues[i])){
+			kernelPanic();		
+		}	
 	}
 	
-	if(append_linkedList(&linkedList, &testValues[0])){
-		kernelPanic();		
+	for(uint8_t j = 0; j < 5; j++){
+		if(get_linkedList(&linkedList, j, &value)){
+				kernelPanic();			
+		} else {
+			if(*value != j){
+				kernelPanic();
+			}
+		}	
 	}
-	int *value;
-	get_linkedList(&linkedList, 0, &value);
-	if(*value != 1){
-		kernelPanic();
-	}
+	
 	
 }
