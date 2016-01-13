@@ -10,6 +10,9 @@
 volatile uint32_t systemTime_ms = 0;
 volatile linkedSyncObject firstSleeping;
 
+volatile taskControlBlock* tmpSleeping;
+volatile taskControlBlock* next;
+
 void sleep_ms(uint32_t ms){
 	enterCriticalSection();
 	tcb[task].state = WAITING;
@@ -30,4 +33,20 @@ void sleep_ms(uint32_t ms){
 		firstSleeping.firstWaiting = &tcb[task];
 	}
 	yieldTask();
+}
+
+void wakeupPendingTasks(){
+	tmpSleeping = firstSleeping.firstWaiting;
+		while(tmpSleeping != NULL){
+			if(tmpSleeping->waitUntil <= systemTime_ms){
+				tmpSleeping->state = READY;
+				tmpSleeping->waitUntil = 0;
+				next = tmpSleeping->semaNextWaiting;
+				tmpSleeping->semaNextWaiting = NULL;
+				tmpSleeping = next;
+				firstSleeping.firstWaiting = next;
+			}else{				
+				break;
+			}
+		}
 }

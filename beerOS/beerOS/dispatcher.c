@@ -8,8 +8,7 @@
 #include "dispatcher.h"
 
 volatile uint8_t hardwareISR = 1;
-volatile taskControlBlock* tmpSleeping;
-volatile taskControlBlock* next;
+
 
 
 ISR(DISPISRVEC, ISR_NAKED){
@@ -69,19 +68,7 @@ ISR(DISPISRVEC, ISR_NAKED){
 	
 	if(hardwareISR == 1){
 		systemTime_ms ++;
-		tmpSleeping = firstSleeping.firstWaiting;
-		while(tmpSleeping != NULL){
-			if(tmpSleeping->waitUntil <= systemTime_ms){
-				tmpSleeping->state = READY;
-				tmpSleeping->waitUntil = 0;
-				next = tmpSleeping->semaNextWaiting;
-				tmpSleeping->semaNextWaiting = NULL;
-				tmpSleeping = next;
-				firstSleeping.firstWaiting = next;
-			}else{				
-				break;
-			}
-		}
+		wakeupPendingTasks();
 	}
 	hardwareISR = 1;
 	
