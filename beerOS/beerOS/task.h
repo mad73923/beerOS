@@ -17,7 +17,7 @@ extern const uint8_t progcntOffset;
 
 void initTask(uint8_t prio, uint8_t* stack, void* taskFunction, uint16_t stackSize);
 
-void wakeupLinkedTasks(likedSyncObject* syncObj);
-void queueWaitingTask(likedSyncObject* syncObj, taskControlBlock* newTask);
+void wakeupLinkedTasks(linkedSyncObject* syncObj);
+void queueWaitingTask(linkedSyncObject* syncObj, taskControlBlock* newTask);
 
 #endif /* TASK_H_ */

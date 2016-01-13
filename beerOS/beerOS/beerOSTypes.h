@@ -41,9 +41,9 @@ typedef volatile struct{
 	volatile taskControlBlock* firstWaiting;
 }signal;
 
-typedef volatile struct{
+typedef volatile struct strucLSO{
 	volatile taskControlBlock* firstWaiting;
-}likedSyncObject;
+}linkedSyncObject;
 
 
 

@@ -8,25 +8,26 @@
 #include "time.h"
 
 volatile uint32_t systemTime_ms = 0;
-volatile likedSyncObject firstSleeping;
+volatile linkedSyncObject firstSleeping;
 
 void sleep_ms(uint32_t ms){
 	enterCriticalSection();
 	tcb[task].state = WAITING;
 	tcb[task].waitUntil = systemTime_ms + ms;
-	uint8_t done = 0;
-	while(!done){
-		if(firstSleeping.firstWaiting != NULL){
-			if(firstSleeping.firstWaiting->waitUntil < systemTime_ms + ms){
-				done = 1;
+	
+	if(firstSleeping.firstWaiting != NULL){
+		linkedSyncObject* temp = &firstSleeping;
+		while(temp->firstWaiting != NULL){
+			if(temp->firstWaiting->waitUntil < systemTime_ms + ms){
+				temp = temp->firstWaiting;
+			}else{
+				tcb[task].semaNextWaiting = temp->firstWaiting;
+				break;
 			}
-		}else{
-			done = 1;
 		}
-		if(!done){
-			firstSleeping.firstWaiting = firstSleeping.firstWaiting->semaNextWaiting;		
-		}
+		temp->firstWaiting = &tcb[task];
+	}else{
+		firstSleeping.firstWaiting = &tcb[task];
 	}
-	firstSleeping.firstWaiting = &tcb[task];
 	yieldTask();
 }

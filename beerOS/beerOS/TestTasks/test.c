@@ -28,6 +28,7 @@ int run(void)
 #endif // SignalTest
 #ifdef sleepTest
 	initTask(1, task1Stack, sleepTestTask, 128);
+	initTask(1, task2Stack, sleepTestTask, 128);
 #endif //sleepTest
 
 	initIdleTask();

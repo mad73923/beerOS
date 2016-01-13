@@ -16,6 +16,6 @@
 #include "time.h"
 
 extern volatile uint32_t systemTime_ms;
-extern volatile likedSyncObject firstSleeping;
+extern volatile linkedSyncObject firstSleeping;
 
 #endif /* DISPATCHER_H_ */
