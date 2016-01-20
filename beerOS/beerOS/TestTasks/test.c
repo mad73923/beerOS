@@ -24,11 +24,12 @@ int run(void)
 	initTask(1, task1Stack, semaphoreTestTask, 128);
 	initTask(1, task2Stack, semaphoreTestTask, 128);
 #endif // SemaTest
+
 #ifdef SignalTest
 	initTask(1, task1Stack, signalTestTask, 128);
 	initTask(1, task2Stack, signalTestTask, 128);
+	initTask(1, task3Stack, signalTestTask, 128);	
 #endif // SignalTest
-
 
 #ifdef sleepTest
 	initTask(1, task1Stack, sleepTestTask, 128);
