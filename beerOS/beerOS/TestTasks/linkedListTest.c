@@ -17,7 +17,7 @@ void linkedListTestTask(){
 	int* value;
 	
 	// test linkedList_get
-	if(init_linkedList(&linkedList)){
+	if(linkedList_init(&linkedList)){
 		kernelPanic();
 	}	
 	

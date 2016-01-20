@@ -15,7 +15,7 @@ typedef struct {
 	uint8_t currentIndex;
 }LinkedList;
 
-uint8_t init_linkedList(LinkedList *linkedList);
+uint8_t linkedList_init(LinkedList *linkedList);
 
 uint8_t linkedList_add(LinkedList *linkedList, void *item, uint8_t index);
 uint8_t linkedList_append(LinkedList *linkedList, void *item);

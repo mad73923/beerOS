@@ -6,7 +6,7 @@ void freeMem(ListItem* listItem);
 uint8_t outOfBound(LinkedList *linkedList, uint8_t index);
 uint8_t getInternal(LinkedList *linkedList, uint8_t index, void **item);
 
-uint8_t init_linkedList(LinkedList *linkedList){
+uint8_t linkedList_init(LinkedList *linkedList){
 	ListItem* listItem;
 	if(allocMem(&listItem)){
 		return 1;
