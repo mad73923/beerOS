@@ -94,6 +94,9 @@
     <Compile Include="TestTasks\linkedListTest.c">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="TestTasks\queueTest.c">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="TestTasks\testTasks.h">
       <SubType>compile</SubType>
     </Compile>
