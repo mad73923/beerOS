@@ -6,7 +6,6 @@ void freeMem(ListItem* listItem);
 uint8_t outOfBound(LinkedList *linkedList, uint8_t index);
 uint8_t getInternal(LinkedList *linkedList, uint8_t index, void **item);
 
-
 uint8_t init_linkedList(LinkedList *linkedList){
 	ListItem* listItem;
 	if(allocMem(&listItem)){
@@ -17,10 +16,11 @@ uint8_t init_linkedList(LinkedList *linkedList){
 	linkedList->current = NULL;
 	linkedList->currentIndex = 0;
 	linkedList->length = 0;
+	linkedList->sema = NULL;
 	return 0;
 }
 
-uint8_t linkedList_add(LinkedList *linkedList, void *item, uint8_t index){
+uint8_t linkedList_add(LinkedList *linkedList, void *item, uint8_t index){		
 	ListItem *newListItem;
 	
 	if(allocMem(&newListItem)){
