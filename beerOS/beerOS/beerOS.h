@@ -15,6 +15,8 @@
 #include "task.h"
 #include "hardware.h"
 
+extern taskControlBlock* currentTask;
+
 //void startBeerOS(taskControlBlock* firstTask);
 //int run();
 

@@ -12,8 +12,7 @@
 #include "beerOSTypes.h"
 #include "scheduler.h"
 
-extern const uint8_t magicStackNumber;
-extern const uint8_t progcntOffset;
+extern taskControlBlock tcb[4];
 
 void initTask(uint8_t prio, uint8_t* stack, void* taskFunction, uint16_t stackSize);
 

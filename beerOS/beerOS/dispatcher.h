@@ -17,5 +17,8 @@
 
 extern volatile uint32_t systemTime_ms;
 extern volatile linkedSyncObject firstSleeping;
+extern taskControlBlock* currentTask;
+extern const uint8_t magicStackNumber;
+
 
 #endif /* DISPATCHER_H_ */

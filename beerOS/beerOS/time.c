@@ -15,8 +15,8 @@ volatile taskControlBlock* next;
 
 void sleep_ms(uint32_t ms){
 	enterCriticalSection();
-	tcb[task].state = WAITING;
-	tcb[task].waitUntil = systemTime_ms + ms;
+	currentTask->state = WAITING;
+	currentTask->waitUntil = systemTime_ms + ms;
 	
 	if(firstSleeping.firstWaiting != NULL){
 		linkedSyncObject* temp = &firstSleeping;
@@ -24,13 +24,13 @@ void sleep_ms(uint32_t ms){
 			if(temp->firstWaiting->waitUntil < systemTime_ms + ms){
 				temp = temp->firstWaiting;
 			}else{
-				tcb[task].semaNextWaiting = temp->firstWaiting;
+				currentTask->semaNextWaiting = temp->firstWaiting;
 				break;
 			}
 		}
-		temp->firstWaiting = &tcb[task];
+		temp->firstWaiting = currentTask;
 	}else{
-		firstSleeping.firstWaiting = &tcb[task];
+		firstSleeping.firstWaiting = currentTask;
 	}
 	yieldTask();
 }

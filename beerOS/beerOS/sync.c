@@ -16,7 +16,7 @@ void initSemaphore(semaphore* sema, uint16_t cntInit){
 void waitSemaphore(semaphore* sema){
 	enterCriticalSection();
 	if(sema->semaCnt <= 0){
-		queueWaitingTask(sema->firstWaiting, &tcb[task]);
+		queueWaitingTask(sema->firstWaiting, currentTask);
 		while(sema->semaCnt <= 0){
 			leaveCriticalSection();
 			yieldTask();
@@ -39,7 +39,7 @@ void initSignal(signal* sig){
 
 void waitSignal(signal* sig){
 	enterCriticalSection();
-	queueWaitingTask(sig, &tcb[task]);
+	queueWaitingTask(sig, currentTask);
 	leaveCriticalSection();
 	yieldTask();
 }

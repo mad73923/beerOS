@@ -3,6 +3,7 @@
 uint8_t task = 0;
 uint8_t idleTaskStack[128];
 taskControlBlock tcb[4];
+taskControlBlock* currentTask;
 
 void schedSimpleRoundRobbin();
 
@@ -13,7 +14,8 @@ void scheduleNextTask(){
 void schedSimpleRoundRobbin(){
 	do{
 		task = (task + 1) % numberOfTasks;
-	}while (tcb[task].state == WAITING);
+		currentTask = &tcb[task];
+	}while (currentTask->state == WAITING);
 }
 
 void initIdleTask(){
@@ -24,4 +26,13 @@ void idleTask(){
 	while(1){
 		yieldTask();
 	}
+}
+
+void startBeerOS(taskControlBlock* firstTask){
+	//set stack pointer of starting task next to taskaddress
+	SP = firstTask->stackBeginn+firstTask->stackSize-progcntOffset;
+	firstTask->state = RUNNING;
+	currentTask = firstTask;
+	//start task
+	asm volatile ("ret");
 }

@@ -59,11 +59,11 @@ ISR(DISPISRVEC, ISR_NAKED){
 	// Prioritaet (je nach Scheduling Verfahren)
 	
 	//rescue stack pointer
-	tcb[task].stackPointer = SP;
+	currentTask->stackPointer = SP;
 	// set task state
 	// if state = waiting, dont change!	
-	if(tcb[task].state == RUNNING){
-		tcb[task].state = READY;		
+	if(currentTask->state == RUNNING){
+		currentTask->state = READY;
 	}
 	
 	if(hardwareISR == 1){
@@ -75,14 +75,14 @@ ISR(DISPISRVEC, ISR_NAKED){
 	// call scheduler
 	scheduleNextTask();
 	
-	if(tcb[task].stackBeginn[tcb->stackSize-1] != magicStackNumber){
+	if(currentTask->stackBeginn[currentTask->stackSize-1] != magicStackNumber){
 		kernelPanic();
 	}
 	
 	// reassign stackpointer
-	SP = tcb[task].stackPointer;
+	SP = currentTask->stackPointer;
 	// set task state
-	tcb[task].state = RUNNING;
+	currentTask->state = RUNNING;
 	
 	asm volatile ("nop");
 	

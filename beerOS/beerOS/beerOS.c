@@ -26,11 +26,3 @@ int run(void)
         //TODO:: Please write your application code 
     }
 }
-
-void startBeerOS(taskControlBlock* firstTask){
-	//set stack pointer of starting task next to taskaddress
-	SP = firstTask->stackBeginn+firstTask->stackSize-progcntOffset;
-	firstTask->state = RUNNING;
-	//start task
-	asm volatile ("ret");
-}

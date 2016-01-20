@@ -11,7 +11,7 @@ uint8_t task1Stack[128];
 uint8_t task2Stack[128];
 uint8_t task3Stack[128];
 
-//#define SemaTest
+#define SemaTest
 //#define SignalTest
 //#define sleepTest
 //#define LinkedListTest
@@ -56,12 +56,4 @@ int run(void)
     {
         //TODO:: Please write your application code 
     }
-}
-
-void startBeerOS(taskControlBlock* firstTask){
-	//set stack pointer of starting task next to taskaddress
-	SP = firstTask->stackBeginn+firstTask->stackSize-progcntOffset;
-	firstTask->state = RUNNING;
-	//start task
-	asm volatile ("ret");
 }

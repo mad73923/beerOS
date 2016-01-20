@@ -14,6 +14,7 @@
 #include "hardware.h"
 
 extern volatile uint8_t hardwareISR;
+extern taskControlBlock* currentTask;
 
 static void __attribute__((always_inline)) enterCriticalSection(){
 	disableInterrupts();
