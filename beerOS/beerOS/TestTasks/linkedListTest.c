@@ -28,7 +28,7 @@ void linkedListTestTask(){
 		if(get_linkedList(&linkedList, j, &value)){
 				kernelPanic();			
 		} else {
-			if(*value != j){
+			if(*value != j + 1){
 				kernelPanic();
 			}
 		}	
