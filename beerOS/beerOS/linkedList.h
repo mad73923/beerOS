@@ -25,7 +25,7 @@ uint8_t linkedList_append(LinkedList *linkedList, void *item);
 //uint8_t insertafter_linkedlist(linkedlist *linkedlist, void *item);
 //uint8_t insertbefore_linkedlist(linkedlist *linkedlist, void *item);
 
-void linkedList_removeAt(LinkedList *linkedList, uint8_t index);
+void linkedList_remove(LinkedList *linkedList, uint8_t index);
 
 uint8_t linkedList_first(LinkedList *linkedList, void **item);
 uint8_t linkedList_last(LinkedList *linkedList, void **item);

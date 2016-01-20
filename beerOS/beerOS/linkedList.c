@@ -73,8 +73,10 @@ uint8_t insertBefore_linkedList(LinkedList *linkedList, void *item){
 	kernelPanic();
 }
 
-void linkedList_removeAt(LinkedList *linkedList, uint8_t index){
-	getInternal(linkedList, index, NULL);
+void linkedList_remove(LinkedList *linkedList, uint8_t index){
+	if(getInternal(linkedList, index, NULL)){
+		return;
+	}
 	ListItem *toRemove = linkedList->current->next;
 	linkedList->current->next = toRemove->next;
 	linkedList->length--;
