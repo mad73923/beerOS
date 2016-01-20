@@ -84,10 +84,5 @@ void linkedListTestTask(){
 	
 	if(linkedList_get(&linkedList, lenghtBeforeRemove - 1, NULL) == 0){
 		kernelPanic();
-	}
-
-	
-	
-	
-			
+	}			
 }
