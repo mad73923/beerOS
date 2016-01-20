@@ -4,7 +4,7 @@ ListItem linkedListMem[256];
 uint8_t allocMem(ListItem** listItem);
 void freeMem(ListItem* listItem);
 uint8_t outOfBound(LinkedList *linkedList, uint8_t index);
-uint8_t getInternal_linkedList(LinkedList *linkedList, uint8_t index, void **item);
+uint8_t getInternal(LinkedList *linkedList, uint8_t index, void **item);
 
 
 uint8_t init_linkedList(LinkedList *linkedList){
@@ -20,26 +20,27 @@ uint8_t init_linkedList(LinkedList *linkedList){
 	return 0;
 }
 
-uint8_t add_linkedList(LinkedList *linkedList, void *item, uint8_t index){
+uint8_t linkedList_add(LinkedList *linkedList, void *item, uint8_t index){
 	ListItem *newListItem;
 	
 	if(allocMem(&newListItem)){
 		return 1;
 	}
 	
-	if(getInternal_linkedList(linkedList, index, NULL)){
+	if(getInternal(linkedList, index, NULL)){
 		return 1;
 	}
 	
 	newListItem->next = (ListItem*) linkedList->current->next;
 	linkedList->current->next = newListItem;		
-	newListItem->this= item;	
-	linkedList->length++;
+	newListItem->this= item;
+	
+	linkedList->length++;		
 	
 	return 0;
 }
 
-uint8_t getInternal_linkedList(LinkedList *linkedList, uint8_t index, void **item){
+uint8_t getInternal(LinkedList *linkedList, uint8_t index, void **item){
 	if(index > linkedList->length){
 		return 1;
 	}
@@ -57,46 +58,42 @@ uint8_t getInternal_linkedList(LinkedList *linkedList, uint8_t index, void **ite
 
 
 
-uint8_t append_linkedList(LinkedList *linkedList, void *item){
-	if(add_linkedList(linkedList, item, linkedList->length)){
+uint8_t linkedList_append(LinkedList *linkedList, void *item){
+	if(linkedList_add(linkedList, item, linkedList->length)){
 		return 1;
 	}
 	return 0;
 }
 
-uint8_t insertAfter_linkedList(LinkedList *linkedList, void *item);
-uint8_t insertBefore_linkedList(LinkedList *linkedList, void *item);
-
-void remove_linkedList(LinkedList *linkedList){
-	removeAt_linkedList(linkedList, linkedList->currentIndex);	
+uint8_t insertAfter_linkedList(LinkedList *linkedList, void *item){
+	kernelPanic();
 }
 
-void removeAt_linkedList(LinkedList *linkedList, uint8_t index){
-	getInternal_linkedList(linkedList, index, NULL);
+uint8_t insertBefore_linkedList(LinkedList *linkedList, void *item){
+	kernelPanic();
+}
+
+void linkedList_removeAt(LinkedList *linkedList, uint8_t index){
+	getInternal(linkedList, index, NULL);
 	ListItem *toRemove = linkedList->current->next;
 	linkedList->current->next = toRemove->next;
+	linkedList->length--;
 	freeMem(toRemove);
 }
 
-//uint8_t next_linkedList(LinkedList *linkedList){
-	//uint8_t newIndex = (linkedList->currentIndex + 1) % linkedList->length;
-	//get_linkedList(linkedList, newIndex);
-	//return newIndex;
-//}
-//
-//void first_linkedList(LinkedList *linkedList){
-	//get_linkedList(linkedList, 0);
-//}
-//
-//void last_linkedList(LinkedList *linkedList){
-	//get_linkedList(linkedList->length - 1);
-//}
-//
-uint8_t get_linkedList(LinkedList *linkedList, uint8_t index, void **item){
-	return getInternal_linkedList(linkedList, index + 1, item);
+uint8_t linkedList_first(LinkedList *linkedList, void **item){
+	linkedList_get(linkedList, 0, item);
 }
 
-uint8_t length_linkedList(LinkedList *linkedList){
+uint8_t linkedList_last(LinkedList *linkedList, void **item){
+	linkedList_get(linkedList, linkedList->length - 1, item);
+}
+
+uint8_t linkedList_get(LinkedList *linkedList, uint8_t index, void **item){
+	return getInternal(linkedList, index + 1, item);
+}
+
+uint8_t linkedList_length(LinkedList *linkedList){
 	return linkedList->length;
 }
 

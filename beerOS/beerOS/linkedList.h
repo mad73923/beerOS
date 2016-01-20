@@ -20,19 +20,17 @@ typedef struct {
 
 uint8_t init_linkedList(LinkedList *linkedList);
 
-uint8_t add_linkedList(LinkedList *linkedList, void *item, uint8_t index);
-uint8_t append_linkedList(LinkedList *linkedList, void *item);
-//uint8_t insertAfter_linkedList(LinkedList *linkedList, void *item);
-//uint8_t insertBefore_linkedList(LinkedList *linkedList, void *item);
+uint8_t linkedList_add(LinkedList *linkedList, void *item, uint8_t index);
+uint8_t linkedList_append(LinkedList *linkedList, void *item);
+//uint8_t insertafter_linkedlist(linkedlist *linkedlist, void *item);
+//uint8_t insertbefore_linkedlist(linkedlist *linkedlist, void *item);
 
-void remove_linkedList(LinkedList *linkedList);
-void removeAt_linkedList(LinkedList *linkedList, uint8_t index);
+void linkedList_removeAt(LinkedList *linkedList, uint8_t index);
 
-//uint8_t next_linkedList(LinkedList *linkedList);
-//void first_linkedList(LinkedList *linkedList);
-//void last_linkedList(LinkedList *linkedList);
-uint8_t get_linkedList(LinkedList *linkedList, uint8_t index, void **item);
+uint8_t linkedList_first(LinkedList *linkedList, void **item);
+uint8_t linkedList_last(LinkedList *linkedList, void **item);
+uint8_t linkedList_get(LinkedList *linkedList, uint8_t index, void **item);
 
-uint8_t length_linkedList(LinkedList *linkedList);
+uint8_t linkedList_length(LinkedList *linkedList);
 
 #endif /* LINKEDLIST_H_ */
