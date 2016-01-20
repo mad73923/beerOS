@@ -14,6 +14,7 @@
 
 void semaphoreTestTask();
 void signalTestTask();
+void sleepTestTask();
 void linkedListTestTask();
 
 extern uint8_t task;

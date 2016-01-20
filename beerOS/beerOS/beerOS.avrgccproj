@@ -79,6 +79,9 @@
     <GenerateEepFile>True</GenerateEepFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="TestTasks\sleepTest.c">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="safeLinkedList.c">
       <SubType>compile</SubType>
     </Compile>
@@ -152,6 +155,12 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="task.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="time.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="time.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="TestTasks\semaphoreTest.c">

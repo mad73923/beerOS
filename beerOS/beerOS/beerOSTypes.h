@@ -26,23 +26,24 @@ typedef volatile struct strucTCB{
 	volatile uint8_t prio;
 	volatile uint8_t* stackPointer;
 	volatile uint8_t* stackBeginn;
-	volatile uint32_t stackSize;
+	volatile uint16_t stackSize;
+	volatile uint32_t waitUntil;
 	volatile taskstate state;
 }taskControlBlock;
 
 //SYNC
 typedef volatile struct{
-	volatile struct taskControlBlock* firstWaiting;
+	volatile taskControlBlock* firstWaiting;
 	volatile int16_t semaCnt;
 }semaphore;
 
 typedef volatile struct{
-	volatile struct taskControlBlock* firstWaiting;
+	volatile taskControlBlock* firstWaiting;
 }signal;
 
-typedef volatile struct{
-	volatile struct taskControlBlock* firstWaiting;
-}likedSyncObject;
+typedef volatile struct strucLSO{
+	volatile taskControlBlock* firstWaiting;
+}linkedSyncObject;
 
 
 
