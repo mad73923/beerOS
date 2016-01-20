@@ -7,7 +7,9 @@
 
 #include "dispatcher.h"
 
-uint8_t task = 0;
+volatile uint8_t hardwareISR = 1;
+
+
 
 ISR(DISPISRVEC, ISR_NAKED){
 	
@@ -48,6 +50,7 @@ ISR(DISPISRVEC, ISR_NAKED){
 					"PUSH R0\n\t"
 					"IN R0, 0x003C ;EIND\n\t"
 					"PUSH R0\n\t"
+					"CLR R1"
 				);
 				
 	
@@ -56,15 +59,33 @@ ISR(DISPISRVEC, ISR_NAKED){
 	// Prioritaet (je nach Scheduling Verfahren)
 	
 	//rescue stack pointer
-	tcb[task].stack = SP;
+	tcb[task].stackPointer = SP;
+	// set task state
+	// if state = waiting, dont change!	
+	if(tcb[task].state == RUNNING){
+		tcb[task].state = READY;		
+	}
+	
+	if(hardwareISR == 1){
+		systemTime_ms ++;
+		wakeupPendingTasks();
+	}
+	hardwareISR = 1;
+	
 	// call scheduler
-	task = (task + 1) % 2;
+	scheduleNextTask();
+	
+	if(tcb[task].stackBeginn[tcb->stackSize-1] != magicStackNumber){
+		kernelPanic();
+	}
+	
 	// reassign stackpointer
-	SP = tcb[task].stack;
+	SP = tcb[task].stackPointer;
+	// set task state
+	tcb[task].state = RUNNING;
 	
 	asm volatile ("nop");
 	
-	 
 	// write registers of new thread
 	asm volatile(	"POP R0\n\t"
 					"OUT 0x003C, R0 ;EIND\n\t"
@@ -103,6 +124,7 @@ ISR(DISPISRVEC, ISR_NAKED){
 					"POP R1\n\t"
 					"POP R0\n\t"					
 				);
+	
 	enableInterrupts();
 	asm volatile ("nop");
 	asm volatile ("reti");

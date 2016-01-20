@@ -9,17 +9,25 @@
 #ifndef HARDWARE_H_
 #define HARDWARE_H_
 
+#include "beerOSTypes.h"
+
+
 #ifdef __AVR_ATxmega128A1__
 
-#include <avr/io.h>
-#include <avr/interrupt.h>
-
 #define DISPISRVEC TCF0_OVF_vect
+
+static void __attribute__((always_inline)) enableInterrupts(){
+	sei();
+}
+
+static void __attribute__((always_inline)) disableInterrupts(){
+	cli();
+}
 
 #endif // __AVR_ATxmega128A1__
 
 void initHardware();
-void enableInterrupts();
-void disableInterrupts();
+
+
 
 #endif /* HARDWARE_H_ */

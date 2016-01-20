@@ -9,9 +9,13 @@
 #ifndef DISPATCHER_H_
 #define DISPATCHER_H_
 
+#include "beerOSTypes.h"
+#include "scheduler.h"
 #include "hardware.h"
 #include "task.h"
+#include "time.h"
 
-extern taskControlBlock tcb[4];
+extern volatile uint32_t systemTime_ms;
+extern volatile linkedSyncObject firstSleeping;
 
 #endif /* DISPATCHER_H_ */

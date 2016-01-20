@@ -9,10 +9,13 @@
 #ifndef BEEROS_H_
 #define BEEROS_H_
 
-#include "hardware.h"
-#include "dispatcher.h"
-#include "task.h"
-
+#include "beerOSTypes.h"
 #include "dummyTask.h"
+#include "scheduler.h"
+#include "task.h"
+#include "hardware.h"
+
+//void startBeerOS(taskControlBlock* firstTask);
+//int run();
 
 #endif /* BEEROS_H_ */
