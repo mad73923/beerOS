@@ -50,9 +50,5 @@ void queueTestTask(){
 	
 	if(queue_isEmpty(&queue)){
 		kernelPanic();
-	}
-	
-	
-	
-	
+	}	
 }
