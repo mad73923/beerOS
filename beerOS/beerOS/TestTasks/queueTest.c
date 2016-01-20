@@ -1,7 +1,7 @@
 #include "../queue.h"
 #include "testTasks.h"
 
-static int testValues[6] = {1, 2, 3, 4, 5, 6};
+static int testValues[5] = {1, 2, 3, 4, 5};
 static Queue queue;
 	
 void queueTestTask(){
@@ -13,68 +13,46 @@ void queueTestTask(){
 		kernelPanic();
 	}
 	
+	//test queue_push
+	for(int i = 0; i < 5; i++){
+		if(queue_push(&queue, &testValues[i])){
+			kernelPanic();
+		}
+	}
 	
-	//// test linkedList_append
-	//// test linkedList_get
-	//for(int i = 0; i < 5; i++){
-		//if(linkedList_append(&linkedList, &testValues[i])){
-			//kernelPanic();		
-		//}	
-	//}	
-	//
-	//for(uint8_t j = 0; j < 5; j++){
-		//if(linkedList_get(&linkedList, j, &value)){
-				//kernelPanic();			
-		//}
-		 //
-		//if(*value != j + 1){
-			//kernelPanic();
-		//}
-			//
-	//}
-	//
-	////test linkedList_add
-	//if(linkedList_add(&linkedList, &testValues[5], 2)){
-		//kernelPanic();
-	//}
-	 //
-	//if(linkedList_get(&linkedList, 2, &value)){
-		//kernelPanic();
-	//}
-	//
-	//if(*value != 6){
-		//kernelPanic();
-	//}
-	//
-	////test linkedList_length	
-	//if(linkedList_length(&linkedList) != 6){
-		//kernelPanic();
-	//}
-	//
-		//
-	////test linkedList_first	
-	//if(linkedList_first(&linkedList, &value)){
-		//kernelPanic();
-	//}
-	//
-	//if(*value != 1){
-		//kernelPanic();
-	//}
-	//
-	////test linkedList_last	
-	//if(linkedList_last(&linkedList, &value)){
-		//kernelPanic();
-	//}
-	//
-	//if(*value != 5){
-		//kernelPanic();
-	//}
-	//
-	////test linkedList_remove
-	//int lenghtBeforeRemove = linkedList_length(&linkedList);
-	//linkedList_remove(&linkedList, lenghtBeforeRemove - 1);
-	//
-	//if(linkedList_get(&linkedList, lenghtBeforeRemove - 1, NULL) == 0){
-		//kernelPanic();
-	//}			
+	//test queue_peek
+	if(queue_peek(&queue, &value)){
+		kernelPanic();
+	}
+	
+	if(*value != 1){
+		kernelPanic();
+	}
+	
+	//test queue_pop
+	for(int i = 0; i < 5; i++){
+		if(queue_pop(&queue, &value)){
+			kernelPanic();
+		}
+		if(*value != i + 1){
+			kernelPanic();
+		}
+	}
+	
+	//test queue_isEmpty
+	if(!queue_isEmpty(&queue)){
+		kernelPanic();
+	}
+	
+	if(queue_push(&queue, &testValues[1])){
+		kernelPanic();
+	}
+	
+	if(queue_isEmpty(&queue)){
+		kernelPanic();
+	}
+	
+	
+	
+	
 }
