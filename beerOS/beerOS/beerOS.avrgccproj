@@ -79,6 +79,18 @@
     <GenerateEepFile>True</GenerateEepFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="memoryManagement.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="memoryManagement.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="memoryManagementInternal.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="TestTasks\memoryManagementTest.c">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="TestTasks\sleepTest.c">
       <SubType>compile</SubType>
     </Compile>

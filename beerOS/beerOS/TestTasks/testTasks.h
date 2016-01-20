@@ -17,6 +17,7 @@ void signalTestTask();
 void sleepTestTask();
 void linkedListTestTask();
 void queueTestTask();
+void memoryManagementTestTask();
 
 extern uint8_t task;
 

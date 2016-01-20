@@ -16,6 +16,7 @@ uint8_t task3Stack[128];
 //#define sleepTest
 //#define LinkedListTest
 //#define QueueTest
+#define MemoryManagementTest
 void startBeerOS(taskControlBlock* firstTask);
 
 int run(void)
@@ -45,6 +46,10 @@ int run(void)
 	initTask(1, task1Stack, queueTestTask, 128);
 #endif // QueueTest
 
+#ifdef MemoryManagementTest
+	initTask(1, task1Stack, memoryManagementTestTask, 128);
+#endif
+	
 	initIdleTask();
 	initHardware();
 	
