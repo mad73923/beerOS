@@ -7,6 +7,9 @@
 
 #include "dispatcher.h"
 
+volatile uint8_t hardwareISR = 1;
+
+
 
 ISR(DISPISRVEC, ISR_NAKED){
 	
@@ -47,6 +50,7 @@ ISR(DISPISRVEC, ISR_NAKED){
 					"PUSH R0\n\t"
 					"IN R0, 0x003C ;EIND\n\t"
 					"PUSH R0\n\t"
+					"CLR R1"
 				);
 				
 	
@@ -61,6 +65,12 @@ ISR(DISPISRVEC, ISR_NAKED){
 	if(tcb[task].state == RUNNING){
 		tcb[task].state = READY;		
 	}
+	
+	if(hardwareISR == 1){
+		systemTime_ms ++;
+		wakeupPendingTasks();
+	}
+	hardwareISR = 1;
 	
 	// call scheduler
 	scheduleNextTask();
