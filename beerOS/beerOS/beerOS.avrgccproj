@@ -79,6 +79,12 @@
     <GenerateEepFile>True</GenerateEepFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="safeLinkedList.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="safeLinkedList.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="TestTasks\linkedListTest.c">
       <SubType>compile</SubType>
     </Compile>
