@@ -16,7 +16,6 @@ uint8_t linkedList_init(LinkedList *linkedList){
 	linkedList->current = NULL;
 	linkedList->currentIndex = 0;
 	linkedList->length = 0;
-	linkedList->sema = NULL;
 	return 0;
 }
 
