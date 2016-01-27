@@ -41,6 +41,19 @@ void linkedListTestTask(){
 			
 	}
 	
+	//test linkedList_iter
+	int i = 1;
+	while(linkedList_iter(&linkedList, &value)){
+		if(*value != i){
+			kernelPanic();
+		}
+		i++;
+	}
+	
+	if(*value != 5){
+			kernelPanic();
+	}
+	
 	//test linkedList_add
 	if(linkedList_add(&linkedList, &testValues[5], 2)){
 		kernelPanic();
@@ -84,5 +97,5 @@ void linkedListTestTask(){
 	
 	if(linkedList_get(&linkedList, lenghtBeforeRemove - 1, NULL) == 0){
 		kernelPanic();
-	}			
+	}
 }
