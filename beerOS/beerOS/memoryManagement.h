@@ -3,7 +3,7 @@
 
 #include "beerOSTypes.h"
 
-uint16_t *get(uint16_t size);
+void* get(uint16_t size);
 void free(uint16_t *ptr);
 
 #define numberOfSegments 32

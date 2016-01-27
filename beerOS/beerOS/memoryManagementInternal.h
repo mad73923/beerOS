@@ -8,7 +8,7 @@ typedef struct{
 }MemoryHead;
 
 typedef struct{
-	uint16_t current;
+	uint16_t memId;
 	uint8_t requestSize;
 	uint16_t gapSize;
 }MemoryRequest;
@@ -20,10 +20,10 @@ typedef struct{
 typedef uint16_t (*memoryAlgorithm)(uint16_t);
 
 void memoryManagement_wipe();
-uint8_t memoryManagement_next(MemoryRequest *memoryRequest);
+uint16_t memoryManagement_next(MemoryRequest *memoryRequest);
 void memoryManagement_init(memoryAlgorithm m);
-
-
+void* memoryManagement_alloc(MemoryRequest *memoryRequest);
+void memoryManagement_initMemoryRequest(MemoryRequest *memoryRequest, uint8_t size);
 
 
 #endif /* MEMORYMANAGEMENTINTERNAL_H_ */
