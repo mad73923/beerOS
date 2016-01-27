@@ -18,6 +18,7 @@ uint8_t task3Stack[stacksize];
 //#define sleepTest
 //#define LinkedListTest
 //#define QueueTest
+//#define PrioTest
 
 int run(void)
 {	
@@ -47,6 +48,12 @@ int run(void)
 #ifdef QueueTest
 	initTask(1, task1Stack, queueTestTask, stacksize);
 #endif // QueueTest
+
+#ifdef PrioTest
+	initTask(0, task1Stack, prioTestTask, stacksize);
+	initTask(1, task2Stack, prioTestTask, stacksize);
+	initTask(2, task3Stack, prioTestTask, stacksize);
+#endif // PrioTest
 
 	initIdleTask();
 	initHardware();

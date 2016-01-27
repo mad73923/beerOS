@@ -17,5 +17,6 @@ void signalTestTask();
 void sleepTestTask();
 void linkedListTestTask();
 void queueTestTask();
+void prioTestTask();
 
 #endif /* TESTTASKS_H_ */
