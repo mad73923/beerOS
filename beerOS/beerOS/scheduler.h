@@ -3,10 +3,11 @@
 
 
 #include "beerOSTypes.h"
+#include "linkedList.h"
 
-extern uint8_t numberOfTasks;
 extern const uint8_t progcntOffset;
 
+extern volatile LinkedList allTasksList;
 
 void scheduleNextTask();
 void initIdleTask();

@@ -13,8 +13,8 @@ void scheduleNextTask(){
 
 void schedSimpleRoundRobbin(){
 	do{
-		task = (task + 1) % numberOfTasks;
-		currentTask = &tcb[task];
+		task = (task + 1) % linkedList_length(&allTasksList);
+		linkedList_get(&allTasksList, task, &currentTask);
 	}while (currentTask->state == WAITING);
 }
 

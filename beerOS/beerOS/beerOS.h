@@ -17,7 +17,6 @@
 
 extern taskControlBlock* currentTask;
 
-//void startBeerOS(taskControlBlock* firstTask);
 //int run();
 
 #endif /* BEEROS_H_ */

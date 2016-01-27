@@ -1,5 +1,8 @@
 #include "task.h"
 
+volatile uint8_t taskStructsAreInit = 0;
+volatile LinkedList allTasksList;
+
 uint8_t numberOfTasks = 0;
 // 32 reg + sreg + eind + 3x progcnt + index 0 + magicNo
 const uint8_t numberOfRegister = 32+2+3+1+1;
@@ -11,18 +14,28 @@ typedef union {
 	uint8_t u8[4];
 } ByteAccessUnion;
 
+void initTaskStructs();
 void initTaskControlBlock(uint8_t prio, uint8_t* stack, uint16_t stackSize);
 void placeMagicNumberOnStack(uint8_t* stack, uint16_t stackSize);
 void placeStartAdressOnStack(uint8_t* stack, void* taskFunction, uint16_t stackSize);
 
 void initTask(uint8_t prio, uint8_t* stack, void* taskFunction, uint16_t stackSize){
+	if(!taskStructsAreInit){
+		initTaskStructs();
+		taskStructsAreInit = 1;
+	}
 	initTaskControlBlock(prio, stack, stackSize);
 	placeMagicNumberOnStack(stack, stackSize);
 	placeStartAdressOnStack(stack, taskFunction, stackSize);	
 }
 
+void initTaskStructs(){
+	linkedList_init(&allTasksList);
+}
+
 void initTaskControlBlock(uint8_t prio, uint8_t* stack, uint16_t stackSize){
 	taskControlBlock *cb = &tcb[numberOfTasks];
+	linkedList_append(&allTasksList, cb);
 	numberOfTasks++;
 	cb->prio = prio;
 	cb->stackSize = stackSize;
