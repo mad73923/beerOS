@@ -3,7 +3,6 @@
 volatile uint8_t taskStructsAreInit = 0;
 volatile LinkedList allTasksList;
 
-uint8_t numberOfTasks = 0;
 // 32 reg + sreg + eind + 3x progcnt + index 0 + magicNo
 const uint8_t numberOfRegister = 32+2+3+1+1;
 // 3x progcnt + magicNo + index 0
@@ -34,9 +33,11 @@ void initTaskStructs(){
 }
 
 void initTaskControlBlock(uint8_t prio, uint8_t* stack, uint16_t stackSize){
-	taskControlBlock *cb = &tcb[numberOfTasks];
+	if(linkedList_length(&allTasksList) >= maxNumberOfTasks){
+		kernelPanic();
+	}
+	taskControlBlock *cb = &tcb[linkedList_length(&allTasksList)];
 	linkedList_append(&allTasksList, cb);
-	numberOfTasks++;
 	cb->prio = prio;
 	cb->stackSize = stackSize;
 	cb->stackBeginn = stack;

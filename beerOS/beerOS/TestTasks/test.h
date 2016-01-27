@@ -15,9 +15,4 @@
 #include "../task.h"
 #include "../hardware.h"
 
-extern taskControlBlock* currentTask;
-extern taskControlBlock tcb[4];
-
-//int run();
-
 #endif /* TEST_H_ */

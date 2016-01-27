@@ -49,7 +49,9 @@ int run(void)
 	initIdleTask();
 	initHardware();
 	
-	startBeerOS(&tcb[0]);
+	taskControlBlock* startTask;
+	linkedList_get(&allTasksList, 0, &startTask);
+	startBeerOS(startTask);
 	
     while(1)
     {

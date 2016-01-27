@@ -19,6 +19,8 @@
 #define NULL 0
 
 // TASK
+#define maxNumberOfTasks 10
+
 typedef enum {READY, RUNNING, WAITING, KILLED} taskstate;
 
 typedef volatile struct strucTCB{

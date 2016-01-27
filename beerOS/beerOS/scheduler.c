@@ -2,7 +2,7 @@
 
 uint8_t task = 0;
 uint8_t idleTaskStack[128];
-taskControlBlock tcb[4];
+taskControlBlock tcb[maxNumberOfTasks];
 taskControlBlock* currentTask;
 
 void schedSimpleRoundRobbin();
