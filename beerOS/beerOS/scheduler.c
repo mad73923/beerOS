@@ -8,7 +8,8 @@ void schedSimpleRoundRobbin();
 void schedPrioRoundRobbin();
 
 void scheduleNextTask(){
-	schedSimpleRoundRobbin();
+	//schedSimpleRoundRobbin();
+	schedPrioRoundRobbin();
 }
 
 void schedSimpleRoundRobbin(){
@@ -28,8 +29,8 @@ void schedPrioRoundRobbin(){
 		linkedList_get(&prioQueueList, currentTask->prio, &targetPrioQueue);
 		queue_push(targetPrioQueue, currentTask);
 	}
+	Queue* nextPrioQueue;	
 	for(uint16_t i = 0; i <= maxPrio; i++){
-		Queue* nextPrioQueue;
 		linkedList_get(&prioQueueList, i, &nextPrioQueue);
 		if(!queue_isEmpty(nextPrioQueue)){
 			queue_pop(nextPrioQueue, &currentTask);
@@ -49,6 +50,16 @@ void idleTask(){
 }
 
 void startBeerOS(taskControlBlock* firstTask){
+	Queue* targetPrioQueue;
+	taskControlBlock* newTask;
+	for(uint32_t i = 0; i < linkedList_length(&allTasksList); i++){
+		linkedList_get(&allTasksList, i, &newTask);
+		if(newTask != firstTask){
+			linkedList_get(&prioQueueList, newTask->prio, &targetPrioQueue);
+			queue_push(targetPrioQueue, newTask);
+		}
+	}
+	
 	//set stack pointer of starting task next to taskaddress
 	SP = firstTask->stackBeginn+firstTask->stackSize-progcntOffset;
 	firstTask->state = RUNNING;

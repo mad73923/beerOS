@@ -48,10 +48,7 @@ void initTaskControlBlock(uint8_t prio, uint8_t* stack, uint16_t stackSize){
 	}
 	taskControlBlock *cb = &tcb[linkedList_length(&allTasksList)];
 	linkedList_append(&allTasksList, cb);
-	Queue* targetPrioQueue;
-	linkedList_get(&prioQueueList, prio, &targetPrioQueue);
-	queue_push(targetPrioQueue, cb);
-	
+		
 	cb->prio = prio;
 	cb->id = linkedList_length(&allTasksList)-1;
 	cb->stackSize = stackSize;
@@ -87,8 +84,8 @@ void wakeupLinkedTasks(linkedSyncObject* syncObj){
 		linkedList_get(&prioQueueList, tb->prio, &targetPrioQueue);
 		queue_push(targetPrioQueue, tb);
 		
-		syncObj->firstWaiting = NULL;
 		syncObj->firstWaiting = tb->semaNextWaiting;
+		tb->semaNextWaiting = NULL;
 	}
 }
 

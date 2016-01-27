@@ -21,6 +21,7 @@
 // TASK
 #define maxNumberOfTasks 10
 // prios allowed: 0 - maxprio
+// 0 highest prio, maxPrio lowest
 #define maxPrio 5
 
 typedef enum {READY, RUNNING, WAITING, KILLED} taskstate;
