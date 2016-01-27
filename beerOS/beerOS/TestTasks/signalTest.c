@@ -17,20 +17,20 @@ static volatile int task2Cnt = 0;
 static volatile int task3Cnt = 0;
 
 void signalTestTask(){
-	if(task == 0){
+	if(currentTask->id == 0){
 		initSignal(&signal1);
 		initSignal(&signal2);
 		initSignal(&signal3);
 	}
 	while(1){
-		if(task == 0){
+		if(currentTask->id == 0){
 			waitSignal(&signal1);
 			task1Cnt++;	
 			yieldTask();
 			yieldTask();
 			yieldTask();	
 			sendSignal(&signal2);
-		}else if(task == 1){
+		}else if(currentTask->id == 1){
 			yieldTask();
 			yieldTask();
 			yieldTask();
@@ -41,7 +41,7 @@ void signalTestTask(){
 			yieldTask();
 			yieldTask();
 			sendSignal(&signal3);	
-		}else if(task == 2){
+		}else if(currentTask->id == 2){
 			waitSignal(&signal3);
 			task3Cnt++;
 		}

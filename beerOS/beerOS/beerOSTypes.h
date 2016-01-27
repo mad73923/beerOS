@@ -28,6 +28,7 @@ typedef enum {READY, RUNNING, WAITING, KILLED} taskstate;
 typedef volatile struct strucTCB{
 	volatile struct strucTCB* semaNextWaiting;
 	volatile uint8_t prio;
+	volatile uint8_t id;
 	volatile uint8_t* stackPointer;
 	volatile uint8_t* stackBeginn;
 	volatile uint16_t stackSize;

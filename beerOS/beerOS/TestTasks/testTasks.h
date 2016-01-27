@@ -18,6 +18,4 @@ void sleepTestTask();
 void linkedListTestTask();
 void queueTestTask();
 
-extern uint8_t task;
-
 #endif /* TESTTASKS_H_ */

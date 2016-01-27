@@ -17,19 +17,19 @@ static volatile int task3Cnt = 0;
 
 
 void sleepTestTask(){
-	if(task == 0){
+	if(currentTask->id == 0){
 		// lower timer period to 200us for faster testing
 		TCF0.PER = 0x1C20;
 	}			
 	
 	while(1){
-		if(task == 0){
+		if(currentTask->id == 0){
 			sleep_ms(2);
 			task1Cnt++;
 			if(task1Cnt * 2 != systemTime_ms){
 				kernelPanic();
 			}
-		}else if(task == 1){
+		}else if(currentTask->id == 1){
 			sleep_ms(3);
 			task2Cnt++;
 			if(task2Cnt * 3 != systemTime_ms){

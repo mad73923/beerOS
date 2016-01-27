@@ -53,6 +53,7 @@ void initTaskControlBlock(uint8_t prio, uint8_t* stack, uint16_t stackSize){
 	queue_push(targetPrioQueue, cb);
 	
 	cb->prio = prio;
+	cb->id = linkedList_length(&allTasksList)-1;
 	cb->stackSize = stackSize;
 	cb->stackBeginn = stack;
 	cb->stackPointer = stack + (stackSize - numberOfRegister);

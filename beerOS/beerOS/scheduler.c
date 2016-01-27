@@ -1,6 +1,5 @@
 #include "scheduler.h"
 
-uint8_t task = 0;
 uint8_t idleTaskStack[128];
 taskControlBlock tcb[maxNumberOfTasks];
 taskControlBlock* currentTask;
@@ -13,8 +12,9 @@ void scheduleNextTask(){
 }
 
 void schedSimpleRoundRobbin(){
+	uint8_t task;
 	do{
-		task = (task + 1) % linkedList_length(&allTasksList);
+		task = (currentTask->id + 1)% linkedList_length(&allTasksList);
 		linkedList_get(&allTasksList, task, &currentTask);
 	}while (currentTask->state == WAITING);
 }

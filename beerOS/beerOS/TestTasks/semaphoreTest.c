@@ -17,22 +17,22 @@ static volatile int task2Cnt = 0;
 static volatile int task3Cnt = 0;
 
 void semaphoreTestTask(){	
-	if(task == 0){
+	if(currentTask->id == 0){
 		initSemaphore(&dummySema, 1);
 		initSemaphore(&dummySema2, 0);
 		initSemaphore(&dummySema3, 0);
 	}	
 	asm volatile ("nop");
 	while(1){
-		if(task == 0){
+		if(currentTask->id == 0){
 			waitSemaphore(&dummySema);
 			task1Cnt++;
 			releaseSemaphore(&dummySema2);
-		}else if(task == 1){
+		}else if(currentTask->id == 1){
 			waitSemaphore(&dummySema2);
 			task2Cnt++;
 			releaseSemaphore(&dummySema3);
-		}else if(task == 2){
+		}else if(currentTask->id == 2){
 			waitSemaphore(&dummySema3);
 			task3Cnt++;
 			releaseSemaphore(&dummySema);
