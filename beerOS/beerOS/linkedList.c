@@ -114,6 +114,24 @@ uint8_t allocMem(ListItem** listItem){
 	return 0;
 }
 
+uint8_t linkedList_iter(LinkedList *linkedList, void **item){
+	if(!linkedList->isIterating){
+		linkedList->current = linkedList->list->next;
+		linkedList->isIterating = 1;
+		linkedList->currentIndex = 0;
+	} else if(!linkedList->current->next){
+		linkedList->isIterating = 0;
+		return 0;		
+	} else {
+		linkedList->current = linkedList->current->next;
+		linkedList->currentIndex++;
+	}
+	
+	*item = linkedList->current->this;
+	return 1;
+}
+
 void freeMem(ListItem* listItem){
 	listItem->this = NULL;
 }
+

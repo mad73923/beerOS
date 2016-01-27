@@ -50,3 +50,7 @@ void wakeupPendingTasks(){
 			}
 		}
 }
+
+uint32_t getTime(){
+	return systemTime_ms;
+}
