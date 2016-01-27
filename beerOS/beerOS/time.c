@@ -56,6 +56,7 @@ void wakeupPendingTasks(){
 		}else{				
 			break;
 		}
+	}
 }
 
 uint32_t getTime(){
