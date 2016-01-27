@@ -9,8 +9,9 @@
 
 void kernelPanic(){
 	disableInterrupts();
+	uint32_t calledAt = __builtin_return_address(0);
 	while(1){
-		asm volatile ("nop");		
+		asm volatile ("nop");
 	}
 }
 

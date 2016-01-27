@@ -37,16 +37,24 @@ void sleep_ms(uint32_t ms){
 
 void wakeupPendingTasks(){
 	tmpSleeping = firstSleeping.firstWaiting;
-		while(tmpSleeping != NULL){
-			if(tmpSleeping->waitUntil <= systemTime_ms){
-				tmpSleeping->state = READY;
-				tmpSleeping->waitUntil = 0;
-				next = tmpSleeping->semaNextWaiting;
-				tmpSleeping->semaNextWaiting = NULL;
-				tmpSleeping = next;
-				firstSleeping.firstWaiting = next;
-			}else{				
-				break;
+	Queue* targetPrioQueue;	
+	while(tmpSleeping != NULL){
+		if(tmpSleeping->waitUntil <= systemTime_ms){
+			tmpSleeping->state = READY;
+			tmpSleeping->waitUntil = 0;
+				
+			if(tmpSleeping->prio > maxPrio){
+				kernelPanic();
 			}
+			linkedList_get(&prioQueueList, tmpSleeping->prio, &targetPrioQueue);
+			queue_push(targetPrioQueue, tmpSleeping);
+				
+			next = tmpSleeping->semaNextWaiting;
+			tmpSleeping->semaNextWaiting = NULL;
+			tmpSleeping = next;
+			firstSleeping.firstWaiting = next;
+		}else{				
+			break;
 		}
+	}
 }

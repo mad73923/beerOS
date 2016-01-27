@@ -1,6 +1,7 @@
 #include "scheduler.h"
 
-uint8_t idleTaskStack[128];
+#define idleTaskStackSize 256
+uint8_t idleTaskStack[idleTaskStackSize];
 taskControlBlock tcb[maxNumberOfTasks];
 taskControlBlock* currentTask;
 
@@ -40,7 +41,7 @@ void schedPrioRoundRobbin(){
 }
 
 void initIdleTask(){
-	initTask(maxPrio, idleTaskStack, idleTask, 128);	
+	initTask(maxPrio, idleTaskStack, idleTask, idleTaskStackSize);	
 }
 
 void idleTask(){

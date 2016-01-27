@@ -36,6 +36,7 @@ void initDispatcherTimer(){
 	// adapt period here
 	// 0x7D00 = 1ms
 	// 0x4650 = 500us
+	// 0x3200 = 400us
 	// 0x1C20 = 200us
 	// 0xC80  = 100us
 	// 0x140  = 10us

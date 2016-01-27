@@ -73,6 +73,7 @@ void placeStartAdressOnStack(uint8_t* stack, void* taskFunction, uint16_t stackS
 }
 
 void wakeupLinkedTasks(linkedSyncObject* syncObj){
+	Queue* targetPrioQueue;
 	while(syncObj->firstWaiting != NULL){
 		taskControlBlock* tb = syncObj->firstWaiting;
 		tb->state = READY;
@@ -80,7 +81,6 @@ void wakeupLinkedTasks(linkedSyncObject* syncObj){
 		if(tb->prio > maxPrio){
 			kernelPanic();
 		}
-		Queue* targetPrioQueue;
 		linkedList_get(&prioQueueList, tb->prio, &targetPrioQueue);
 		queue_push(targetPrioQueue, tb);
 		
