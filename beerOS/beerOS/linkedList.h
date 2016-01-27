@@ -13,6 +13,7 @@ typedef struct {
 	ListItem *current;
 	uint8_t length;
 	uint8_t currentIndex;
+	uint8_t isIterating;
 }LinkedList;
 
 uint8_t linkedList_init(LinkedList *linkedList);
@@ -27,6 +28,7 @@ void linkedList_remove(LinkedList *linkedList, uint8_t index);
 uint8_t linkedList_first(LinkedList *linkedList, void **item);
 uint8_t linkedList_last(LinkedList *linkedList, void **item);
 uint8_t linkedList_get(LinkedList *linkedList, uint8_t index, void **item);
+uint8_t linkedList_iter(LinkedList *linkedList, void **item);
 
 uint8_t linkedList_length(LinkedList *linkedList);
 
