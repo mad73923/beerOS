@@ -25,7 +25,7 @@ void signalTestTask(){
 	while(1){
 		if(currentTask->id == 0){
 			waitSignal(&signal1);
-			task1Cnt++;	
+			task1Cnt++;
 			yieldTask();
 			yieldTask();
 			yieldTask();	
