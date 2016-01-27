@@ -17,5 +17,6 @@ extern taskControlBlock tcb[4];
 
 void sleep_ms(uint32_t ms);
 void wakeupPendingTasks();
+uint32_t getTime();
 
 #endif /* TIME_H_ */
