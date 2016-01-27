@@ -11,7 +11,7 @@ uint8_t task1Stack[128];
 uint8_t task2Stack[128];
 uint8_t task3Stack[128];
 
-#define SemaTest
+//#define SemaTest
 //#define SignalTest
 //#define sleepTest
 //#define LinkedListTest

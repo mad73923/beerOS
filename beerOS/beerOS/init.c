@@ -7,6 +7,12 @@
 
 #include "init.h"
 
+uint8_t mainCalled = 0;
+
 int main(void){
+	if(mainCalled){
+		kernelPanic();
+	}
+	mainCalled++;
 	return run();
 }
