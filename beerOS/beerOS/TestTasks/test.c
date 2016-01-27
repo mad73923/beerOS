@@ -15,6 +15,7 @@ uint8_t task3Stack[128];
 //#define SignalTest
 //#define sleepTest
 //#define LinkedListTest
+//#define QueueTest
 void startBeerOS(taskControlBlock* firstTask);
 
 int run(void)
@@ -24,11 +25,11 @@ int run(void)
 	initTask(1, task1Stack, semaphoreTestTask, 128);
 	initTask(1, task2Stack, semaphoreTestTask, 128);
 #endif // SemaTest
+
 #ifdef SignalTest
 	initTask(1, task1Stack, signalTestTask, 128);
 	initTask(1, task2Stack, signalTestTask, 128);
 #endif // SignalTest
-
 
 #ifdef sleepTest
 	initTask(1, task1Stack, sleepTestTask, 128);
@@ -40,6 +41,9 @@ int run(void)
 	initTask(1, task1Stack, linkedListTestTask, 128);
 #endif // LinkedListTest
 
+#ifdef QueueTest
+	initTask(1, task1Stack, queueTestTask, 128);
+#endif // QueueTest
 
 	initIdleTask();
 	initHardware();

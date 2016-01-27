@@ -82,6 +82,12 @@
     <Compile Include="TestTasks\sleepTest.c">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="queue.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="queue.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="safeLinkedList.c">
       <SubType>compile</SubType>
     </Compile>
@@ -89,6 +95,9 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="TestTasks\linkedListTest.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="TestTasks\queueTest.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="TestTasks\testTasks.h">
