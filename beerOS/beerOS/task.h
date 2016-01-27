@@ -12,6 +12,7 @@
 #include "beerOSTypes.h"
 #include "scheduler.h"
 #include "linkedList.h"
+#include "queue.h"
 
 extern taskControlBlock tcb[4];
 

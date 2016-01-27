@@ -6,6 +6,7 @@ taskControlBlock tcb[maxNumberOfTasks];
 taskControlBlock* currentTask;
 
 void schedSimpleRoundRobbin();
+void schedPrioRoundRobbin();
 
 void scheduleNextTask(){
 	schedSimpleRoundRobbin();
@@ -18,8 +19,27 @@ void schedSimpleRoundRobbin(){
 	}while (currentTask->state == WAITING);
 }
 
+void schedPrioRoundRobbin(){
+	if(currentTask->state == READY){
+		if(currentTask->prio > maxPrio){
+			kernelPanic();
+		}
+		Queue* targetPrioQueue;
+		linkedList_get(&prioQueueList, currentTask->prio, &targetPrioQueue);
+		queue_push(targetPrioQueue, currentTask);
+	}
+	for(uint16_t i = 0; i <= maxPrio; i++){
+		Queue* nextPrioQueue;
+		linkedList_get(&prioQueueList, i, &nextPrioQueue);
+		if(!queue_isEmpty(nextPrioQueue)){
+			queue_pop(nextPrioQueue, &currentTask);
+			break;
+		}
+	}
+}
+
 void initIdleTask(){
-	initTask(1, idleTaskStack, idleTask, 128);	
+	initTask(maxPrio, idleTaskStack, idleTask, 128);	
 }
 
 void idleTask(){

@@ -2,6 +2,8 @@
 
 volatile uint8_t taskStructsAreInit = 0;
 volatile LinkedList allTasksList;
+volatile LinkedList prioQueueList;
+volatile Queue prioQueue[maxPrio+1];
 
 // 32 reg + sreg + eind + 3x progcnt + index 0 + magicNo
 const uint8_t numberOfRegister = 32+2+3+1+1;
@@ -30,14 +32,26 @@ void initTask(uint8_t prio, uint8_t* stack, void* taskFunction, uint16_t stackSi
 
 void initTaskStructs(){
 	linkedList_init(&allTasksList);
+	linkedList_init(&prioQueueList);
+	for (uint16_t i = 0; i <= maxPrio; i++){
+		queue_init(&prioQueue[i]);
+		linkedList_append(&prioQueueList, &prioQueue[i]);
+	}
 }
 
 void initTaskControlBlock(uint8_t prio, uint8_t* stack, uint16_t stackSize){
 	if(linkedList_length(&allTasksList) >= maxNumberOfTasks){
 		kernelPanic();
 	}
+	if(prio > maxPrio){
+		kernelPanic();
+	}
 	taskControlBlock *cb = &tcb[linkedList_length(&allTasksList)];
 	linkedList_append(&allTasksList, cb);
+	Queue* targetPrioQueue;
+	linkedList_get(&prioQueueList, prio, &targetPrioQueue);
+	queue_push(targetPrioQueue, cb);
+	
 	cb->prio = prio;
 	cb->stackSize = stackSize;
 	cb->stackBeginn = stack;
@@ -64,6 +78,14 @@ void wakeupLinkedTasks(linkedSyncObject* syncObj){
 	while(syncObj->firstWaiting != NULL){
 		taskControlBlock* tb = syncObj->firstWaiting;
 		tb->state = READY;
+		
+		if(tb->prio > maxPrio){
+			kernelPanic();
+		}
+		Queue* targetPrioQueue;
+		linkedList_get(&prioQueueList, tb->prio, &targetPrioQueue);
+		queue_push(targetPrioQueue, tb);
+		
 		syncObj->firstWaiting = NULL;
 		syncObj->firstWaiting = tb->semaNextWaiting;
 	}
