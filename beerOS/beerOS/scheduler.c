@@ -5,13 +5,12 @@ uint8_t idleTaskStack[idleTaskStackSize];
 taskControlBlock tcb[maxNumberOfTasks];
 taskControlBlock* currentTask;
 
-void schedSimpleRoundRobbin();
-void schedPrioRoundRobbin();
+void (*scheduleNextTask)(void);
 
-void scheduleNextTask(){
-	//schedSimpleRoundRobbin();
-	schedPrioRoundRobbin();
-}
+//void scheduleNextTask(){
+//	schedSimpleRoundRobbin();
+//	schedPrioRoundRobbin();
+//}
 
 void schedSimpleRoundRobbin(){
 	uint8_t task;
@@ -61,6 +60,8 @@ void startBeerOS(taskControlBlock* firstTask){
 			queue_push(targetPrioQueue, newTask);
 		}
 	}
+	
+	scheduler_initSimpleRR();
 	
 	//set stack pointer of starting task next to taskaddress
 	SP = firstTask->stackBeginn+firstTask->stackSize-progcntOffset;

@@ -79,6 +79,12 @@
     <GenerateEepFile>True</GenerateEepFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="scheduler\allScheduler.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="scheduler\simpleRR.c">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="TestTasks\prioTest.c">
       <SubType>compile</SubType>
     </Compile>
@@ -189,6 +195,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="scheduler" />
     <Folder Include="TestTasks" />
   </ItemGroup>
   <Import Project="$(AVRSTUDIO_EXE_PATH)\\Vs\\AvrGCC.targets" />
