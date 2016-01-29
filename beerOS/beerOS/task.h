@@ -14,7 +14,7 @@
 #include "linkedList.h"
 #include "queue.h"
 
-extern taskControlBlock tcb[4];
+extern taskControlBlock tcb[maxNumberOfTasks];
 
 void initTask(uint8_t prio, uint8_t* stack, void* taskFunction, uint16_t stackSize);
 
