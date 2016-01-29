@@ -64,6 +64,7 @@ int run(void)
 	
     while(1)
     {
+		kernelPanic();
         //TODO:: Please write your application code 
     }
 }
