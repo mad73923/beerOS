@@ -91,6 +91,9 @@
     <Compile Include="TestTasks\prioTest.c">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="TestTasks\rebootTest.c">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="TestTasks\sleepTest.c">
       <SubType>compile</SubType>
     </Compile>

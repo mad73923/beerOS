@@ -18,5 +18,6 @@ void sleepTestTask();
 void linkedListTestTask();
 void queueTestTask();
 void prioTestTask();
+void rebootTestTask();
 
 #endif /* TESTTASKS_H_ */
