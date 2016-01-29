@@ -10,8 +10,6 @@
 extern const uint8_t progcntOffset;
 
 extern volatile LinkedList allTasksList;
-extern volatile LinkedList prioQueueList;
-extern volatile Queue prioQueue[maxPrio+1];
 
 void (*scheduler_NextTask)(void);
 void (*scheduler_enqueueTask)(taskControlBlock* task);

@@ -7,6 +7,9 @@
 #include "../beerOSTypes.h"
 #include "allScheduler.h"
 
+volatile LinkedList prioQueueList;
+volatile Queue prioQueue[maxPrio+1];
+
 void prioRR_nextTask(){
 	if(currentTask->state == READY){
 		if(currentTask->prio > maxPrio){
@@ -36,6 +39,11 @@ void prioRR_enqueueTask(taskControlBlock* task){
 }
 
 void scheduler_initPrioRR(){
+	linkedList_init(&prioQueueList);
+	for (uint16_t i = 0; i <= maxPrio; i++){
+		queue_init(&prioQueue[i]);
+		linkedList_append(&prioQueueList, &prioQueue[i]);
+	}
 	Queue* targetPrioQueue;
 	taskControlBlock* newTask;
 	for(uint32_t i = 0; i < linkedList_length(&allTasksList); i++){

@@ -2,8 +2,7 @@
 
 volatile uint8_t taskStructsAreInit = 0;
 volatile LinkedList allTasksList;
-volatile LinkedList prioQueueList;
-volatile Queue prioQueue[maxPrio+1];
+
 
 // 32 reg + sreg + eind + 3x progcnt + index 0 + magicNo
 const uint8_t numberOfRegister = 32+2+3+1+1;
@@ -32,11 +31,6 @@ void initTask(uint8_t prio, uint8_t* stack, void* taskFunction, uint16_t stackSi
 
 void initTaskStructs(){
 	linkedList_init(&allTasksList);
-	linkedList_init(&prioQueueList);
-	for (uint16_t i = 0; i <= maxPrio; i++){
-		queue_init(&prioQueue[i]);
-		linkedList_append(&prioQueueList, &prioQueue[i]);
-	}
 }
 
 void initTaskControlBlock(uint8_t prio, uint8_t* stack, uint16_t stackSize){
