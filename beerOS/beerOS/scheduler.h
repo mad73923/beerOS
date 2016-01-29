@@ -13,7 +13,8 @@ extern volatile LinkedList allTasksList;
 extern volatile LinkedList prioQueueList;
 extern volatile Queue prioQueue[maxPrio+1];
 
-void (*scheduleNextTask)(void);
+void (*scheduler_NextTask)(void);
+void (*scheduler_enqueueTask)(taskControlBlock* task);
 void initIdleTask();
 void idleTask();
 void startBeerOS(taskControlBlock* firstTask);

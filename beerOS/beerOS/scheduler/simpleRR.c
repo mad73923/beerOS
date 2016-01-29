@@ -16,6 +16,11 @@ void simpleRR_nextTask(){
 	}while (currentTask->state == WAITING);
 }
 
+void simpleRR_enqueueTask(taskControlBlock* task){
+	
+}
+
 void scheduler_initSimpleRR(){
-	scheduleNextTask = &simpleRR_nextTask;
+	scheduler_NextTask = &simpleRR_nextTask;
+	scheduler_enqueueTask = &simpleRR_enqueueTask;
 }

@@ -5,12 +5,6 @@ uint8_t idleTaskStack[idleTaskStackSize];
 taskControlBlock tcb[maxNumberOfTasks];
 taskControlBlock* currentTask;
 
-void (*scheduleNextTask)(void);
-
-//void scheduleNextTask(){
-//	schedSimpleRoundRobbin();
-//	schedPrioRoundRobbin();
-//}
 
 void schedSimpleRoundRobbin(){
 	uint8_t task;

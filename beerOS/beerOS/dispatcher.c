@@ -73,7 +73,7 @@ ISR(DISPISRVEC, ISR_NAKED){
 	hardwareISR = 1;
 	
 	// call scheduler
-	scheduleNextTask();
+	scheduler_NextTask();
 	
 	if(currentTask->stackBeginn[currentTask->stackSize-1] != magicStackNumber){
 		kernelPanic();
