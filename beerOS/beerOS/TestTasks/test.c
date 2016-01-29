@@ -15,7 +15,7 @@ uint8_t task3Stack[stacksize];
 
 //#define SemaTest
 //#define SignalTest
-#define sleepTest
+//#define sleepTest
 //#define LinkedListTest
 //#define QueueTest
 //#define PrioTest
