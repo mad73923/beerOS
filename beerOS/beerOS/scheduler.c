@@ -15,11 +15,10 @@ void idleTask(){
 	}
 }
 
-void startBeerOS(taskControlBlock* firstTask){
+void startBeerOS(taskControlBlock* firstTask, void (*scheduler_init)(void)){
 	currentTask = firstTask;
 	
-	//TODO make this a parameter
-	scheduler_initPrioRR();
+	scheduler_init();
 	
 	//set stack pointer of starting task next to taskaddress
 	SP = currentTask->stackBeginn+currentTask->stackSize-progcntOffset;

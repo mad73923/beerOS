@@ -17,6 +17,6 @@ void (*scheduler_NextTask)(void);
 void (*scheduler_enqueueTask)(taskControlBlock* task);
 void initIdleTask();
 void idleTask();
-void startBeerOS(taskControlBlock* firstTask);
+void startBeerOS(taskControlBlock* firstTask, void (*scheduler_init)(void));
 
 #endif /* SCHEDULER_H_ */
