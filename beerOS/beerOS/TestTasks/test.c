@@ -36,9 +36,9 @@ int run(void)
 #endif // SignalTest
 
 #ifdef sleepTest
-	initTask(1, task1Stack, sleepTestTask, stacksize);
-	initTask(1, task2Stack, sleepTestTask, stacksize);
-	initTask(1, task3Stack, sleepTestTask, stacksize);
+	initTask(0, task1Stack, sleepTestTask, stacksize);
+	initTask(0, task2Stack, sleepTestTask, stacksize);
+	initTask(0, task3Stack, sleepTestTask, stacksize);
 #endif //sleepTest
 
 #ifdef LinkedListTest

@@ -18,41 +18,45 @@ void sleep_ms(uint32_t ms){
 	enterCriticalSection();
 	currentTask->state = WAITING;
 	currentTask->waitUntil = systemTime_ms + ms;
-	
-	if(linkedList_length(&allSleepingTasks.waitingTasks) > 0){
+	uint8_t taskAdded = 0;
+	uint8_t length = linkedList_length(&allSleepingTasks.waitingTasks);
+	if(length > 0){
 		taskControlBlock* nextTask;
 		uint8_t index = 0;
-		while(linkedList_iter(&allSleepingTasks.waitingTasks, &nextTask)){
+		for(int i = 0; i < length; i++){
+			linkedList_get(&allSleepingTasks.waitingTasks, index, &nextTask);
 			if(nextTask->waitUntil > currentTask->waitUntil){
 				linkedList_add(&allSleepingTasks.waitingTasks, currentTask, index);
-				allSleepingTasks.waitingTasks.isIterating = 0;
+				taskAdded = 1;
 				break;
 			}
 			index++;
 		}
-	}	
-	linkedList_append(&allSleepingTasks.waitingTasks, currentTask);
+		if(!taskAdded){
+			linkedList_append(&allSleepingTasks.waitingTasks, currentTask);			
+		}
+	}else{
+		linkedList_append(&allSleepingTasks.waitingTasks, currentTask);
+	}
 	yieldTask();
 }
 
 void wakeupPendingTasks(){
-	if(linkedList_length(&allSleepingTasks.waitingTasks) > 0){
+	uint8_t length = linkedList_length(&allSleepingTasks.waitingTasks);
+	if(length > 0){
 		taskControlBlock* nextTask;
-		uint8_t index = 0;
-		while(linkedList_iter(&allSleepingTasks.waitingTasks, &nextTask)){
+		for(int i = 0; i<length; i++){
+			linkedList_get(&allSleepingTasks.waitingTasks, i, &nextTask);
 			if(nextTask->waitUntil <= systemTime_ms){
 				nextTask->state = READY;
 				nextTask->waitUntil = 0;
-				linkedList_remove(&allSleepingTasks.waitingTasks, index);
-				//TODO dirty fix
-				allSleepingTasks.waitingTasks.currentIndex--;
-				index--;
 				scheduler_enqueueTask(nextTask);
+				linkedList_remove(&allSleepingTasks.waitingTasks, i);
+				length--;
+				i--;
 			}else{
-				allSleepingTasks.waitingTasks.isIterating = 0;
-				break;				
-			}
-			index++;
+				break;
+			}				
 		}
 	}
 }

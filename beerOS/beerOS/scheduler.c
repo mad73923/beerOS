@@ -1,6 +1,6 @@
 #include "scheduler.h"
 
-#define idleTaskStackSize 256
+#define idleTaskStackSize 512
 uint8_t idleTaskStack[idleTaskStackSize];
 taskControlBlock tcb[maxNumberOfTasks];
 taskControlBlock* currentTask;
