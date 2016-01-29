@@ -82,6 +82,9 @@
     <Compile Include="scheduler\allScheduler.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="scheduler\prioRR.c">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="scheduler\simpleRR.c">
       <SubType>compile</SubType>
     </Compile>

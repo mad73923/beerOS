@@ -16,6 +16,7 @@ extern taskControlBlock* currentTask;
 
 
 void scheduler_initSimpleRR();
+void scheduler_initPrioRR();
 
 
 #endif /* ALLSCHEDULER_H_ */

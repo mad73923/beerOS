@@ -48,7 +48,7 @@ void initTaskControlBlock(uint8_t prio, uint8_t* stack, uint16_t stackSize){
 	}
 	taskControlBlock *cb = &tcb[linkedList_length(&allTasksList)];
 	linkedList_append(&allTasksList, cb);
-		
+
 	cb->prio = prio;
 	cb->id = linkedList_length(&allTasksList)-1;
 	cb->stackSize = stackSize;
@@ -73,16 +73,11 @@ void placeStartAdressOnStack(uint8_t* stack, void* taskFunction, uint16_t stackS
 }
 
 void wakeupLinkedTasks(linkedSyncObject* syncObj){
-	Queue* targetPrioQueue;
 	while(syncObj->firstWaiting != NULL){
 		taskControlBlock* tb = syncObj->firstWaiting;
 		tb->state = READY;
 		
-		if(tb->prio > maxPrio){
-			kernelPanic();
-		}
-		linkedList_get(&prioQueueList, tb->prio, &targetPrioQueue);
-		queue_push(targetPrioQueue, tb);
+		scheduler_enqueueTask(tb);
 		
 		syncObj->firstWaiting = tb->semaNextWaiting;
 		tb->semaNextWaiting = NULL;
