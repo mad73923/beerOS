@@ -37,17 +37,12 @@ void sleep_ms(uint32_t ms){
 
 void wakeupPendingTasks(){
 	tmpSleeping = firstSleeping.firstWaiting;
-	Queue* targetPrioQueue;	
 	while(tmpSleeping != NULL){
 		if(tmpSleeping->waitUntil <= systemTime_ms){
 			tmpSleeping->state = READY;
 			tmpSleeping->waitUntil = 0;
-				
-			if(tmpSleeping->prio > maxPrio){
-				kernelPanic();
-			}
-			linkedList_get(&prioQueueList, tmpSleeping->prio, &targetPrioQueue);
-			queue_push(targetPrioQueue, tmpSleeping);
+			
+			scheduler_enqueueTask(tmpSleeping);
 				
 			next = tmpSleeping->semaNextWaiting;
 			tmpSleeping->semaNextWaiting = NULL;
