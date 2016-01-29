@@ -8,48 +8,51 @@
 #include "time.h"
 
 volatile uint32_t systemTime_ms = 0;
-volatile linkedSyncObject firstSleeping;
+volatile linkedSyncObject allSleepingTasks;
 
-volatile taskControlBlock* tmpSleeping;
-volatile taskControlBlock* next;
+void time_init(){
+	linkedList_init(&allSleepingTasks.waitingTasks);
+}
 
 void sleep_ms(uint32_t ms){
 	enterCriticalSection();
 	currentTask->state = WAITING;
 	currentTask->waitUntil = systemTime_ms + ms;
 	
-	if(firstSleeping.firstWaiting != NULL){
-		linkedSyncObject* temp = &firstSleeping;
-		while(temp->firstWaiting != NULL){
-			if(temp->firstWaiting->waitUntil < systemTime_ms + ms){
-				temp = temp->firstWaiting;
-			}else{
-				currentTask->semaNextWaiting = temp->firstWaiting;
+	if(linkedList_length(&allSleepingTasks.waitingTasks) > 0){
+		taskControlBlock* nextTask;
+		uint8_t index = 0;
+		while(linkedList_iter(&allSleepingTasks.waitingTasks, &nextTask)){
+			if(nextTask->waitUntil > currentTask->waitUntil){
+				linkedList_add(&allSleepingTasks.waitingTasks, currentTask, index);
+				allSleepingTasks.waitingTasks.isIterating = 0;
 				break;
 			}
+			index++;
 		}
-		temp->firstWaiting = currentTask;
-	}else{
-		firstSleeping.firstWaiting = currentTask;
-	}
+	}	
+	linkedList_append(&allSleepingTasks.waitingTasks, currentTask);
 	yieldTask();
 }
 
 void wakeupPendingTasks(){
-	tmpSleeping = firstSleeping.firstWaiting;
-	while(tmpSleeping != NULL){
-		if(tmpSleeping->waitUntil <= systemTime_ms){
-			tmpSleeping->state = READY;
-			tmpSleeping->waitUntil = 0;
-			
-			scheduler_enqueueTask(tmpSleeping);
-				
-			next = tmpSleeping->semaNextWaiting;
-			tmpSleeping->semaNextWaiting = NULL;
-			tmpSleeping = next;
-			firstSleeping.firstWaiting = next;
-		}else{				
-			break;
+	if(linkedList_length(&allSleepingTasks.waitingTasks) > 0){
+		taskControlBlock* nextTask;
+		uint8_t index = 0;
+		while(linkedList_iter(&allSleepingTasks.waitingTasks, &nextTask)){
+			if(nextTask->waitUntil <= systemTime_ms){
+				nextTask->state = READY;
+				nextTask->waitUntil = 0;
+				linkedList_remove(&allSleepingTasks.waitingTasks, index);
+				//TODO dirty fix
+				allSleepingTasks.waitingTasks.currentIndex--;
+				index--;
+				scheduler_enqueueTask(nextTask);
+			}else{
+				allSleepingTasks.waitingTasks.isIterating = 0;
+				break;				
+			}
+			index++;
 		}
 	}
 }

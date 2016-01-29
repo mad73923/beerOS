@@ -49,7 +49,6 @@ void initTaskControlBlock(uint8_t prio, uint8_t* stack, uint16_t stackSize){
 	cb->stackBeginn = stack;
 	cb->stackPointer = stack + (stackSize - numberOfRegister);
 	cb->state = READY;	
-	cb->semaNextWaiting = NULL;
 	cb->waitUntil = 0;
 }
 
@@ -67,20 +66,16 @@ void placeStartAdressOnStack(uint8_t* stack, void* taskFunction, uint16_t stackS
 }
 
 void wakeupLinkedTasks(linkedSyncObject* syncObj){
-	while(syncObj->firstWaiting != NULL){
-		taskControlBlock* tb = syncObj->firstWaiting;
-		tb->state = READY;
-		
-		scheduler_enqueueTask(tb);
-		
-		syncObj->firstWaiting = tb->semaNextWaiting;
-		tb->semaNextWaiting = NULL;
+	taskControlBlock* task;
+	if(linkedList_length(&syncObj->waitingTasks) > 0){
+		while(linkedList_iter(&syncObj->waitingTasks, &task)){
+			task->state = READY;
+			scheduler_enqueueTask(task);
+		}	
 	}
 }
 
 void queueWaitingTask(linkedSyncObject* syncObj, taskControlBlock* newTask){
-	while(syncObj->firstWaiting != NULL)
-		syncObj = syncObj->firstWaiting;
-	syncObj->firstWaiting = newTask;
+	linkedList_append(&syncObj->waitingTasks, newTask);
 	newTask->state = WAITING;
 }

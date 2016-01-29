@@ -12,6 +12,7 @@
 #include "beerOSTypes.h"
 #include "sync.h"
 
+void time_init();
 void sleep_ms(uint32_t ms);
 void wakeupPendingTasks();
 uint32_t getTime();

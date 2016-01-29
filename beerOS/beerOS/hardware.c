@@ -35,6 +35,7 @@ void initDispatcherTimer(){
 	TCF0.CTRLB = TC_WGMODE_NORMAL_gc;
 	// adapt period here
 	// 0x7D00 = 1ms
+	// 0x5DC0 = 750us
 	// 0x4650 = 500us
 	// 0x3200 = 400us
 	// 0x1C20 = 200us

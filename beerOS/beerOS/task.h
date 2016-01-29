@@ -13,6 +13,7 @@
 #include "scheduler.h"
 #include "linkedList.h"
 #include "queue.h"
+#include "sync.h"
 
 extern taskControlBlock tcb[maxNumberOfTasks];
 

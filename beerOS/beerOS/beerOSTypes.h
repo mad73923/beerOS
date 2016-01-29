@@ -27,7 +27,6 @@
 typedef enum {READY, RUNNING, WAITING, KILLED} taskstate;
 
 typedef volatile struct strucTCB{
-	volatile struct strucTCB* semaNextWaiting;
 	volatile uint8_t prio;
 	volatile uint8_t id;
 	volatile uint8_t* stackPointer;
@@ -36,21 +35,6 @@ typedef volatile struct strucTCB{
 	volatile uint32_t waitUntil;
 	volatile taskstate state;
 }taskControlBlock;
-
-//SYNC
-typedef volatile struct{
-	volatile taskControlBlock* firstWaiting;
-	volatile int16_t semaCnt;
-}semaphore;
-
-typedef volatile struct{
-	volatile taskControlBlock* firstWaiting;
-}signal;
-
-typedef volatile struct strucLSO{
-	volatile taskControlBlock* firstWaiting;
-}linkedSyncObject;
-
 
 
 #endif /* BEEROSTYPES_H_ */
