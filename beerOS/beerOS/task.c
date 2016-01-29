@@ -53,6 +53,7 @@ void initTaskControlBlock(uint8_t prio, uint8_t* stack, uint16_t stackSize){
 }
 
 void placeMagicNumberOnStack(uint8_t* stack, uint16_t stackSize){
+	stack[0] = magicStackNumber;
 	stack[stackSize-1] = magicStackNumber;
 }
 

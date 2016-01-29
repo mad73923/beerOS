@@ -52,11 +52,6 @@ ISR(DISPISRVEC, ISR_NAKED){
 					"PUSH R0\n\t"
 					"CLR R1"
 				);
-				
-	
-	
-	// Modus (Running, Waiting, Killed ....)
-	// Prioritaet (je nach Scheduling Verfahren)
 	
 	//rescue stack pointer
 	currentTask->stackPointer = SP;
@@ -71,6 +66,10 @@ ISR(DISPISRVEC, ISR_NAKED){
 		wakeupPendingTasks();
 	}
 	hardwareISR = 1;
+	
+	if(currentTask->stackBeginn[0] != magicStackNumber){
+		kernelPanic();
+	}
 	
 	// call scheduler
 	scheduler_NextTask();
