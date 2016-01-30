@@ -49,5 +49,9 @@ void prioTestTask(){
 		if(task2Cnt - task3Cnt > 1 || task2Cnt - task3Cnt < -1){
 			kernelPanic();
 		}
+		if(task3Cnt >= 2){
+			break;
+		}
 	}
+	rebootBeerOS();
 }

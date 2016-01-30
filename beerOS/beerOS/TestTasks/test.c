@@ -19,7 +19,7 @@ void (*initNextTest)(void) __attribute__ ((section (".noinit"))) = &initSemaphor
 //#define LinkedListTest
 //#define QueueTest
 //#define PrioTest
-#define RebootTest
+//#define RebootTest
 
 int run(void)
 {	

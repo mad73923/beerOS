@@ -5,7 +5,8 @@ static int testValues[5] = {1, 2, 3, 4, 5};
 static Queue queue;
 
 void initQueueTest(){
-	initTask(1, task1Stack, queueTestTask, stacksize);		
+	initTask(1, task1Stack, queueTestTask, stacksize);
+	initNextTest = &initPrioTest;
 }	
 	
 void queueTestTask(){
