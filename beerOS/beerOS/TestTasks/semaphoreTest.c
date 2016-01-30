@@ -16,6 +16,13 @@ static volatile int task1Cnt = 0;
 static volatile int task2Cnt = 0;
 static volatile int task3Cnt = 0;
 
+void initSemaphoreTest(){
+	initTask(1, task1Stack, semaphoreTestTask, stacksize);
+	initTask(1, task2Stack, semaphoreTestTask, stacksize);
+	initTask(1, task3Stack, semaphoreTestTask, stacksize);
+	initNextTest = &initSignalTest;
+}
+
 void semaphoreTestTask(){	
 	if(currentTask->id == 0){
 		initSemaphore(&dummySema, 1);
@@ -44,5 +51,9 @@ void semaphoreTestTask(){
 		if(task2Cnt - task3Cnt > 1 || task2Cnt - task3Cnt < -1){
 			kernelPanic();
 		}
-	}	
+		if(task3Cnt == 3){
+			break;
+		}
+	}
+	rebootBeerOS();	
 }

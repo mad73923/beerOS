@@ -16,6 +16,13 @@ static volatile int task1Cnt = 0;
 static volatile int task2Cnt = 0;
 static volatile int task3Cnt = 0;
 
+void initSignalTest(){
+	initTask(1, task1Stack, signalTestTask, stacksize);
+	initTask(1, task2Stack, signalTestTask, stacksize);
+	initTask(1, task3Stack, signalTestTask, stacksize);
+	initNextTest = &initSleepTest;
+}
+
 void signalTestTask(){
 	if(currentTask->id == 0){
 		initSignal(&signal1);
@@ -52,5 +59,10 @@ void signalTestTask(){
 		if(task2Cnt - task3Cnt > 1 || task2Cnt - task3Cnt < -1){
 			kernelPanic();
 		}
+		
+		if(task3Cnt == 2){
+			break;
+		}
 	}
+	rebootBeerOS();
 }

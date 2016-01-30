@@ -11,6 +11,11 @@
 
 static int testValues[6] = {1, 2, 3, 4, 5, 6};
 static LinkedList linkedList;
+
+void initLinkedListTest(){
+	initTask(1, task1Stack, linkedListTestTask, stacksize);
+	initNextTest = &initQueueTest;
+}
 	
 void linkedListTestTask(){
 	
@@ -98,4 +103,6 @@ void linkedListTestTask(){
 	if(linkedList_get(&linkedList, lenghtBeforeRemove - 1, NULL) == 0){
 		kernelPanic();
 	}
+	
+	rebootBeerOS();
 }

@@ -14,6 +14,12 @@ static volatile int task3Cnt = 0;
 volatile semaphore dummySema;
 volatile signal dummySignal;
 
+void initPrioTest(){
+	initTask(0, task1Stack, prioTestTask, stacksize);
+	initTask(1, task2Stack, prioTestTask, stacksize);
+	initTask(2, task3Stack, prioTestTask, stacksize);
+}
+
 void prioTestTask(){
 	if(currentTask->id == 0){
 		initSemaphore(&dummySema, 0);

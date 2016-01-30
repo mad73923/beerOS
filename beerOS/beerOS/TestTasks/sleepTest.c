@@ -15,6 +15,12 @@ static volatile int task1Cnt = 0;
 static volatile int task2Cnt = 0;
 static volatile int task3Cnt = 0;
 
+void initSleepTest(){
+	initTask(0, task1Stack, sleepTestTask, stacksize);
+	initTask(0, task2Stack, sleepTestTask, stacksize);
+	initTask(0, task3Stack, sleepTestTask, stacksize);
+	initNextTest = &initLinkedListTest;
+}
 
 void sleepTestTask(){
 	if(currentTask->id == 0){
@@ -42,6 +48,9 @@ void sleepTestTask(){
 				kernelPanic();
 			}
 		}
-		
+		if(task3Cnt == 2){
+			break;
+		}
 	}
+	rebootBeerOS();
 }
