@@ -37,7 +37,7 @@ void prioTestTask(){
 			releaseSemaphore(&dummySema);
 			task2Cnt++;
 			waitSignal(&dummySignal);			
-		}else{
+		}else if(currentTask->id == 2){
 			sendSignal(&dummySignal);
 			task3Cnt++;
 			yieldTask();

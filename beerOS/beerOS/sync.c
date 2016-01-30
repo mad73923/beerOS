@@ -15,13 +15,11 @@ void initSemaphore(semaphore* sema, uint16_t cntInit){
 
 void waitSemaphore(semaphore* sema){
 	enterCriticalSection();
-	if(sema->semaCnt <= 0){
-		queueWaitingTask(sema, currentTask);
-		while(sema->semaCnt <= 0){
-			leaveCriticalSection();
-			yieldTask();
-			enterCriticalSection();
-		}
+	while(sema->semaCnt <= 0){
+		queueWaitingTask(sema, currentTask);			
+		leaveCriticalSection();
+		yieldTask();
+		enterCriticalSection();
 	}
 	sema->semaCnt --;
 	leaveCriticalSection();
