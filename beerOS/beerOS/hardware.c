@@ -11,6 +11,7 @@
 
 void setSystemClock32MHZ();
 void initDispatcherTimer();
+void resetDispatcherTimer();
 void startDispatcherTimer();
 void stopDispatcherTimer();
 void initInterrupts();
@@ -19,6 +20,7 @@ void initHardware(){
 	
 	setSystemClock32MHZ();
 	initDispatcherTimer();
+	resetDispatcherTimer();
 	startDispatcherTimer();
 	initInterrupts();
 	enableInterrupts();
@@ -43,6 +45,10 @@ void initDispatcherTimer(){
 	// 0x140  = 10us
 	TCF0.PER = 0x7D00;
 	TCF0.INTCTRLA = TC_OVFINTLVL_HI_gc;
+}
+
+void resetDispatcherTimer(){
+	TCF0.CNT = 0;
 }
 
 void startDispatcherTimer(){

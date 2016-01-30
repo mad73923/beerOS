@@ -5,6 +5,9 @@ uint8_t idleTaskStack[idleTaskStackSize];
 taskControlBlock tcb[maxNumberOfTasks];
 taskControlBlock* currentTask;
 
+static uint8_t* mainSP;
+
+
 void initIdleTask(){
 	initTask(maxPrio, idleTaskStack, idleTask, idleTaskStackSize);	
 }
@@ -21,15 +24,23 @@ void startBeerOS(taskControlBlock* firstTask, void (*scheduler_init)(void)){
 	scheduler_init();
 	time_init();
 	
+	firstTask->state = RUNNING;
+	mainSP = SP;
 	//set stack pointer of starting task next to taskaddress
-	SP = currentTask->stackBeginn+currentTask->stackSize-progcntOffset;
-	currentTask->state = RUNNING;
+	SP = firstTask->stackBeginn+firstTask->stackSize-progcntOffset;
 	//start task
 	asm volatile ("ret");
 }
 
 void rebootBeerOS(){
 	disableInterrupts();
+	stopDispatcherTimer();
+	//clear main stack
+	while(mainSP <= RAMEND){
+		*mainSP = 0;
+		mainSP++;
+	}
+	mainCalled--;
 	SP = 0;
 	asm volatile(	"CLR R0\n\t"
 					"CLR R1\n\t"
