@@ -8,6 +8,7 @@ uint8_t safeLinkedList_init(SafeLinkedList *safeLinkedList, semaphore *sema){
 		return 1;
 	}
 	safeLinkedList->sema = sema;
+	initSemaphore(sema, 1);
 }
 
 uint8_t safeLinkedList_add(SafeLinkedList *safeLinkedList, void *item, uint8_t index){
