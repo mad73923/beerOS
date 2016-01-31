@@ -8,10 +8,10 @@
 #include "time.h"
 
 volatile uint32_t systemTime_ms = 0;
-volatile linkedSyncObject allSleepingTasks;
+volatile LinkedList allSleepingTasks;
 
 void time_init(){
-	linkedList_init(&allSleepingTasks.waitingTasks);
+	linkedList_init(&allSleepingTasks);
 }
 
 void sleep_ms(uint32_t ms){
@@ -19,39 +19,39 @@ void sleep_ms(uint32_t ms){
 	currentTask->state = WAITING;
 	currentTask->waitUntil = systemTime_ms + ms;
 	uint8_t taskAdded = 0;
-	uint8_t length = linkedList_length(&allSleepingTasks.waitingTasks);
+	uint8_t length = linkedList_length(&allSleepingTasks);
 	if(length > 0){
 		taskControlBlock* nextTask;
 		uint8_t index = 0;
 		for(int i = 0; i < length; i++){
-			linkedList_get(&allSleepingTasks.waitingTasks, index, &nextTask);
+			linkedList_get(&allSleepingTasks, index, &nextTask);
 			if(nextTask->waitUntil > currentTask->waitUntil){
-				linkedList_add(&allSleepingTasks.waitingTasks, currentTask, index);
+				linkedList_add(&allSleepingTasks, currentTask, index);
 				taskAdded = 1;
 				break;
 			}
 			index++;
 		}
 		if(!taskAdded){
-			linkedList_append(&allSleepingTasks.waitingTasks, currentTask);			
+			linkedList_append(&allSleepingTasks, currentTask);			
 		}
 	}else{
-		linkedList_append(&allSleepingTasks.waitingTasks, currentTask);
+		linkedList_append(&allSleepingTasks, currentTask);
 	}
 	yieldTask();
 }
 
 void wakeupPendingTasks(){
-	uint8_t length = linkedList_length(&allSleepingTasks.waitingTasks);
+	uint8_t length = linkedList_length(&allSleepingTasks);
 	if(length > 0){
 		taskControlBlock* nextTask;
 		for(int i = 0; i<length; i++){
-			linkedList_get(&allSleepingTasks.waitingTasks, i, &nextTask);
+			linkedList_get(&allSleepingTasks, i, &nextTask);
 			if(nextTask->waitUntil <= systemTime_ms){
 				nextTask->state = READY;
 				nextTask->waitUntil = 0;
 				scheduler_enqueueTask(nextTask);
-				linkedList_remove(&allSleepingTasks.waitingTasks, i);
+				linkedList_remove(&allSleepingTasks, i);
 				length--;
 				i--;
 			}else{

@@ -22,10 +22,6 @@ typedef volatile struct{
 	LinkedList waitingTasks;
 }signal;
 
-typedef volatile struct{
-	LinkedList waitingTasks;
-}linkedSyncObject;
-
 extern volatile uint8_t hardwareISR;
 extern taskControlBlock* currentTask;
 

@@ -66,21 +66,21 @@ void placeStartAdressOnStack(uint8_t* stack, void* taskFunction, uint16_t stackS
 	stack[stackSize-4] = byteAccessUnion.u8[2];
 }
 
-void wakeupLinkedTasks(linkedSyncObject* syncObj){
+void wakeupLinkedTasks(LinkedList* syncObj){
 	taskControlBlock* task;
-	uint8_t length = linkedList_length(&syncObj->waitingTasks);
+	uint8_t length = linkedList_length(syncObj);
 	if(length > 0){
-		while(linkedList_iter(&syncObj->waitingTasks, &task)){
+		while(linkedList_iter(syncObj, &task)){
 			task->state = READY;
 			scheduler_enqueueTask(task);
 		}
 		for(int i = 0; i < length; i++){
-			linkedList_remove(&syncObj->waitingTasks, 0);
+			linkedList_remove(syncObj, 0);
 		}
 	}
 }
 
-void queueWaitingTask(linkedSyncObject* syncObj, taskControlBlock* newTask){
-	linkedList_append(&syncObj->waitingTasks, newTask);
+void queueWaitingTask(LinkedList* syncObj, taskControlBlock* newTask){
+	linkedList_append(syncObj, newTask);
 	newTask->state = WAITING;
 }

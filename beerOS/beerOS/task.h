@@ -19,7 +19,7 @@ extern taskControlBlock tcb[maxNumberOfTasks];
 
 void initTask(uint8_t prio, uint8_t* stack, void* taskFunction, uint16_t stackSize);
 
-void wakeupLinkedTasks(linkedSyncObject* syncObj);
-void queueWaitingTask(linkedSyncObject* syncObj, taskControlBlock* newTask);
+void wakeupLinkedTasks(LinkedList* syncObj);
+void queueWaitingTask(LinkedList* syncObj, taskControlBlock* newTask);
 
 #endif /* TASK_H_ */

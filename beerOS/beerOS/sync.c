@@ -16,7 +16,7 @@ void initSemaphore(semaphore* sema, uint16_t cntInit){
 void waitSemaphore(semaphore* sema){
 	enterCriticalSection();
 	while(sema->semaCnt <= 0){
-		queueWaitingTask(sema, currentTask);			
+		queueWaitingTask(&sema->waitingTasks, currentTask);			
 		leaveCriticalSection();
 		yieldTask();
 		enterCriticalSection();
@@ -27,7 +27,7 @@ void waitSemaphore(semaphore* sema){
 void releaseSemaphore(semaphore* sema){
 	enterCriticalSection();
 	sema->semaCnt ++;
-	wakeupLinkedTasks(sema);
+	wakeupLinkedTasks(&sema->waitingTasks);
 	leaveCriticalSection();
 }
 
@@ -37,14 +37,14 @@ void initSignal(signal* sig){
 
 void waitSignal(signal* sig){
 	enterCriticalSection();
-	queueWaitingTask(sig, currentTask);
+	queueWaitingTask(&sig->waitingTasks, currentTask);
 	leaveCriticalSection();
 	yieldTask();
 }
 
 void sendSignal(signal* sig){
 	enterCriticalSection();
-	wakeupLinkedTasks(sig);
+	wakeupLinkedTasks(&sig->waitingTasks);
 	leaveCriticalSection();
 }
 
