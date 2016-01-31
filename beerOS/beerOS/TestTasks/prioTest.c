@@ -11,7 +11,6 @@ static volatile int task1Cnt = 0;
 static volatile int task2Cnt = 0;
 static volatile int task3Cnt = 0;
 
-volatile semaphore dummySema;
 volatile signal dummySignal;
 
 void initPrioTest(){
@@ -22,7 +21,6 @@ void initPrioTest(){
 
 void prioTestTask(){
 	if(currentTask->id == 0){
-		initSemaphore(&dummySema, 0);
 		initSignal(&dummySignal);
 	}
 	
@@ -31,12 +29,14 @@ void prioTestTask(){
 			yieldTask();
 			yieldTask();
 			yieldTask();
-			waitSemaphore(&dummySema);
+			waitSignal(&dummySignal);
+			currentTask->prio = (currentTask->prio+1)%2;
 			task1Cnt++;
 		}else if(currentTask->id == 1){
-			releaseSemaphore(&dummySema);
+			yieldTask();			
 			task2Cnt++;
-			waitSignal(&dummySignal);			
+			waitSignal(&dummySignal);
+			currentTask->prio = (currentTask->prio+1)%2;
 		}else if(currentTask->id == 2){
 			sendSignal(&dummySignal);
 			task3Cnt++;
@@ -49,7 +49,7 @@ void prioTestTask(){
 		if(task2Cnt - task3Cnt > 1 || task2Cnt - task3Cnt < -1){
 			kernelPanic();
 		}
-		if(task3Cnt >= 2){
+		if(task3Cnt > 4){
 			break;
 		}
 	}

@@ -68,11 +68,15 @@ void placeStartAdressOnStack(uint8_t* stack, void* taskFunction, uint16_t stackS
 
 void wakeupLinkedTasks(linkedSyncObject* syncObj){
 	taskControlBlock* task;
-	if(linkedList_length(&syncObj->waitingTasks) > 0){
+	uint8_t length = linkedList_length(&syncObj->waitingTasks);
+	if(length > 0){
 		while(linkedList_iter(&syncObj->waitingTasks, &task)){
 			task->state = READY;
 			scheduler_enqueueTask(task);
-		}	
+		}
+		for(int i = 0; i < length; i++){
+			linkedList_remove(&syncObj->waitingTasks, 0);
+		}
 	}
 }
 
