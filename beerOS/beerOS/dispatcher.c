@@ -59,6 +59,7 @@ ISR(DISPISRVEC, ISR_NAKED){
 	// if state = waiting, dont change!	
 	if(currentTask->state == RUNNING){
 		currentTask->state = READY;
+		scheduler_enqueueTask(currentTask);
 	}
 	
 	if(hardwareISR == 1){

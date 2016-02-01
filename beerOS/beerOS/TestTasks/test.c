@@ -13,12 +13,14 @@ uint8_t task3Stack[stacksize];
 
 void (*initNextTest)(void) __attribute__ ((section (".noinit"))) = &initSemaphoreTest;
 
-//#define SemaTest
-//#define SignalTest
-//#define sleepTest
-//#define LinkedListTest
-//#define QueueTest
-//#define PrioTest
+// Automated test order
+// 1. SemaTest
+// 2. SignalTest
+// 3. sleepTest
+// 4. LinkedListTest
+// 5. QueueTest
+// 6. PrioTest
+
 //#define RebootTest
 
 int run(void)
