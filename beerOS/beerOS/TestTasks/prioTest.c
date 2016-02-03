@@ -17,6 +17,7 @@ void initPrioTest(){
 	initTask(0, task1Stack, prioTestTask, stacksize);
 	initTask(1, task2Stack, prioTestTask, stacksize);
 	initTask(2, task3Stack, prioTestTask, stacksize);
+	initNextTest = &initMemoryManagementTest;
 }
 
 void prioTestTask(){

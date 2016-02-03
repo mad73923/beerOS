@@ -20,6 +20,7 @@ void (*initNextTest)(void) __attribute__ ((section (".noinit"))) = &initSemaphor
 // 4. LinkedListTest
 // 5. QueueTest
 // 6. PrioTest
+// 7. MemoryManagementTest
 
 // Simulated time: 20.987,06 us
 
@@ -27,15 +28,15 @@ void (*initNextTest)(void) __attribute__ ((section (".noinit"))) = &initSemaphor
 
 int run(void)
 {	
+	initNextTest = &initMemoryManagementTest;
 	initNextTest();
+
 /*
 #ifdef RebootTest
 	initTask(1, task1Stack, rebootTestTask, stacksize);
 #endif
 */
-#ifdef MemoryManagementTest
-	initTask(1, task1Stack, memoryManagementTestTask, 128);
-#endif
+
 	
 	initIdleTask();
 	initHardware();

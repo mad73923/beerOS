@@ -30,6 +30,7 @@ void linkedListTestTask();
 void initQueueTest();
 void queueTestTask();
 void memoryManagementTestTask();
+void initMemoryManagementTest();
 void initPrioTest();
 void prioTestTask();
 void rebootTestTask();

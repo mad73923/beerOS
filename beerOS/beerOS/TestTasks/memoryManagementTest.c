@@ -2,6 +2,10 @@
 #include "../memoryManagementInternal.h"
 #include "testTasks.h"
 
+void initMemoryManagementTest(){
+	initTask(1, task1Stack, memoryManagementTestTask, stacksize);
+}
+
 uint16_t testTask(uint16_t size){
 	MemoryRequest memoryRequest;
 	memoryManagement_initMemoryRequest(&memoryRequest, size);
@@ -18,5 +22,6 @@ void memoryManagementTestTask(){
 	void* pointer = get(16);
 	void* pointer2 = get(8);
 	void* pointer3 = get(20);
+	beerOS_reboot();
 }
 
