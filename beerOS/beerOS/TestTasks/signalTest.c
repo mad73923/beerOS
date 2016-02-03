@@ -25,31 +25,31 @@ void initSignalTest(){
 
 void signalTestTask(){
 	if(currentTask->id == 0){
-		initSignal(&signal1);
-		initSignal(&signal2);
-		initSignal(&signal3);
+		signal_init(&signal1);
+		signal_init(&signal2);
+		signal_init(&signal3);
 	}
 	while(1){
 		if(currentTask->id == 0){
-			waitSignal(&signal1);
+			signal_wait(&signal1);
 			task1Cnt++;
-			yieldTask();
-			yieldTask();
-			yieldTask();	
-			sendSignal(&signal2);
+			task_yield();
+			task_yield();
+			task_yield();	
+			signal_send(&signal2);
 		}else if(currentTask->id == 1){
-			yieldTask();
-			yieldTask();
-			yieldTask();
-			sendSignal(&signal1);
-			waitSignal(&signal2);
+			task_yield();
+			task_yield();
+			task_yield();
+			signal_send(&signal1);
+			signal_wait(&signal2);
 			task2Cnt++;
-			yieldTask();
-			yieldTask();
-			yieldTask();
-			sendSignal(&signal3);	
+			task_yield();
+			task_yield();
+			task_yield();
+			signal_send(&signal3);	
 		}else if(currentTask->id == 2){
-			waitSignal(&signal3);
+			signal_wait(&signal3);
 			task3Cnt++;
 		}
 		asm volatile ("nop");
@@ -64,5 +64,5 @@ void signalTestTask(){
 			break;
 		}
 	}
-	rebootBeerOS();
+	beerOS_reboot();
 }

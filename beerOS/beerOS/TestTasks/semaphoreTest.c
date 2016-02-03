@@ -25,24 +25,24 @@ void initSemaphoreTest(){
 
 void semaphoreTestTask(){	
 	if(currentTask->id == 0){
-		initSemaphore(&dummySema, 1);
-		initSemaphore(&dummySema2, 0);
-		initSemaphore(&dummySema3, 0);
+		semaphore_init(&dummySema, 1);
+		semaphore_init(&dummySema2, 0);
+		semaphore_init(&dummySema3, 0);
 	}	
 	asm volatile ("nop");
 	while(1){
 		if(currentTask->id == 0){
-			waitSemaphore(&dummySema);
+			semaphore_wait(&dummySema);
 			task1Cnt++;
-			releaseSemaphore(&dummySema2);
+			semaphore_release(&dummySema2);
 		}else if(currentTask->id == 1){
-			waitSemaphore(&dummySema2);
+			semaphore_wait(&dummySema2);
 			task2Cnt++;
-			releaseSemaphore(&dummySema3);
+			semaphore_release(&dummySema3);
 		}else if(currentTask->id == 2){
-			waitSemaphore(&dummySema3);
+			semaphore_wait(&dummySema3);
 			task3Cnt++;
-			releaseSemaphore(&dummySema);
+			semaphore_release(&dummySema);
 		}
 		asm volatile ("nop");
 		if(task1Cnt - task2Cnt > 1 || task1Cnt - task2Cnt < -1){
@@ -55,5 +55,5 @@ void semaphoreTestTask(){
 			break;
 		}
 	}
-	rebootBeerOS();	
+	beerOS_reboot();	
 }

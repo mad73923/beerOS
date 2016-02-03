@@ -57,5 +57,5 @@ void queueTestTask(){
 		kernelPanic();
 	}
 	
-	rebootBeerOS();
+	beerOS_reboot();
 }

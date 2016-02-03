@@ -104,5 +104,5 @@ void linkedListTestTask(){
 		kernelPanic();
 	}
 	
-	rebootBeerOS();
+	beerOS_reboot();
 }

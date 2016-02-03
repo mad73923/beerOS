@@ -8,6 +8,6 @@
 #include "../time.h"
 
 void rebootTestTask(){
-	sleep_ms(1);
-	rebootBeerOS();
+	time_sleep_ms(1);
+	beerOS_reboot();
 }

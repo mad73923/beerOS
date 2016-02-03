@@ -64,7 +64,7 @@ ISR(DISPISRVEC, ISR_NAKED){
 	
 	if(hardwareISR == 1){
 		systemTime_ms ++;
-		wakeupPendingTasks();
+		time_wakeupPendingTasks();
 	}
 	hardwareISR = 1;
 	

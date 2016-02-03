@@ -14,11 +14,11 @@ void initIdleTask(){
 
 void idleTask(){
 	while(1){
-		yieldTask();
+		task_yield();
 	}
 }
 
-void startBeerOS(taskControlBlock* firstTask, void (*scheduler_init)(void)){
+void beerOS_start(taskControlBlock* firstTask, void (*scheduler_init)(void)){
 	currentTask = firstTask;
 	
 	scheduler_init();
@@ -32,7 +32,7 @@ void startBeerOS(taskControlBlock* firstTask, void (*scheduler_init)(void)){
 	asm volatile ("ret");
 }
 
-void rebootBeerOS(){
+void beerOS_reboot(){
 	disableInterrupts();
 	stopDispatcherTimer();
 	//clear main stack

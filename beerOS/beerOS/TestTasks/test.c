@@ -38,7 +38,7 @@ int run(void)
 	
 	taskControlBlock* startTask;
 	linkedList_get(&allTasksList, 0, &startTask);
-	startBeerOS(startTask, &scheduler_initPrioRR);
+	beerOS_start(startTask, &scheduler_initPrioRR);
 	
     while(1)
     {

@@ -21,26 +21,26 @@ void initPrioTest(){
 
 void prioTestTask(){
 	if(currentTask->id == 0){
-		initSignal(&dummySignal);
+		signal_init(&dummySignal);
 	}
 	
 	while(1){
 		if(currentTask->id == 0){
-			yieldTask();
-			yieldTask();
-			yieldTask();
-			waitSignal(&dummySignal);
+			task_yield();
+			task_yield();
+			task_yield();
+			signal_wait(&dummySignal);
 			currentTask->prio = (currentTask->prio+1)%2;
 			task1Cnt++;
 		}else if(currentTask->id == 1){
-			yieldTask();			
+			task_yield();			
 			task2Cnt++;
-			waitSignal(&dummySignal);
+			signal_wait(&dummySignal);
 			currentTask->prio = (currentTask->prio+1)%2;
 		}else if(currentTask->id == 2){
-			sendSignal(&dummySignal);
+			signal_send(&dummySignal);
 			task3Cnt++;
-			yieldTask();
+			task_yield();
 		}		
 		asm volatile ("nop");
 		if(task1Cnt - task2Cnt > 1 || task1Cnt - task2Cnt < -1){
@@ -53,5 +53,5 @@ void prioTestTask(){
 			break;
 		}
 	}
-	rebootBeerOS();
+	beerOS_reboot();
 }

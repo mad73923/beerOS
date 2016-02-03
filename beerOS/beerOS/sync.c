@@ -8,47 +8,47 @@
 #include "sync.h"
 
 
-void initSemaphore(semaphore* sema, uint16_t cntInit){
+void semaphore_init(semaphore* sema, uint16_t cntInit){
 	sema->semaCnt = cntInit;
 	linkedList_init(&sema->waitingTasks);
 }
 
-void waitSemaphore(semaphore* sema){
+void semaphore_wait(semaphore* sema){
 	enterCriticalSection();
 	while(sema->semaCnt <= 0){
 		queueWaitingTask(&sema->waitingTasks, currentTask);			
 		leaveCriticalSection();
-		yieldTask();
+		task_yield();
 		enterCriticalSection();
 	}
 	sema->semaCnt --;
 	leaveCriticalSection();
 }
-void releaseSemaphore(semaphore* sema){
+void semaphore_release(semaphore* sema){
 	enterCriticalSection();
 	sema->semaCnt ++;
 	wakeupLinkedTasks(&sema->waitingTasks);
 	leaveCriticalSection();
 }
 
-void initSignal(signal* sig){
+void signal_init(signal* sig){
 	linkedList_init(&sig->waitingTasks);
 }
 
-void waitSignal(signal* sig){
+void signal_wait(signal* sig){
 	enterCriticalSection();
 	queueWaitingTask(&sig->waitingTasks, currentTask);
 	leaveCriticalSection();
-	yieldTask();
+	task_yield();
 }
 
-void sendSignal(signal* sig){
+void signal_send(signal* sig){
 	enterCriticalSection();
 	wakeupLinkedTasks(&sig->waitingTasks);
 	leaveCriticalSection();
 }
 
-void yieldTask(){
+void task_yield(){
 	disableInterrupts();
 	hardwareISR = 0;
 	DISPISRVEC();

@@ -33,14 +33,14 @@ static void __attribute__((always_inline)) leaveCriticalSection(){
 	enableInterrupts();
 }
 
-void initSemaphore(semaphore* sema, uint16_t cntInit);
-void waitSemaphore(semaphore* sema);
-void releaseSemaphore(semaphore* sema);
+void semaphore_init(semaphore* sema, uint16_t cntInit);
+void semaphore_wait(semaphore* sema);
+void semaphore_release(semaphore* sema);
 
-void initSignal(signal* sig);
-void waitSignal(signal* sig);
-void sendSignal(signal* sig);
+void signal_init(signal* sig);
+void signal_wait(signal* sig);
+void signal_send(signal* sig);
 
-void yieldTask();
+void task_yield();
 
 #endif /* SYNC_H_ */

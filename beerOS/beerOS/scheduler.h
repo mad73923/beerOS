@@ -19,7 +19,7 @@ void (*scheduler_NextTask)(void);
 void (*scheduler_enqueueTask)(taskControlBlock* task);
 void initIdleTask();
 void idleTask();
-void startBeerOS(taskControlBlock* firstTask, void (*scheduler_init)(void));
-void rebootBeerOS();
+void beerOS_start(taskControlBlock* firstTask, void (*scheduler_init)(void));
+void beerOS_reboot();
 
 #endif /* SCHEDULER_H_ */

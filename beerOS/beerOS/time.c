@@ -14,7 +14,7 @@ void time_init(){
 	linkedList_init(&allSleepingTasks);
 }
 
-void sleep_ms(uint32_t ms){
+void time_sleep_ms(uint32_t ms){
 	enterCriticalSection();
 	currentTask->state = WAITING;
 	currentTask->waitUntil = systemTime_ms + ms;
@@ -38,10 +38,10 @@ void sleep_ms(uint32_t ms){
 	}else{
 		linkedList_append(&allSleepingTasks, currentTask);
 	}
-	yieldTask();
+	task_yield();
 }
 
-void wakeupPendingTasks(){
+void time_wakeupPendingTasks(){
 	uint8_t length = linkedList_length(&allSleepingTasks);
 	if(length > 0){
 		taskControlBlock* nextTask;
@@ -61,6 +61,6 @@ void wakeupPendingTasks(){
 	}
 }
 
-uint32_t getTime(){
+uint32_t time_getSystemTime(){
 	return systemTime_ms;
 }

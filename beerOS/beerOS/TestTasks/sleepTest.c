@@ -30,19 +30,19 @@ void sleepTestTask(){
 	
 	while(1){
 		if(currentTask->id == 0){
-			sleep_ms(2);
+			time_sleep_ms(2);
 			task1Cnt++;
 			if(task1Cnt * 2 != systemTime_ms){
 				kernelPanic();
 			}
 		}else if(currentTask->id == 1){
-			sleep_ms(3);
+			time_sleep_ms(3);
 			task2Cnt++;
 			if(task2Cnt * 3 != systemTime_ms){
 				kernelPanic();
 			}
 		}else{
-			sleep_ms(5);
+			time_sleep_ms(5);
 			task3Cnt++;
 			if(task3Cnt * 5 != systemTime_ms){
 				kernelPanic();
@@ -52,5 +52,5 @@ void sleepTestTask(){
 			break;
 		}
 	}
-	rebootBeerOS();
+	beerOS_reboot();
 }

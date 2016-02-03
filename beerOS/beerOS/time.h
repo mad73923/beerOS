@@ -13,8 +13,8 @@
 #include "sync.h"
 
 void time_init();
-void sleep_ms(uint32_t ms);
-void wakeupPendingTasks();
-uint32_t getTime();
+void time_sleep_ms(uint32_t ms);
+void time_wakeupPendingTasks();
+uint32_t time_getSystemTime();
 
 #endif /* TIME_H_ */
