@@ -12,13 +12,26 @@
 #include "../beerOSTypes.h"
 #include "../exceptions.h"
 
+#define stacksize 128
+
+extern void (*initNextTest)(void);
+extern uint8_t task1Stack[stacksize];
+extern uint8_t task2Stack[stacksize];
+extern uint8_t task3Stack[stacksize];
+
+void initSemaphoreTest();
 void semaphoreTestTask();
+void initSignalTest();
 void signalTestTask();
+void initSleepTest();
 void sleepTestTask();
+void initLinkedListTest();
 void linkedListTestTask();
+void initQueueTest();
 void queueTestTask();
 void memoryManagementTestTask();
-
-extern uint8_t task;
+void initPrioTest();
+void prioTestTask();
+void rebootTestTask();
 
 #endif /* TESTTASKS_H_ */

@@ -8,49 +8,47 @@
 #include "sync.h"
 
 
-void initSemaphore(semaphore* sema, uint16_t cntInit){
+void semaphore_init(semaphore* sema, uint16_t cntInit){
 	sema->semaCnt = cntInit;
-	sema->firstWaiting = NULL;
+	linkedList_init(&sema->waitingTasks);
 }
 
-void waitSemaphore(semaphore* sema){
+void semaphore_wait(semaphore* sema){
 	enterCriticalSection();
-	if(sema->semaCnt <= 0){
-		queueWaitingTask(sema->firstWaiting, &tcb[task]);
-		while(sema->semaCnt <= 0){
-			leaveCriticalSection();
-			yieldTask();
-			enterCriticalSection();
-		}
+	while(sema->semaCnt <= 0){
+		queueWaitingTask(&sema->waitingTasks, currentTask);			
+		leaveCriticalSection();
+		task_yield();
+		enterCriticalSection();
 	}
 	sema->semaCnt --;
 	leaveCriticalSection();
 }
-void releaseSemaphore(semaphore* sema){
+void semaphore_release(semaphore* sema){
 	enterCriticalSection();
 	sema->semaCnt ++;
-	wakeupLinkedTasks(sema->firstWaiting);	
+	wakeupLinkedTasks(&sema->waitingTasks);
 	leaveCriticalSection();
 }
 
-void initSignal(signal* sig){
-	sig->firstWaiting = NULL;
+void signal_init(signal* sig){
+	linkedList_init(&sig->waitingTasks);
 }
 
-void waitSignal(signal* sig){
+void signal_wait(signal* sig){
 	enterCriticalSection();
-	queueWaitingTask(sig, &tcb[task]);
+	queueWaitingTask(&sig->waitingTasks, currentTask);
 	leaveCriticalSection();
-	yieldTask();
+	task_yield();
 }
 
-void sendSignal(signal* sig){
+void signal_send(signal* sig){
 	enterCriticalSection();
-	wakeupLinkedTasks(sig);
+	wakeupLinkedTasks(&sig->waitingTasks);
 	leaveCriticalSection();
 }
 
-void yieldTask(){
+void task_yield(){
 	disableInterrupts();
 	hardwareISR = 0;
 	DISPISRVEC();

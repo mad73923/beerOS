@@ -15,7 +15,4 @@
 #include "../task.h"
 #include "../hardware.h"
 
-//void startBeerOS(taskControlBlock* firstTask);
-//int run();
-
 #endif /* TEST_H_ */

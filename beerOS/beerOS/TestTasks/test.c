@@ -7,47 +7,32 @@
 
 #include "test.h"
 
-uint8_t task1Stack[128];
-uint8_t task2Stack[128];
-uint8_t task3Stack[128];
+uint8_t task1Stack[stacksize];
+uint8_t task2Stack[stacksize];
+uint8_t task3Stack[stacksize];
 
-//#define SemaTest
-//#define SignalTest
-//#define sleepTest
-//#define LinkedListTest
-//#define QueueTest
-//#define MemoryManagementTest
-void startBeerOS(taskControlBlock* firstTask);
+void (*initNextTest)(void) __attribute__ ((section (".noinit"))) = &initSemaphoreTest;
+
+// Automated test order
+// 1. SemaTest
+// 2. SignalTest
+// 3. sleepTest
+// 4. LinkedListTest
+// 5. QueueTest
+// 6. PrioTest
+
+// Simulated time: 20.987,06 us
+
+//#define RebootTest
 
 int run(void)
 {	
-	
-#ifdef SemaTest
-	initTask(1, task1Stack, semaphoreTestTask, 128);
-	initTask(1, task2Stack, semaphoreTestTask, 128);
-	initTask(1, task3Stack, semaphoreTestTask, 128);
-#endif // SemaTest
-
-#ifdef SignalTest
-	initTask(1, task1Stack, signalTestTask, 128);
-	initTask(1, task2Stack, signalTestTask, 128);
-	initTask(1, task3Stack, signalTestTask, 128);
-#endif // SignalTest
-
-#ifdef sleepTest
-	initTask(1, task1Stack, sleepTestTask, 128);
-	initTask(1, task2Stack, sleepTestTask, 128);
-	initTask(1, task3Stack, sleepTestTask, 128);
-#endif //sleepTest
-
-#ifdef LinkedListTest
-	initTask(1, task1Stack, linkedListTestTask, 128);
-#endif // LinkedListTest
-
-#ifdef QueueTest
-	initTask(1, task1Stack, queueTestTask, 128);
-#endif // QueueTest
-
+	initNextTest();
+/*
+#ifdef RebootTest
+	initTask(1, task1Stack, rebootTestTask, stacksize);
+#endif
+*/
 #ifdef MemoryManagementTest
 	initTask(1, task1Stack, memoryManagementTestTask, 128);
 #endif
@@ -55,18 +40,13 @@ int run(void)
 	initIdleTask();
 	initHardware();
 	
-	startBeerOS(&tcb[0]);
+	taskControlBlock* startTask;
+	linkedList_get(&allTasksList, 0, &startTask);
+	beerOS_start(startTask, &scheduler_initPrioRR);
 	
     while(1)
     {
+		kernelPanic();
         //TODO:: Please write your application code 
     }
-}
-
-void startBeerOS(taskControlBlock* firstTask){
-	//set stack pointer of starting task next to taskaddress
-	SP = firstTask->stackBeginn+firstTask->stackSize-progcntOffset;
-	firstTask->state = RUNNING;
-	//start task
-	asm volatile ("ret");
 }

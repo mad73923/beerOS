@@ -52,37 +52,37 @@ ISR(DISPISRVEC, ISR_NAKED){
 					"PUSH R0\n\t"
 					"CLR R1"
 				);
-				
-	
-	
-	// Modus (Running, Waiting, Killed ....)
-	// Prioritaet (je nach Scheduling Verfahren)
 	
 	//rescue stack pointer
-	tcb[task].stackPointer = SP;
+	currentTask->stackPointer = SP;
 	// set task state
 	// if state = waiting, dont change!	
-	if(tcb[task].state == RUNNING){
-		tcb[task].state = READY;		
+	if(currentTask->state == RUNNING){
+		currentTask->state = READY;
+		scheduler_enqueueTask(currentTask);
 	}
 	
 	if(hardwareISR == 1){
 		systemTime_ms ++;
-		wakeupPendingTasks();
+		time_wakeupPendingTasks();
 	}
 	hardwareISR = 1;
 	
-	// call scheduler
-	scheduleNextTask();
+	if(currentTask->stackBeginn[0] != magicStackNumber){
+		kernelPanic();
+	}
 	
-	if(tcb[task].stackBeginn[tcb->stackSize-1] != magicStackNumber){
+	// call scheduler
+	scheduler_NextTask();
+	
+	if(currentTask->stackBeginn[currentTask->stackSize-1] != magicStackNumber){
 		kernelPanic();
 	}
 	
 	// reassign stackpointer
-	SP = tcb[task].stackPointer;
+	SP = currentTask->stackPointer;
 	// set task state
-	tcb[task].state = RUNNING;
+	currentTask->state = RUNNING;
 	
 	asm volatile ("nop");
 	

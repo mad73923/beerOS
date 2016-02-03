@@ -16,6 +16,9 @@
 #include "time.h"
 
 extern volatile uint32_t systemTime_ms;
-extern volatile linkedSyncObject firstSleeping;
+extern volatile LinkedList allSleepingTasks;
+extern taskControlBlock* currentTask;
+extern const uint8_t magicStackNumber;
+
 
 #endif /* DISPATCHER_H_ */

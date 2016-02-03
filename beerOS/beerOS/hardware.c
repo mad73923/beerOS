@@ -11,6 +11,7 @@
 
 void setSystemClock32MHZ();
 void initDispatcherTimer();
+void resetDispatcherTimer();
 void startDispatcherTimer();
 void stopDispatcherTimer();
 void initInterrupts();
@@ -19,6 +20,7 @@ void initHardware(){
 	
 	setSystemClock32MHZ();
 	initDispatcherTimer();
+	resetDispatcherTimer();
 	startDispatcherTimer();
 	initInterrupts();
 	enableInterrupts();
@@ -35,12 +37,18 @@ void initDispatcherTimer(){
 	TCF0.CTRLB = TC_WGMODE_NORMAL_gc;
 	// adapt period here
 	// 0x7D00 = 1ms
+	// 0x5DC0 = 750us
 	// 0x4650 = 500us
+	// 0x3200 = 400us
 	// 0x1C20 = 200us
 	// 0xC80  = 100us
 	// 0x140  = 10us
 	TCF0.PER = 0x7D00;
 	TCF0.INTCTRLA = TC_OVFINTLVL_HI_gc;
+}
+
+void resetDispatcherTimer(){
+	TCF0.CNT = 0;
 }
 
 void startDispatcherTimer(){

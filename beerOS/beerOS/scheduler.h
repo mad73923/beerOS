@@ -3,13 +3,23 @@
 
 
 #include "beerOSTypes.h"
+#include "linkedList.h"
+#include "queue.h"
+#include "scheduler/allScheduler.h"
+#include "hardware.h"
 
-extern uint8_t numberOfTasks;
-extern uint8_t task;
-extern taskControlBlock tcb[4];
+extern const uint8_t progcntOffset;
 
-void scheduleNextTask();
+extern volatile LinkedList allTasksList;
+extern volatile uint8_t taskStructsAreInit;
+
+extern uint8_t mainCalled;
+
+void (*scheduler_NextTask)(void);
+void (*scheduler_enqueueTask)(taskControlBlock* task);
 void initIdleTask();
 void idleTask();
+void beerOS_start(taskControlBlock* firstTask, void (*scheduler_init)(void));
+void beerOS_reboot();
 
 #endif /* SCHEDULER_H_ */

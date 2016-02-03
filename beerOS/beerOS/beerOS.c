@@ -19,18 +19,12 @@ int run(void)
 	initIdleTask();
 	initHardware();
 	
-	startBeerOS(&tcb[0]);
+	taskControlBlock* startTask;
+	linkedList_get(&allTasksList, 0, &startTask);
+	beerOS_start(startTask, &scheduler_initSimpleRR);
 	
     while(1)
     {
         //TODO:: Please write your application code 
     }
-}
-
-void startBeerOS(taskControlBlock* firstTask){
-	//set stack pointer of starting task next to taskaddress
-	SP = firstTask->stackBeginn+firstTask->stackSize-progcntOffset;
-	firstTask->state = RUNNING;
-	//start task
-	asm volatile ("ret");
 }

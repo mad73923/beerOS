@@ -1,6 +1,9 @@
 #include "task.h"
 
-uint8_t numberOfTasks = 0;
+volatile uint8_t taskStructsAreInit = 0;
+volatile LinkedList allTasksList;
+
+
 // 32 reg + sreg + eind + 3x progcnt + index 0 + magicNo
 const uint8_t numberOfRegister = 32+2+3+1+1;
 // 3x progcnt + magicNo + index 0
@@ -11,29 +14,46 @@ typedef union {
 	uint8_t u8[4];
 } ByteAccessUnion;
 
+void initTaskStructs();
 void initTaskControlBlock(uint8_t prio, uint8_t* stack, uint16_t stackSize);
 void placeMagicNumberOnStack(uint8_t* stack, uint16_t stackSize);
 void placeStartAdressOnStack(uint8_t* stack, void* taskFunction, uint16_t stackSize);
 
 void initTask(uint8_t prio, uint8_t* stack, void* taskFunction, uint16_t stackSize){
+	if(!taskStructsAreInit){
+		initTaskStructs();
+		taskStructsAreInit = 1;
+	}
 	initTaskControlBlock(prio, stack, stackSize);
 	placeMagicNumberOnStack(stack, stackSize);
 	placeStartAdressOnStack(stack, taskFunction, stackSize);	
 }
 
+void initTaskStructs(){
+	linkedList_init(&allTasksList);
+}
+
 void initTaskControlBlock(uint8_t prio, uint8_t* stack, uint16_t stackSize){
-	taskControlBlock *cb = &tcb[numberOfTasks];
-	numberOfTasks++;
+	if(linkedList_length(&allTasksList) >= maxNumberOfTasks){
+		kernelPanic();
+	}
+	if(prio > maxPrio){
+		kernelPanic();
+	}
+	taskControlBlock *cb = &tcb[linkedList_length(&allTasksList)];
+	linkedList_append(&allTasksList, cb);
+
 	cb->prio = prio;
+	cb->id = linkedList_length(&allTasksList)-1;
 	cb->stackSize = stackSize;
 	cb->stackBeginn = stack;
 	cb->stackPointer = stack + (stackSize - numberOfRegister);
 	cb->state = READY;	
-	cb->semaNextWaiting = NULL;
 	cb->waitUntil = 0;
 }
 
 void placeMagicNumberOnStack(uint8_t* stack, uint16_t stackSize){
+	stack[0] = magicStackNumber;
 	stack[stackSize-1] = magicStackNumber;
 }
 
@@ -46,18 +66,21 @@ void placeStartAdressOnStack(uint8_t* stack, void* taskFunction, uint16_t stackS
 	stack[stackSize-4] = byteAccessUnion.u8[2];
 }
 
-void wakeupLinkedTasks(linkedSyncObject* syncObj){
-	while(syncObj->firstWaiting != NULL){
-		taskControlBlock* tb = syncObj->firstWaiting;
-		tb->state = READY;
-		syncObj->firstWaiting = NULL;
-		syncObj->firstWaiting = tb->semaNextWaiting;
+void wakeupLinkedTasks(LinkedList* syncObj){
+	taskControlBlock* task;
+	uint8_t length = linkedList_length(syncObj);
+	if(length > 0){
+		while(linkedList_iter(syncObj, &task)){
+			task->state = READY;
+			scheduler_enqueueTask(task);
+		}
+		for(int i = 0; i < length; i++){
+			linkedList_remove(syncObj, 0);
+		}
 	}
 }
 
-void queueWaitingTask(linkedSyncObject* syncObj, taskControlBlock* newTask){
-	while(syncObj->firstWaiting != NULL)
-		syncObj = syncObj->firstWaiting;
-	syncObj->firstWaiting = newTask;
+void queueWaitingTask(LinkedList* syncObj, taskControlBlock* newTask){
+	linkedList_append(syncObj, newTask);
 	newTask->state = WAITING;
 }
