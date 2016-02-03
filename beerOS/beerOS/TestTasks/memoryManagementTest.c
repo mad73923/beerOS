@@ -19,9 +19,17 @@ uint16_t testTask(uint16_t size){
 
 void memoryManagementTestTask(){
 	memoryManagement_init(testTask);
-	void* pointer = get(16);
-	void* pointer2 = get(8);
-	void* pointer3 = get(20);
+	Segment* seg = (Segment*) get(5);
+	Segment* mh = seg - 1;
+	Segment* seg2 = (Segment*) get(5);
+	Segment* mh2 = seg2 - 1;
+	Segment* seg3 = (Segment*) get(5);
+	Segment* mh3 = seg3 - 1;
+	free(seg2);
+	Segment* seg4 = (Segment*) get(6);
+	Segment* mh4 = seg4 - 1;
+	Segment* seg5 = (Segment*) get(5);
+	Segment* mh5 = seg5 - 1;
 	beerOS_reboot();
 }
 

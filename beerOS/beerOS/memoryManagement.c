@@ -90,7 +90,21 @@ void *get(uint16_t size){
 	return memAlgo(size);
 }
 void free(uint16_t *ptr){
+	Segment* firstSegment = (Segment*) ptr;
+	firstSegment--;
+	MemoryHead* memoryHead = &firstSegment->memoryHead;
 	
+	if(memoryHead->size > 0){
+		uint16_t prev = memoryHead->prev;
+		uint16_t next = memoryHead->next;
+		memoryHead->size = 0;
+		
+		memoryHead = &theHeap[prev].memoryHead;
+		memoryHead->next = next;
+		
+		memoryHead = &theHeap[next].memoryHead;
+		memoryHead->prev = prev;
+	}
 }
 
 
