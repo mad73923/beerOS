@@ -15,7 +15,8 @@
 
 typedef volatile struct{
 	LinkedList waitingTasks;
-	volatile int16_t semaCnt;
+	int16_t semaCnt;
+	taskControlBlock* tookLastKey;
 }semaphore;
 
 typedef volatile struct{
@@ -34,7 +35,7 @@ static void __attribute__((always_inline)) leaveCriticalSection(){
 }
 
 void semaphore_init(semaphore* sema, uint16_t cntInit);
-void semaphore_wait(semaphore* sema);
+void semaphore_request(semaphore* sema);
 void semaphore_release(semaphore* sema);
 
 void signal_init(signal* sig);

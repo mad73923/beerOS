@@ -13,10 +13,10 @@ void semaphore_init(semaphore* sema, uint16_t cntInit){
 	linkedList_init(&sema->waitingTasks);
 }
 
-void semaphore_wait(semaphore* sema){
+void semaphore_request(semaphore* sema){
 	enterCriticalSection();
 	while(sema->semaCnt <= 0){
-		queueWaitingTask(&sema->waitingTasks, currentTask);			
+		queueWaitingTask(&sema->waitingTasks, currentTask);
 		leaveCriticalSection();
 		task_yield();
 		enterCriticalSection();

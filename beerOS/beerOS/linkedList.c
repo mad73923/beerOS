@@ -98,6 +98,17 @@ uint8_t linkedList_length(LinkedList *linkedList){
 	return linkedList->length;
 }
 
+uint8_t linkedList_contains(LinkedList *linkedList, void *item){
+	void *currentItem;
+	for(uint8_t i = 0; i < linkedList->length; i++){
+		linkedList_get(linkedList, i, &currentItem);
+		if(currentItem == item){
+			return 1;
+		}
+	}
+	return 0;
+}
+
 uint8_t outOfBound(LinkedList *linkedList, uint8_t index){
 	return index >= linkedList->length;
 }
