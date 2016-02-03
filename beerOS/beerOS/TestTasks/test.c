@@ -21,6 +21,8 @@ void (*initNextTest)(void) __attribute__ ((section (".noinit"))) = &initSemaphor
 // 5. QueueTest
 // 6. PrioTest
 
+// Simulated time: 20.987,06 us
+
 //#define RebootTest
 
 int run(void)

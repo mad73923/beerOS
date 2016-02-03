@@ -48,7 +48,7 @@ void sleepTestTask(){
 				kernelPanic();
 			}
 		}
-		if(task3Cnt >= 2){
+		if(task3Cnt > 2){
 			break;
 		}
 	}

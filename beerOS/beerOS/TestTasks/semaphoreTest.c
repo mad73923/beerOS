@@ -51,7 +51,7 @@ void semaphoreTestTask(){
 		if(task2Cnt - task3Cnt > 1 || task2Cnt - task3Cnt < -1){
 			kernelPanic();
 		}
-		if(task3Cnt >= 3){
+		if(task3Cnt > 3){
 			break;
 		}
 	}
