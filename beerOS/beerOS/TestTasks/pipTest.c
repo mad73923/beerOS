@@ -41,8 +41,9 @@ void pipTestTask(){
 			asm volatile ("nop");
 		}else if(currentTask->id == 2){
 			semaphore_release(&dummySema);
+			asm volatile ("nop");		
 		}
 		asm volatile ("nop");
 	}
-	beerOS_reboot();	
+	beerOS_reboot();
 }

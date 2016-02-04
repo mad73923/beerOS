@@ -29,12 +29,12 @@ void prioInheritance_enqueueTask(taskControlBlock* task){
 	queue_push(targetPrioQueue, task);
 }
 
-void prioInheritance_blockedByRessourceRequest(semaphore* ressource){
-	uint8_t length = linkedList_length(&ressource->freedBy);
+void prioInheritance_blockedByRessourceRequest(LinkedList* resFreedBy){
+	uint8_t length = linkedList_length(resFreedBy);
 	taskControlBlock* nextTask;
 	if(length){
 		for(uint16_t i = 0; i < length; i++){
-			linkedList_get(&ressource->freedBy, i, &nextTask);
+			linkedList_get(resFreedBy, i, &nextTask);
 			if(nextTask->state == READY && nextTask->prio > currentTask->prio){
 				nextTask->prio = currentTask->prio;
 				queue_removeItem(&prioQueue[nextTask->tmpPrio], nextTask);
@@ -45,9 +45,9 @@ void prioInheritance_blockedByRessourceRequest(semaphore* ressource){
 	}
 }
 
-void prioInheritance_ressourceReleased(semaphore* ressource){
-	if(!linkedList_contains(&ressource->freedBy, currentTask)){
-		linkedList_append(&ressource->freedBy, currentTask);
+void prioInheritance_ressourceReleased(LinkedList* resFreedBy){
+	if(!linkedList_contains(resFreedBy, currentTask)){
+		linkedList_append(resFreedBy, currentTask);
 	}
 	if(currentTask->tmpPrio != currentTask->prio){
 		currentTask->prio = currentTask->tmpPrio;

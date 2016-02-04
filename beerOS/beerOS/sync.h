@@ -21,6 +21,7 @@ typedef volatile struct{
 
 typedef volatile struct{
 	LinkedList waitingTasks;
+	LinkedList freedBy;
 }signal;
 
 extern volatile uint8_t hardwareISR;

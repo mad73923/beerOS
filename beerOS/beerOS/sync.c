@@ -18,7 +18,7 @@ void semaphore_request(semaphore* sema){
 	enterCriticalSection();
 	while(sema->semaCnt <= 0){
 		queueWaitingTask(&sema->waitingTasks, currentTask);
-		scheduler_blockedByRessourceRequest(sema);
+		scheduler_blockedByRessourceRequest(&sema->freedBy);
 		leaveCriticalSection();
 		task_yield();
 		enterCriticalSection();
@@ -30,17 +30,19 @@ void semaphore_release(semaphore* sema){
 	enterCriticalSection();
 	sema->semaCnt ++;
 	wakeupLinkedTasks(&sema->waitingTasks);
-	scheduler_ressourceReleased(sema);
+	scheduler_ressourceReleased(&sema->freedBy);
 	leaveCriticalSection();
 }
 
 void signal_init(signal* sig){
 	linkedList_init(&sig->waitingTasks);
+	linkedList_init(&sig->freedBy);
 }
 
 void signal_wait(signal* sig){
 	enterCriticalSection();
 	queueWaitingTask(&sig->waitingTasks, currentTask);
+	scheduler_blockedByRessourceRequest(&sig->freedBy);
 	leaveCriticalSection();
 	task_yield();
 }
@@ -48,6 +50,7 @@ void signal_wait(signal* sig){
 void signal_send(signal* sig){
 	enterCriticalSection();
 	wakeupLinkedTasks(&sig->waitingTasks);
+	scheduler_ressourceReleased(&sig->freedBy);
 	leaveCriticalSection();
 }
 
