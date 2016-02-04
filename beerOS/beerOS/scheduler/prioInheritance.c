@@ -36,7 +36,6 @@ void prioInheritance_blockedByRessourceRequest(semaphore* ressource){
 		for(uint16_t i = 0; i < length; i++){
 			linkedList_get(&ressource->freedBy, i, &nextTask);
 			if(nextTask->state == READY && nextTask->prio > currentTask->prio){
-				nextTask->tmpPrio = nextTask->prio;
 				nextTask->prio = currentTask->prio;
 				queue_removeItem(&prioQueue[nextTask->tmpPrio], nextTask);
 				queue_push(&prioQueue[nextTask->prio], nextTask);
@@ -50,9 +49,8 @@ void prioInheritance_ressourceReleased(semaphore* ressource){
 	if(!linkedList_contains(&ressource->freedBy, currentTask)){
 		linkedList_append(&ressource->freedBy, currentTask);
 	}
-	if(currentTask->tmpPrio > currentTask->prio){
+	if(currentTask->tmpPrio != currentTask->prio){
 		currentTask->prio = currentTask->tmpPrio;
-		currentTask->tmpPrio = maxPrio;
 		task_yield();
 	}
 }

@@ -49,7 +49,7 @@ void initTaskControlBlock(uint8_t prio, uint8_t* stack, uint16_t stackSize){
 	cb->stackBeginn = stack;
 	cb->stackPointer = stack + (stackSize - numberOfRegister);
 	cb->state = READY;
-	cb->tmpPrio = maxPrio;
+	cb->tmpPrio = prio;
 	cb->waitUntil = 0;
 }
 

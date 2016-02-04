@@ -32,5 +32,7 @@ void queueTestTask();
 void initPrioTest();
 void prioTestTask();
 void rebootTestTask();
+void initPipTest();
+void pipTestTask();
 
 #endif /* TESTTASKS_H_ */

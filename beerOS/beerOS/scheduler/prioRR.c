@@ -10,7 +10,7 @@
 volatile Queue prioQueue[maxPrio+1];
 
 void prioRR_nextTask(){
-	Queue* nextPrioQueue;	
+	Queue* nextPrioQueue;
 	for(uint16_t i = 0; i <= maxPrio; i++){
 		nextPrioQueue = &prioQueue[i];
 		if(!queue_isEmpty(nextPrioQueue)){

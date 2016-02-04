@@ -12,6 +12,11 @@
 #include "../beerOSTypes.h"
 #include "../scheduler.h"
 
+extern void (*scheduler_NextTask)(void);
+extern void (*scheduler_enqueueTask)(task);
+extern void (*scheduler_blockedByRessourceRequest)(ressource);
+extern void (*scheduler_ressourceReleased)(ressource);
+
 extern taskControlBlock* currentTask;
 
 void scheduler_initSimpleRR();
