@@ -36,14 +36,25 @@ void pipTestTask(){
 	while(1){
 		if(currentTask->id == 0){
 			semaphore_request(&dummySema);
+			task1Cnt++;
 			asm volatile ("nop");
 		}else if(currentTask->id == 1){
+			task2Cnt++;
 			asm volatile ("nop");
 		}else if(currentTask->id == 2){
 			semaphore_release(&dummySema);
+			task3Cnt++;
 			asm volatile ("nop");		
 		}
-		asm volatile ("nop");
+		if(task1Cnt - task3Cnt > 1 || task1Cnt - task3Cnt < -1){
+			kernelPanic();
+		}
+		if(task2Cnt){
+			kernelPanic();
+		}
+		if(task3Cnt > 3){
+			break;
+		}
 	}
 	beerOS_reboot();
 }

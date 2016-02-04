@@ -11,7 +11,7 @@ uint8_t task1Stack[stacksize];
 uint8_t task2Stack[stacksize];
 uint8_t task3Stack[stacksize];
 
-void (*initNextTest)(void) __attribute__ ((section (".noinit"))) = &initPipTest;
+void (*initNextTest)(void) __attribute__ ((section (".noinit"))) = &initSemaphoreTest;
 
 // Automated test order
 // 1. SemaTest
@@ -20,6 +20,7 @@ void (*initNextTest)(void) __attribute__ ((section (".noinit"))) = &initPipTest;
 // 4. LinkedListTest
 // 5. QueueTest
 // 6. PrioTest
+// 7. PIPTest
 
 // Simulated time: 20.987,06 us
 
