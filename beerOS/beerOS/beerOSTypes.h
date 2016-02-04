@@ -33,6 +33,7 @@ typedef volatile struct strucTCB{
 	volatile uint8_t* stackBeginn;
 	volatile uint16_t stackSize;
 	volatile uint32_t waitUntil;
+	volatile uint8_t tmpPrio;
 	volatile taskstate state;
 }taskControlBlock;
 

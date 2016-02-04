@@ -7,6 +7,7 @@
 #include "queue.h"
 #include "scheduler/allScheduler.h"
 #include "hardware.h"
+#include "sync.h"
 
 extern const uint8_t progcntOffset;
 
@@ -15,8 +16,6 @@ extern volatile uint8_t taskStructsAreInit;
 
 extern uint8_t mainCalled;
 
-void (*scheduler_NextTask)(void);
-void (*scheduler_enqueueTask)(taskControlBlock* task);
 void initIdleTask();
 void idleTask();
 void beerOS_start(taskControlBlock* firstTask, void (*scheduler_init)(void));

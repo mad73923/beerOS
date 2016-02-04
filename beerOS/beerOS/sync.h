@@ -15,8 +15,8 @@
 
 typedef volatile struct{
 	LinkedList waitingTasks;
+	LinkedList freedBy;
 	int16_t semaCnt;
-	taskControlBlock* tookLastKey;
 }semaphore;
 
 typedef volatile struct{

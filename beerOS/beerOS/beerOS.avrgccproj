@@ -82,10 +82,16 @@
     <Compile Include="scheduler\allScheduler.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="scheduler\prioInheritance.c">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="scheduler\prioRR.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="scheduler\simpleRR.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="TestTasks\pipTest.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="TestTasks\prioTest.c">

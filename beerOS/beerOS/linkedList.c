@@ -82,6 +82,23 @@ void linkedList_remove(LinkedList *linkedList, uint8_t index){
 	freeMem(toRemove);
 }
 
+uint8_t linkedList_removeItem(LinkedList *linkedList, void *item){
+	void *nextItem;
+	for(uint8_t i = 0; i < linkedList->length; i++){
+		linkedList_get(linkedList, i, &nextItem);
+		if(nextItem == item){
+			return 0;
+		}
+	}
+	return 1;
+}
+
+void linkedList_removeAll(LinkedList *linkedList){
+	while(linkedList->length){
+		linkedList_remove(linkedList, 0);
+	}
+}
+
 uint8_t linkedList_first(LinkedList *linkedList, void **item){
 	linkedList_get(linkedList, 0, item);
 }

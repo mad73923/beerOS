@@ -32,15 +32,15 @@ void semaphoreTestTask(){
 	asm volatile ("nop");
 	while(1){
 		if(currentTask->id == 0){
-			semaphore_wait(&dummySema);
+			semaphore_request(&dummySema);
 			task1Cnt++;
 			semaphore_release(&dummySema2);
 		}else if(currentTask->id == 1){
-			semaphore_wait(&dummySema2);
+			semaphore_request(&dummySema2);
 			task2Cnt++;
 			semaphore_release(&dummySema3);
 		}else if(currentTask->id == 2){
-			semaphore_wait(&dummySema3);
+			semaphore_request(&dummySema3);
 			task3Cnt++;
 			semaphore_release(&dummySema);
 		}

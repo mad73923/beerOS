@@ -14,4 +14,7 @@ uint8_t queue_pop(Queue *queue, void **item);
 uint8_t queue_isEmpty(Queue *queue);
 uint8_t queue_peek(Queue *queue, void **item);
 
+void queue_removeAll(Queue *queue);
+void queue_removeItem(Queue *queue, void *item);
+
 #endif /* QUEUE_H_ */

@@ -14,9 +14,9 @@
 
 extern taskControlBlock* currentTask;
 
-
 void scheduler_initSimpleRR();
 void scheduler_initPrioRR();
+void scheduler_initPrioInheritance();
 
 
 #endif /* ALLSCHEDULER_H_ */

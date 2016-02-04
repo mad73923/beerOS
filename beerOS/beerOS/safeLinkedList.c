@@ -58,7 +58,7 @@ uint8_t safeLinkedList_length(SafeLinkedList *safeLinkedList){
 
 void lockList(SafeLinkedList *safeLinkedList){
 	if(safeLinkedList->sema){
-		semaphore_wait(safeLinkedList->sema);
+		semaphore_request(safeLinkedList->sema);
 	}
 }
 
