@@ -23,7 +23,7 @@ void (*scheduler_init)(void) = &scheduler_initPrioRR;
 // 6. PrioTest
 // 7. PIPTest
 
-// Simulated time: 20.987,06 us
+// Simulated time: 24.035,25 us
 
 //#define RebootTest
 
