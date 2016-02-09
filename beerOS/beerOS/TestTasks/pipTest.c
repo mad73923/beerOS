@@ -18,6 +18,7 @@ void initPipTest(){
 	initTask(0, task1Stack, pipTestTask, stacksize);
 	initTask(1, task2Stack, pipTestTask, stacksize);
 	initTask(2, task3Stack, pipTestTask, stacksize);
+	scheduler_init = &scheduler_initPrioInheritance;
 }
 
 void pipTestTask(){	

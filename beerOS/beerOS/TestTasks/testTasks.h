@@ -15,6 +15,7 @@
 #define stacksize 128
 
 extern void (*initNextTest)(void);
+extern void (*scheduler_init)(void);
 extern uint8_t task1Stack[stacksize];
 extern uint8_t task2Stack[stacksize];
 extern uint8_t task3Stack[stacksize];
