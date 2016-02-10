@@ -7,7 +7,6 @@
 
 #include "sync.h"
 
-
 void semaphore_init(semaphore* sema, uint16_t cntInit){
 	sema->semaCnt = cntInit;
 	linkedList_init(&sema->waitingTasks);

@@ -7,6 +7,11 @@ uint16_t firstMemHead = 0;
 
 memoryAlgorithm memAlgo;
 MemoryHead* memoryHeadFromPointer(uint16_t *ptr);
+semaphore sema;
+
+void memoryManagement_init(memoryAlgorithm m){
+	memAlgo = m;
+}
 
 uint16_t memoryManagement_next(MemoryRequest *memoryRequest){
 	MemoryHead memoryHead;
@@ -44,9 +49,10 @@ uint16_t memoryManagement_next(MemoryRequest *memoryRequest){
 	return lastIndex + 1;	
 }
 
-void memoryManagement_init(memoryAlgorithm m){
-	memAlgo = m;
+void memoryManagement_preStart(){
+	semaphore_init(&sema, 1);
 }
+
 
 void* memoryManagement_alloc(MemoryRequest *memoryRequest){
 	uint16_t memIdBefore = memoryRequest->memId - 1;
@@ -93,18 +99,18 @@ void *alloc(uint16_t size){
 		return NULL;
 	}
 	
-	enterCriticalSection();
+	semaphore_request(&sema);
 	uint16_t segments = size/sizeof(Segment);
 	if(size%sizeof(Segment)){
 		segments++;
 	}
 	void* pointer = memAlgo(segments);
-	leaveCriticalSection();
+	semaphore_release(&sema);
 	return pointer;
 }
 
 void free(uint16_t *ptr){
-	enterCriticalSection();
+	semaphore_request(&sema);
 	MemoryHead* memoryHead = memoryHeadFromPointer(ptr);
 	
 	if(memoryHead->size > 0){
@@ -118,11 +124,11 @@ void free(uint16_t *ptr){
 		memoryHead = &theHeap[next].memoryHead;
 		memoryHead->prev = prev;
 	}
-	leaveCriticalSection();
+	semaphore_release(&sema);
 }
 
 uint8_t memcopy(uint16_t *origin, uint16_t *destination){
-	enterCriticalSection();
+	semaphore_request(&sema);
 	MemoryHead* originHead = memoryHeadFromPointer(origin);
 	MemoryHead* destinationHead = memoryHeadFromPointer(destination);
 	
@@ -139,7 +145,7 @@ uint8_t memcopy(uint16_t *origin, uint16_t *destination){
 		destinationSegment++;
 		current++;
 	}	
-	leaveCriticalSection();
+	semaphore_release(&sema);
 }
 
 MemoryHead* memoryHeadFromPointer(uint16_t *ptr){

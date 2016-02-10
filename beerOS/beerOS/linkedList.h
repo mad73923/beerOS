@@ -2,19 +2,13 @@
 #define LINKEDLIST_H_
 
 #include "beerOSTypes.h"
+#include "memoryManagement.h"
+#include "linkedListTypes.h"
 
 typedef struct ListItem{
 	struct ListItem *next;
 	uint8_t *this;
 }ListItem;
-
-typedef struct {
-	ListItem *list;
-	ListItem *current;
-	uint8_t length;
-	uint8_t currentIndex;
-	uint8_t isIterating;
-}LinkedList;
 
 uint8_t linkedList_init(LinkedList *linkedList);
 

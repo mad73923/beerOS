@@ -8,6 +8,7 @@
 #include "scheduler/allScheduler.h"
 #include "hardware.h"
 #include "sync.h"
+#include "memoryManagement.h"
 
 extern const uint8_t progcntOffset;
 

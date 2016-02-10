@@ -10,8 +10,11 @@
 #define SYNC_H_
 
 #include "beerOSTypes.h"
+#include "linkedList.h"
+#include "linkedListTypes.h"
 #include "scheduler.h"
 #include "hardware.h"
+
 
 typedef volatile struct{
 	LinkedList waitingTasks;
