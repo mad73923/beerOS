@@ -1,4 +1,4 @@
-#include "memoryManagement.h"
+#include "../memoryManagement.h"
 #include "memoryManagementInternal.h"
 
 Segment theHeap[numberOfSegments];

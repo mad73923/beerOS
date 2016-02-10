@@ -1,20 +1,10 @@
 #include "../memoryManagement.h"
-#include "../memoryManagementInternal.h"
+#include "../MemoryManagement/memoryManagementInternal.h"
+#include "../MemoryManagement/memoryManagementAlgos.h"
 #include "testTasks.h"
 
 void initMemoryManagementTest(){
 	initTask(1, task1Stack, memoryManagementTestTask, stacksize);
-}
-
-uint16_t firstFit(uint16_t size){
-	MemoryRequest memoryRequest;
-	memoryManagement_initMemoryRequest(&memoryRequest, size);
-	uint16_t memId = 0;
-	while(memId = memoryManagement_next(&memoryRequest)){
-		memoryRequest.memId = memId;
-		return memoryManagement_alloc(&memoryRequest);
-	}
-	return NULL;
 }
 
 void alloc5_free_alloc5(){

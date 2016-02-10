@@ -1,6 +1,8 @@
 #ifndef MEMORYMANAGEMENTINTERNAL_H_
 #define MEMORYMANAGEMENTINTERNAL_H_
 
+#include "../beerOSTypes.h"
+
 typedef struct{
 	uint16_t prev: 12;
 	uint16_t next: 12;

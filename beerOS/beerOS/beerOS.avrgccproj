@@ -79,6 +79,21 @@
     <GenerateEepFile>True</GenerateEepFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="memoryManagement.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="MemoryManagement\firstFit.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="MemoryManagement\memoryManagement.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="MemoryManagement\memoryManagementAlgos.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="MemoryManagement\memoryManagementInternal.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="scheduler\allScheduler.h">
       <SubType>compile</SubType>
     </Compile>
@@ -98,15 +113,6 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="TestTasks\rebootTest.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="memoryManagement.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="memoryManagement.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="memoryManagementInternal.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="TestTasks\memoryManagementTest.c">
@@ -219,6 +225,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="MemoryManagement" />
     <Folder Include="scheduler" />
     <Folder Include="TestTasks" />
   </ItemGroup>
