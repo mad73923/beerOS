@@ -24,17 +24,23 @@ void linkedListTestTask(){
 	// test linkedList_get
 	if(linkedList_init(&linkedList)){
 		kernelPanic();
-	}	
+	}
+	
+	//test linkedList_iter empty
+	while(linkedList_iter(&linkedList, &value)){
+		value;
+		kernelPanic();
+	}
 	
 	
-	// test linkedList_append
-	// test linkedList_get
+	// test linkedList_append	
 	for(int i = 0; i < 5; i++){
 		if(linkedList_append(&linkedList, &testValues[i])){
 			kernelPanic();		
 		}	
 	}	
 	
+	// test linkedList_get
 	for(uint8_t j = 0; j < 5; j++){
 		if(linkedList_get(&linkedList, j, &value)){
 				kernelPanic();			
