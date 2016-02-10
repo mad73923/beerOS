@@ -84,8 +84,6 @@ ISR(DISPISRVEC, ISR_NAKED){
 	// set task state
 	currentTask->state = RUNNING;
 	
-	asm volatile ("nop");
-	
 	// write registers of new thread
 	asm volatile(	"POP R0\n\t"
 					"OUT 0x003C, R0 ;EIND\n\t"
@@ -126,6 +124,5 @@ ISR(DISPISRVEC, ISR_NAKED){
 				);
 	
 	enableInterrupts();
-	asm volatile ("nop");
 	asm volatile ("reti");
 }

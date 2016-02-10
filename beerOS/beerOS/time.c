@@ -20,7 +20,7 @@ void time_sleep_ms(uint32_t ms){
 	currentTask->waitUntil = systemTime_ms + ms;
 	uint8_t taskAdded = 0;
 	uint8_t length = linkedList_length(&allSleepingTasks);
-	if(length > 0){
+	if(length){
 		taskControlBlock* nextTask;
 		uint8_t index = 0;
 		for(int i = 0; i < length; i++){
@@ -43,7 +43,7 @@ void time_sleep_ms(uint32_t ms){
 
 void time_wakeupPendingTasks(){
 	uint8_t length = linkedList_length(&allSleepingTasks);
-	if(length > 0){
+	if(length){
 		taskControlBlock* nextTask;
 		for(int i = 0; i<length; i++){
 			linkedList_get(&allSleepingTasks, i, &nextTask);
