@@ -87,6 +87,7 @@ uint8_t linkedList_removeItem(LinkedList *linkedList, void *item){
 	for(uint8_t i = 0; i < linkedList->length; i++){
 		linkedList_get(linkedList, i, &nextItem);
 		if(nextItem == item){
+			linkedList_remove(linkedList, i);
 			return 0;
 		}
 	}
@@ -143,11 +144,15 @@ uint8_t allocMem(ListItem** listItem){
 }
 
 uint8_t linkedList_iter(LinkedList *linkedList, void **item){
+	if(linkedList->length == 0){
+		return 0;
+	}
+	
 	if(!linkedList->isIterating){
 		linkedList->current = linkedList->list->next;
 		linkedList->isIterating = 1;
 		linkedList->currentIndex = 0;
-	} else if(!linkedList->current->next){
+	}else if(!linkedList->current->next){
 		linkedList->isIterating = 0;
 		return 0;		
 	} else {
@@ -158,6 +163,11 @@ uint8_t linkedList_iter(LinkedList *linkedList, void **item){
 	*item = linkedList->current->this;
 	return 1;
 }
+
+linkedList_iterReset(LinkedList *linkedList){
+	linkedList->isIterating = 0;
+}
+
 
 void freeMem(ListItem* listItem){
 	listItem->this = NULL;

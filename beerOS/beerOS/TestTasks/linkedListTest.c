@@ -24,17 +24,31 @@ void linkedListTestTask(){
 	// test linkedList_get
 	if(linkedList_init(&linkedList)){
 		kernelPanic();
-	}	
+	}
+	
+	//test linkedList_iter empty
+	while(linkedList_iter(&linkedList, &value)){
+		value;
+		kernelPanic();
+	}
 	
 	
-	// test linkedList_append
-	// test linkedList_get
+	// test linkedList_append	
 	for(int i = 0; i < 5; i++){
 		if(linkedList_append(&linkedList, &testValues[i])){
 			kernelPanic();		
 		}	
-	}	
+	}
 	
+	// test linkedList_contains
+	if(!linkedList_contains(&linkedList, &testValues[4])){
+		kernelPanic();
+	}
+	if(linkedList_contains(&linkedList, &testValues[5])){
+		kernelPanic();
+	}
+	
+	// test linkedList_get
 	for(uint8_t j = 0; j < 5; j++){
 		if(linkedList_get(&linkedList, j, &value)){
 				kernelPanic();			
@@ -102,6 +116,24 @@ void linkedListTestTask(){
 	
 	if(linkedList_get(&linkedList, lenghtBeforeRemove - 1, NULL) == 0){
 		kernelPanic();
+	}
+	
+	//test linkedList_remove
+	lenghtBeforeRemove = linkedList_length(&linkedList);
+	if(!linkedList_removeItem(&linkedList, &testValues[4])){
+		kernelPanic();
+	}
+	if(linkedList_removeItem(&linkedList, &testValues[0])){
+		kernelPanic();
+	}
+	if(linkedList_length(&linkedList) != lenghtBeforeRemove-1){
+		kernelPanic();
+	}
+	
+	//test linkedList_removeAll
+	linkedList_removeAll(&linkedList);
+	if(linkedList.length){
+		kernelPanic();	
 	}
 	
 	beerOS_reboot();
