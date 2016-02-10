@@ -31,7 +31,6 @@ void initTask(uint8_t prio, uint8_t* stack, void* taskFunction, uint16_t stackSi
 }
 
 void initTaskStructs(){
-	linkedList_initModule();
 	linkedList_init(&allTasksList);
 }
 

@@ -2,7 +2,7 @@
 #define MEMORYMANAGEMENT_H_
 
 #include "beerOSTypes.h"
-#include "sync.h"
+#include "hardware.h"
 
 void* alloc(uint16_t size);
 void free(uint16_t *ptr);

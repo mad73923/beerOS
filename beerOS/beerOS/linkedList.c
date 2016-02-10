@@ -6,17 +6,17 @@ uint8_t allocMem(ListItem** listItem);
 void freeMem(ListItem* listItem);
 uint8_t outOfBound(LinkedList *linkedList, uint8_t index);
 uint8_t getInternal(LinkedList *linkedList, uint8_t index, void **item);
-semaphore allocMutex;
+//semaphore allocMutex;
 
 
 void linkedList_initModule(){
 	linkedListMemSize = 4;
-	linkedListMem = alloc(linkedListMemSize * sizeof(ListItem));
+	linkedListMem = (ListItem*) alloc(linkedListMemSize * sizeof(ListItem));
 		
 	if(!linkedListMem){
 		kernelPanic();
 	}
-	semaphore_init(&allocMutex, 1);		
+	//semaphore_init(&allocMutex, 1);	
 }
 
 uint8_t linkedList_init(LinkedList *linkedList){
@@ -147,7 +147,7 @@ uint8_t outOfBound(LinkedList *linkedList, uint8_t index){
 }
 
 uint8_t allocMem(ListItem** listItem){
-	semaphore_request(&allocMutex);
+	//semaphore_request(&allocMutex);
 	uint16_t i = 0;
 	while (linkedListMem[i].this != NULL){
 		i++;
@@ -155,7 +155,7 @@ uint8_t allocMem(ListItem** listItem){
 			uint16_t newSize = linkedListMemSize * 2;
 			ListItem *newMem = alloc(newSize * sizeof(ListItem));
 			if(newMem == NULL || memcopy(linkedListMem, newMem)){
-				semaphore_release(&allocMutex);
+				//semaphore_release(&allocMutex);
 				return 1;
 			}
 			free(linkedListMem);
@@ -164,7 +164,7 @@ uint8_t allocMem(ListItem** listItem){
 		}		
 	}
 	*listItem = &linkedListMem[i];
-	semaphore_release(&allocMutex);
+	//semaphore_release(&allocMutex);
 	return 0;
 }
 

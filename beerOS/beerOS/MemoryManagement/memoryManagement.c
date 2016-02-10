@@ -44,7 +44,7 @@ uint16_t memoryManagement_next(MemoryRequest *memoryRequest){
 	return lastIndex + 1;	
 }
 
-void memoryManagement_init(memoryAlgorithm m){
+void memoryManagement_initModule(memoryAlgorithm m){
 	memAlgo = m;
 }
 
@@ -93,18 +93,18 @@ void *alloc(uint16_t size){
 		return NULL;
 	}
 	
-	enterCriticalSection();
+	disableInterrupts();
 	uint16_t segments = size/sizeof(Segment);
 	if(size%sizeof(Segment)){
 		segments++;
 	}
 	void* pointer = memAlgo(segments);
-	leaveCriticalSection();
+	enableInterrupts();
 	return pointer;
 }
 
 void free(uint16_t *ptr){
-	enterCriticalSection();
+	disableInterrupts();
 	MemoryHead* memoryHead = memoryHeadFromPointer(ptr);
 	
 	if(memoryHead->size > 0){
@@ -118,11 +118,11 @@ void free(uint16_t *ptr){
 		memoryHead = &theHeap[next].memoryHead;
 		memoryHead->prev = prev;
 	}
-	leaveCriticalSection();
+	enableInterrupts();
 }
 
 uint8_t memcopy(uint16_t *origin, uint16_t *destination){
-	enterCriticalSection();
+	disableInterrupts();
 	MemoryHead* originHead = memoryHeadFromPointer(origin);
 	MemoryHead* destinationHead = memoryHeadFromPointer(destination);
 	
@@ -139,7 +139,8 @@ uint8_t memcopy(uint16_t *origin, uint16_t *destination){
 		destinationSegment++;
 		current++;
 	}	
-	leaveCriticalSection();
+	enableInterrupts();
+	return 0;
 }
 
 MemoryHead* memoryHeadFromPointer(uint16_t *ptr){

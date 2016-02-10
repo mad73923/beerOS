@@ -1,10 +1,3 @@
-/*
- * init.c
- *
- * Created: 09.12.2015 18:17:40
- *  Author: anreinha
- */ 
-
 #include "init.h"
 
 uint8_t mainCalled __attribute__ ((section (".noinit"))) = 0;
@@ -14,5 +7,7 @@ int main(void){
 		kernelPanic();
 	}
 	mainCalled++;
+	memoryManagement_initModule(firstFit);
+	linkedList_initModule();
 	return run();
 }
