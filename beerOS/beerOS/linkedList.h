@@ -4,6 +4,7 @@
 #include "beerOSTypes.h"
 #include "memoryManagement.h"
 #include "linkedListTypes.h"
+#include "sync.h"
 
 typedef struct ListItem{
 	struct ListItem *next;
