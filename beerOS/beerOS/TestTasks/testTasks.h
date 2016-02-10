@@ -15,6 +15,7 @@
 #define stacksize 128
 
 extern void (*initNextTest)(void);
+extern void (*scheduler_init)(void);
 extern uint8_t task1Stack[stacksize];
 extern uint8_t task2Stack[stacksize];
 extern uint8_t task3Stack[stacksize];
@@ -34,5 +35,7 @@ void initMemoryManagementTest();
 void initPrioTest();
 void prioTestTask();
 void rebootTestTask();
+void initPipTest();
+void pipTestTask();
 
 #endif /* TESTTASKS_H_ */

@@ -15,11 +15,13 @@
 
 typedef volatile struct{
 	LinkedList waitingTasks;
-	volatile int16_t semaCnt;
+	LinkedList freedBy;
+	int16_t semaCnt;
 }semaphore;
 
 typedef volatile struct{
 	LinkedList waitingTasks;
+	LinkedList freedBy;
 }signal;
 
 extern volatile uint8_t hardwareISR;
@@ -34,7 +36,7 @@ static void __attribute__((always_inline)) leaveCriticalSection(){
 }
 
 void semaphore_init(semaphore* sema, uint16_t cntInit);
-void semaphore_wait(semaphore* sema);
+void semaphore_request(semaphore* sema);
 void semaphore_release(semaphore* sema);
 
 void signal_init(signal* sig);

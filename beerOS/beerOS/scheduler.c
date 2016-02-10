@@ -5,6 +5,11 @@ uint8_t idleTaskStack[idleTaskStackSize];
 taskControlBlock tcb[maxNumberOfTasks];
 taskControlBlock* currentTask;
 
+void (*scheduler_NextTask)(void);
+void (*scheduler_enqueueTask)(taskControlBlock* task);
+void (*scheduler_blockedByRessourceRequest)(semaphore* ressource);
+void (*scheduler_ressourceReleased)(semaphore* ressource);
+
 static uint8_t* mainSP;
 
 

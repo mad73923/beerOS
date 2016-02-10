@@ -82,6 +82,23 @@ void linkedList_remove(LinkedList *linkedList, uint8_t index){
 	freeMem(toRemove);
 }
 
+uint8_t linkedList_removeItem(LinkedList *linkedList, void *item){
+	void *nextItem;
+	for(uint8_t i = 0; i < linkedList->length; i++){
+		linkedList_get(linkedList, i, &nextItem);
+		if(nextItem == item){
+			return 0;
+		}
+	}
+	return 1;
+}
+
+void linkedList_removeAll(LinkedList *linkedList){
+	while(linkedList->length){
+		linkedList_remove(linkedList, 0);
+	}
+}
+
 uint8_t linkedList_first(LinkedList *linkedList, void **item){
 	linkedList_get(linkedList, 0, item);
 }
@@ -96,6 +113,17 @@ uint8_t linkedList_get(LinkedList *linkedList, uint8_t index, void **item){
 
 uint8_t linkedList_length(LinkedList *linkedList){
 	return linkedList->length;
+}
+
+uint8_t linkedList_contains(LinkedList *linkedList, void *item){
+	void *currentItem;
+	for(uint8_t i = 0; i < linkedList->length; i++){
+		linkedList_get(linkedList, i, &currentItem);
+		if(currentItem == item){
+			return 1;
+		}
+	}
+	return 0;
 }
 
 uint8_t outOfBound(LinkedList *linkedList, uint8_t index){

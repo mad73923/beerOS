@@ -87,11 +87,14 @@ void *alloc(uint8_t size){
 	if(!memAlgo){
 		return NULL;
 	}
-		
-	return memAlgo(size);
+	enterCriticalSection();
+	void* pointer = memAlgo(size);
+	leaveCriticalSection();
+	return pointer;
 }
 
 void free(uint16_t *ptr){
+	enterCriticalSection();
 	Segment* firstSegment = (Segment*) ptr;
 	firstSegment--;
 	MemoryHead* memoryHead = &firstSegment->memoryHead;
@@ -107,6 +110,7 @@ void free(uint16_t *ptr){
 		memoryHead = &theHeap[next].memoryHead;
 		memoryHead->prev = prev;
 	}
+	leaveCriticalSection();
 }
 
 

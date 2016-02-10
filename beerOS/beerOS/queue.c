@@ -17,3 +17,11 @@ uint8_t queue_peek(Queue *queue, void **item){
 uint8_t queue_isEmpty(Queue *queue){
 	return linkedList_length(&queue->linkedList) == 0;
 }
+
+void queue_removeAll(Queue *queue){
+	linkedList_removeAll(&queue->linkedList);
+}
+
+void queue_removeItem(Queue *queue, void *item){
+	linkedList_removeItem(&queue->linkedList, item);
+}

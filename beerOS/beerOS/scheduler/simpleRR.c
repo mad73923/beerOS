@@ -20,7 +20,17 @@ void simpleRR_enqueueTask(taskControlBlock* task){
 	
 }
 
+void simpleRR_blockedByRessourceRequest(LinkedList* resFreedBy){
+
+}
+
+void simpleRR_ressourceReleased(LinkedList* resFreedBy){
+
+}
+
 void scheduler_initSimpleRR(){
 	scheduler_NextTask = &simpleRR_nextTask;
 	scheduler_enqueueTask = &simpleRR_enqueueTask;
+	scheduler_blockedByRessourceRequest = &simpleRR_blockedByRessourceRequest;
+	scheduler_ressourceReleased = &simpleRR_ressourceReleased;
 }

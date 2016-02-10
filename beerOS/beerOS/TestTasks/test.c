@@ -12,6 +12,7 @@ uint8_t task2Stack[stacksize];
 uint8_t task3Stack[stacksize];
 
 void (*initNextTest)(void) __attribute__ ((section (".noinit"))) = &initSemaphoreTest;
+void (*scheduler_init)(void) = &scheduler_initPrioRR;
 
 // Automated test order
 // 1. SemaTest
@@ -20,15 +21,17 @@ void (*initNextTest)(void) __attribute__ ((section (".noinit"))) = &initSemaphor
 // 4. LinkedListTest
 // 5. QueueTest
 // 6. PrioTest
-// 7. MemoryManagementTest
+// 7. PIPTest
+// 8. MemoryManagementTest
 
-// Simulated time: 20.987,06 us
+// Simulated time: 26.233,94 us
 
 //#define RebootTest
 
 int run(void)
 {	
-	initNextTest = &initMemoryManagementTest;
+	//initNextTest = &initMemoryManagementTest;
+	
 	initNextTest();
 
 /*
@@ -43,11 +46,10 @@ int run(void)
 	
 	taskControlBlock* startTask;
 	linkedList_get(&allTasksList, 0, &startTask);
-	beerOS_start(startTask, &scheduler_initPrioRR);
-	
+	beerOS_start(startTask, scheduler_init);
+
     while(1)
     {
 		kernelPanic();
-        //TODO:: Please write your application code 
     }
 }

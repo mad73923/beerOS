@@ -10,7 +10,7 @@
 volatile Queue prioQueue[maxPrio+1];
 
 void prioRR_nextTask(){
-	Queue* nextPrioQueue;	
+	Queue* nextPrioQueue;
 	for(uint16_t i = 0; i <= maxPrio; i++){
 		nextPrioQueue = &prioQueue[i];
 		if(!queue_isEmpty(nextPrioQueue)){
@@ -29,6 +29,14 @@ void prioRR_enqueueTask(taskControlBlock* task){
 	queue_push(targetPrioQueue, task);
 }
 
+void prioRR_blockedByRessourceRequest(LinkedList* resFreedBy){
+
+}
+
+void prioRR_ressourceReleased(LinkedList* resFreedBy){
+
+}
+
 void scheduler_initPrioRR(){
 	for (uint16_t i = 0; i <= maxPrio; i++){
 		queue_init(&prioQueue[i]);
@@ -45,4 +53,6 @@ void scheduler_initPrioRR(){
 	
 	scheduler_NextTask = &prioRR_nextTask;
 	scheduler_enqueueTask = &prioRR_enqueueTask;
+	scheduler_ressourceReleased = &prioRR_ressourceReleased;
+	scheduler_blockedByRessourceRequest = &prioRR_blockedByRessourceRequest;
 }
