@@ -6,6 +6,7 @@ Segment theHeap[numberOfSegments];
 uint16_t firstMemHead = 0;
 
 memoryAlgorithm memAlgo;
+MemoryHead* memoryHeadFromPointer(uint16_t *ptr);
 
 uint16_t memoryManagement_next(MemoryRequest *memoryRequest){
 	MemoryHead memoryHead;
@@ -83,21 +84,28 @@ void memoryManagement_initMemoryRequest(MemoryRequest *memoryRequest, uint8_t si
 }
 
 
-void *alloc(uint8_t size){
+void *alloc(uint16_t size){
 	if(!memAlgo){
 		return NULL;
+	}	
+	
+	if(size > 256*sizeof(Segment) || size == 0){
+		return NULL;
 	}
+	
 	enterCriticalSection();
-	void* pointer = memAlgo(size);
+	uint16_t segments = size/sizeof(Segment);
+	if(size%sizeof(Segment)){
+		segments++;
+	}
+	void* pointer = memAlgo(segments);
 	leaveCriticalSection();
 	return pointer;
 }
 
 void free(uint16_t *ptr){
 	enterCriticalSection();
-	Segment* firstSegment = (Segment*) ptr;
-	firstSegment--;
-	MemoryHead* memoryHead = &firstSegment->memoryHead;
+	MemoryHead* memoryHead = memoryHeadFromPointer(ptr);
 	
 	if(memoryHead->size > 0){
 		uint16_t prev = memoryHead->prev;
@@ -113,4 +121,30 @@ void free(uint16_t *ptr){
 	leaveCriticalSection();
 }
 
+uint8_t memcopy(uint16_t *origin, uint16_t *destination){
+	enterCriticalSection();
+	MemoryHead* originHead = memoryHeadFromPointer(origin);
+	MemoryHead* destinationHead = memoryHeadFromPointer(destination);
+	
+	if(originHead->size > destinationHead->size){
+		return 1;
+	}
+	
+	Segment *originSegment = (Segment*) origin;
+	Segment *destinationSegment = (Segment*) destination;
+	uint8_t current = 0;
+	while(current < originHead->size){		
+		*destination = *origin;
+		originSegment++;
+		destinationSegment++;
+		current++;
+	}	
+	leaveCriticalSection();
+}
+
+MemoryHead* memoryHeadFromPointer(uint16_t *ptr){
+		Segment *segment = (Segment*) ptr;
+		segment--;
+		return &segment->memoryHead;
+}
 

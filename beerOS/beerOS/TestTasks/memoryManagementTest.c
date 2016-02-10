@@ -18,11 +18,11 @@ void alloc5_free_alloc5(){
 }
 
 void tooSmallGap(){
-	Segment* seg1 = (Segment*) alloc(5);
-	Segment* seg2 = (Segment*) alloc(5);
-	Segment* seg3 = (Segment*) alloc(5);
+	Segment* seg1 = (Segment*) alloc(4);
+	Segment* seg2 = (Segment*) alloc(4);
+	Segment* seg3 = (Segment*) alloc(4);
 	free(seg2);
-	Segment* seg4 = (Segment*) alloc(6);
+	Segment* seg4 = (Segment*) alloc(5);
 	
 	if(seg2 == seg4){
 		kernelPanic();
@@ -42,12 +42,23 @@ void fittingGap(){
 }
 
 void outOfMemory(){
-	Segment* seg1 = (Segment*) alloc(200);
-	Segment* seg2 = (Segment*) alloc(200);
+	Segment* seg1 = (Segment*) alloc(800);
+	Segment* seg2 = (Segment*) alloc(800);
 	if(seg2 != NULL){
 		kernelPanic();
 	}
 	
+}
+
+void memcopyTest(){
+	uint16_t testValue = 555;
+	uint16_t* origin = (uint16_t*) alloc(2);
+	uint16_t* destination = (uint16_t*) alloc(2);
+	*origin = testValue;
+	memcopy(origin, destination);
+	if(*destination != testValue){
+		kernelPanic();
+	}
 }
 
 void memoryManagementTestTask(){
@@ -63,7 +74,10 @@ void memoryManagementTestTask(){
 	memoryManagement_wipe();
 	
 	outOfMemory();
-	memoryManagement_wipe();	
+	memoryManagement_wipe();
+	
+	memcopyTest();
+	memoryManagement_wipe();
 	
 	beerOS_reboot();
 }
