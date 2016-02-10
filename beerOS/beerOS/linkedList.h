@@ -2,6 +2,7 @@
 #define LINKEDLIST_H_
 
 #include "beerOSTypes.h"
+#include "memoryManagement.h"
 
 typedef struct ListItem{
 	struct ListItem *next;
