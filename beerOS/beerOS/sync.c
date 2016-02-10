@@ -14,7 +14,7 @@ void semaphore_init(semaphore* sema, uint16_t cntInit){
 }
 
 void semaphore_request(semaphore* sema){
-	if(&sema->freedBy.list){
+	if(sema->freedBy.list){
 		enterCriticalSection();
 		while(sema->semaCnt <= 0){
 			queueWaitingTask(&sema->waitingTasks, currentTask);
@@ -28,7 +28,7 @@ void semaphore_request(semaphore* sema){
 	}
 }
 void semaphore_release(semaphore* sema){
-	if(&sema->freedBy.list){
+	if(sema->freedBy.list){
 		enterCriticalSection();
 		sema->semaCnt ++;
 		wakeupLinkedTasks(&sema->waitingTasks);
