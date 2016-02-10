@@ -30,7 +30,7 @@ void (*scheduler_init)(void) = &scheduler_initPrioRR;
 
 int run(void)
 {	
-	initNextTest = &initLinkedListTest;
+	//initNextTest = &initLinkedListTest;
 	
 	initNextTest();
 
