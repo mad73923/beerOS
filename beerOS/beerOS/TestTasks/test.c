@@ -12,6 +12,7 @@ uint8_t task2Stack[stacksize];
 uint8_t task3Stack[stacksize];
 
 void (*initNextTest)(void) __attribute__ ((section (".noinit"))) = &initSemaphoreTest;
+//void (*initNextTest)(void) __attribute__ ((section (".noinit"))) = &initLinkedListTest;
 void (*scheduler_init)(void) = &scheduler_initPrioRR;
 
 // Automated test order
@@ -30,7 +31,7 @@ void (*scheduler_init)(void) = &scheduler_initPrioRR;
 
 int run(void)
 {	
-	//initNextTest = &initMemoryManagementTest;	
+	//initNextTest = &initLinkedListTest;	
 	initNextTest();
 
 /*
