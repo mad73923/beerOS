@@ -87,6 +87,7 @@ uint8_t linkedList_removeItem(LinkedList *linkedList, void *item){
 	for(uint8_t i = 0; i < linkedList->length; i++){
 		linkedList_get(linkedList, i, &nextItem);
 		if(nextItem == item){
+			linkedList_remove(linkedList, i);
 			return 0;
 		}
 	}

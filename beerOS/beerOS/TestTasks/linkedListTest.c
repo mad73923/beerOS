@@ -118,6 +118,18 @@ void linkedListTestTask(){
 		kernelPanic();
 	}
 	
+	//test linkedList_remove
+	lenghtBeforeRemove = linkedList_length(&linkedList);
+	if(!linkedList_removeItem(&linkedList, &testValues[4])){
+		kernelPanic();
+	}
+	if(linkedList_removeItem(&linkedList, &testValues[0])){
+		kernelPanic();
+	}
+	if(linkedList_length(&linkedList) != lenghtBeforeRemove-1){
+		kernelPanic();
+	}
+	
 	//test linkedList_removeAll
 	linkedList_removeAll(&linkedList);
 	if(linkedList.length){
