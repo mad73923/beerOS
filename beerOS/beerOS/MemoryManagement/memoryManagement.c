@@ -9,7 +9,7 @@ memoryAlgorithm memAlgo;
 MemoryHead* memoryHeadFromPointer(uint16_t *ptr);
 semaphore sema;
 
-void memoryManagement_init(memoryAlgorithm m){
+void memoryManagement_initModule(memoryAlgorithm m){
 	memAlgo = m;
 }
 
@@ -48,6 +48,7 @@ uint16_t memoryManagement_next(MemoryRequest *memoryRequest){
 	memoryRequest->gapSize = gap;
 	return lastIndex + 1;	
 }
+
 
 void memoryManagement_preStart(){
 	semaphore_init(&sema, 1);
@@ -146,6 +147,7 @@ uint8_t memcopy(uint16_t *origin, uint16_t *destination){
 		current++;
 	}	
 	semaphore_release(&sema);
+	return 0;
 }
 
 MemoryHead* memoryHeadFromPointer(uint16_t *ptr){

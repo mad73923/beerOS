@@ -23,7 +23,7 @@ typedef uint16_t (*memoryAlgorithm)(uint16_t);
 
 void memoryManagement_wipe();
 uint16_t memoryManagement_next(MemoryRequest *memoryRequest);
-void memoryManagement_init(memoryAlgorithm m);
+void memoryManagement_initModule(memoryAlgorithm m);
 void* memoryManagement_alloc(MemoryRequest *memoryRequest);
 void memoryManagement_initMemoryRequest(MemoryRequest *memoryRequest, uint8_t size);
 

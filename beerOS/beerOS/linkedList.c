@@ -1,16 +1,31 @@
 #include "linkedList.h"
 
-ListItem linkedListMem[256];
+ListItem *linkedListMem;
+uint16_t linkedListMemSize = 0;
 uint8_t allocMem(ListItem** listItem);
 void freeMem(ListItem* listItem);
 uint8_t outOfBound(LinkedList *linkedList, uint8_t index);
 uint8_t getInternal(LinkedList *linkedList, uint8_t index, void **item);
+//semaphore allocMutex;
+
+
+void linkedList_initModule(){
+	linkedListMemSize = 4;
+	linkedListMem = (ListItem*) alloc(linkedListMemSize * sizeof(ListItem));
+		
+	if(!linkedListMem){
+		kernelPanic();
+	}
+	//semaphore_init(&allocMutex, 1);	
+}
 
 uint8_t linkedList_init(LinkedList *linkedList){
-	ListItem* listItem;
+	ListItem* listItem;	
+		
 	if(allocMem(&listItem)){
 		return 1;
 	}
+	
 	linkedList->list = listItem;
 	listItem->this = listItem;
 	linkedList->current = NULL;
@@ -132,14 +147,24 @@ uint8_t outOfBound(LinkedList *linkedList, uint8_t index){
 }
 
 uint8_t allocMem(ListItem** listItem){
-	uint8_t i = 0;
+	//semaphore_request(&allocMutex);
+	uint16_t i = 0;
 	while (linkedListMem[i].this != NULL){
 		i++;
-		if(i >= 256){
-			return 1;
-		}
+		if(i >= linkedListMemSize){
+			uint16_t newSize = linkedListMemSize * 2;
+			ListItem *newMem = alloc(newSize * sizeof(ListItem));
+			if(newMem == NULL || memcopy(linkedListMem, newMem)){
+				//semaphore_release(&allocMutex);
+				return 1;
+			}
+			free(linkedListMem);
+			linkedListMem = newMem;
+			linkedListMemSize = newSize;			
+		}		
 	}
 	*listItem = &linkedListMem[i];
+	//semaphore_release(&allocMutex);
 	return 0;
 }
 
@@ -172,4 +197,3 @@ linkedList_iterReset(LinkedList *linkedList){
 void freeMem(ListItem* listItem){
 	listItem->this = NULL;
 }
-

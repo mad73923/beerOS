@@ -1,10 +1,3 @@
-/*
- * linkedListTest.c
- *
- * Created: 09.12.2015 19:36:53
- *  Author: anreinha
- */ 
-
 #include "../linkedList.h"
 #include "testTasks.h"
 
@@ -118,15 +111,21 @@ void linkedListTestTask(){
 		kernelPanic();
 	}
 	
-	//test linkedList_remove
+	//test linkedList_removeItem
 	lenghtBeforeRemove = linkedList_length(&linkedList);
 	if(!linkedList_removeItem(&linkedList, &testValues[4])){
 		kernelPanic();
 	}
+	
 	if(linkedList_removeItem(&linkedList, &testValues[0])){
 		kernelPanic();
 	}
+	
 	if(linkedList_length(&linkedList) != lenghtBeforeRemove-1){
+		kernelPanic();
+	}
+	
+	if(linkedList_contains(&linkedList, &testValues[0])){
 		kernelPanic();
 	}
 	

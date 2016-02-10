@@ -1,11 +1,3 @@
-/*
- * init.h
- *
- * Created: 09.12.2015 18:18:37
- *  Author: anreinha
- */ 
-
-
 #ifndef INIT_H_
 #define INIT_H_
 
@@ -16,5 +8,9 @@
 #else
 #include "beerOS.c"
 #endif
+
+#include "MemoryManagement/memoryManagementInternal.h"
+#include "MemoryManagement/memoryManagementAlgos.h"
+#include "linkedList.h"
 
 #endif /* INIT_H_ */
