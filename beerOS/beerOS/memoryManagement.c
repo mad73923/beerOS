@@ -82,13 +82,15 @@ void memoryManagement_initMemoryRequest(MemoryRequest *memoryRequest, uint8_t si
 	memoryRequest->memId = 0;
 }
 
-void *get(uint16_t size){
+
+void *alloc(uint8_t size){
 	if(!memAlgo){
 		return NULL;
 	}
-	
+		
 	return memAlgo(size);
 }
+
 void free(uint16_t *ptr){
 	Segment* firstSegment = (Segment*) ptr;
 	firstSegment--;

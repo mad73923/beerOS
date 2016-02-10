@@ -3,10 +3,11 @@
 
 #include "beerOSTypes.h"
 
-void* get(uint16_t size);
+void* alloc(uint8_t size);
 void free(uint16_t *ptr);
 
-#define numberOfSegments 32
-
+#ifndef numberOfSegments
+#define numberOfSegments 256
+#endif
 
 #endif /* MEMORYMANAGEMENT_H_ */
