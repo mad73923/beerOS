@@ -28,7 +28,7 @@ void semaphoreTestTask(){
 		semaphore_init(&dummySema, 1);
 		semaphore_init(&dummySema2, 0);
 		semaphore_init(&dummySema3, 0);
-	}	
+	}
 	asm volatile ("nop");
 	while(1){
 		if(currentTask->id == 0){
@@ -55,5 +55,5 @@ void semaphoreTestTask(){
 			break;
 		}
 	}
-	beerOS_reboot();	
+	beerOS_reboot();
 }
