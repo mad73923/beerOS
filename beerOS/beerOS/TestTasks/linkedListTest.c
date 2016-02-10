@@ -38,7 +38,15 @@ void linkedListTestTask(){
 		if(linkedList_append(&linkedList, &testValues[i])){
 			kernelPanic();		
 		}	
-	}	
+	}
+	
+	// test linkedList_contains
+	if(!linkedList_contains(&linkedList, &testValues[4])){
+		kernelPanic();
+	}
+	if(linkedList_contains(&linkedList, &testValues[5])){
+		kernelPanic();
+	}
 	
 	// test linkedList_get
 	for(uint8_t j = 0; j < 5; j++){
