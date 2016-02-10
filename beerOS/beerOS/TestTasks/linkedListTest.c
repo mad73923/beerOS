@@ -118,5 +118,11 @@ void linkedListTestTask(){
 		kernelPanic();
 	}
 	
+	//test linkedList_removeAll
+	linkedList_removeAll(&linkedList);
+	if(linkedList.length){
+		kernelPanic();	
+	}
+	
 	beerOS_reboot();
 }
