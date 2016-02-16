@@ -13,9 +13,9 @@
 #include "../scheduler.h"
 
 extern void (*scheduler_NextTask)(void);
-extern void (*scheduler_enqueueTask)(task);
-extern void (*scheduler_blockedByRessourceRequest)(ressource);
-extern void (*scheduler_ressourceReleased)(ressource);
+extern void (*scheduler_enqueueTask)(taskControlBlock *task);
+extern void (*scheduler_blockedByRessourceRequest)(LinkedList *ressource);
+extern void (*scheduler_ressourceReleased)(LinkedList *ressource);
 
 extern taskControlBlock* currentTask;
 

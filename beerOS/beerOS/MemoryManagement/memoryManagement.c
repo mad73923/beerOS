@@ -140,6 +140,7 @@ uint8_t memcopy(uint16_t *origin, uint16_t *destination){
 		current++;
 	}	
 	leaveCriticalSection();
+	return 0;
 }
 
 MemoryHead* memoryHeadFromPointer(uint16_t *ptr){

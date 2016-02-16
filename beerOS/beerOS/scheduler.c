@@ -7,8 +7,8 @@ taskControlBlock* currentTask;
 
 void (*scheduler_NextTask)(void);
 void (*scheduler_enqueueTask)(taskControlBlock* task);
-void (*scheduler_blockedByRessourceRequest)(semaphore* ressource);
-void (*scheduler_ressourceReleased)(semaphore* ressource);
+void (*scheduler_blockedByRessourceRequest)(LinkedList* ressource);
+void (*scheduler_ressourceReleased)(LinkedList* ressource);
 
 static uint8_t* mainSP;
 

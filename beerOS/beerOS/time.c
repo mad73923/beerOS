@@ -33,7 +33,7 @@ void time_sleep_ms(uint32_t ms){
 			index++;
 		}
 		if(!taskAdded){
-			linkedList_append(&allSleepingTasks, currentTask);			
+			linkedList_append(&allSleepingTasks, (void*) currentTask);
 		}
 	}else{
 		linkedList_append(&allSleepingTasks, currentTask);
