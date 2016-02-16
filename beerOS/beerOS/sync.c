@@ -7,6 +7,19 @@
 
 #include "sync.h"
 
+uint8_t enterCriticalSection(){
+	uint8_t oldState = GLBINTFLG;
+	disableInterrupts();
+	return oldState;
+}
+
+void leaveCriticalSection(uint8_t oldState){
+	if(oldState){
+		enableInterrupts();
+	}else{
+		disableInterrupts();
+	}
+}
 
 void semaphore_init(semaphore* sema, uint16_t cntInit){
 	sema->semaCnt = cntInit;
@@ -15,27 +28,23 @@ void semaphore_init(semaphore* sema, uint16_t cntInit){
 }
 
 void semaphore_request(semaphore* sema){
-	if(&sema->freedBy.list){
-		enterCriticalSection();
-		while(sema->semaCnt <= 0){
-			queueWaitingTask(&sema->waitingTasks, currentTask);
-			scheduler_blockedByRessourceRequest(&sema->freedBy);
-			leaveCriticalSection();
-			task_yield();
-			enterCriticalSection();
-		}
-		sema->semaCnt --;
-		leaveCriticalSection();
+	uint8_t state = enterCriticalSection();
+	while(sema->semaCnt <= 0){
+		queueWaitingTask(&sema->waitingTasks, currentTask);
+		scheduler_blockedByRessourceRequest(&sema->freedBy);
+		leaveCriticalSection(state);
+		task_yield();
+		state = enterCriticalSection();
 	}
+	sema->semaCnt --;
+	leaveCriticalSection(state);
 }
 void semaphore_release(semaphore* sema){
-	if(&sema->freedBy.list){
-		enterCriticalSection();
-		sema->semaCnt ++;
-		wakeupLinkedTasks(&sema->waitingTasks);
-		scheduler_ressourceReleased(&sema->freedBy);
-		leaveCriticalSection();
-	}
+	uint8_t state = enterCriticalSection();
+	sema->semaCnt ++;
+	wakeupLinkedTasks(&sema->waitingTasks);
+	scheduler_ressourceReleased(&sema->freedBy);
+	leaveCriticalSection(state);
 }
 
 void signal_init(signal* sig){
@@ -44,18 +53,18 @@ void signal_init(signal* sig){
 }
 
 void signal_wait(signal* sig){
-	enterCriticalSection();
+	uint8_t state = enterCriticalSection();
 	queueWaitingTask(&sig->waitingTasks, currentTask);
 	scheduler_blockedByRessourceRequest(&sig->freedBy);
-	leaveCriticalSection();
+	leaveCriticalSection(state);
 	task_yield();
 }
 
 void signal_send(signal* sig){
-	enterCriticalSection();
+	uint8_t state = enterCriticalSection();
 	wakeupLinkedTasks(&sig->waitingTasks);
 	scheduler_ressourceReleased(&sig->freedBy);
-	leaveCriticalSection();
+	leaveCriticalSection(state);
 }
 
 void task_yield(){

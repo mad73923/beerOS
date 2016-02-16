@@ -93,18 +93,18 @@ void *alloc(uint16_t size){
 		return NULL;
 	}
 	
-	enterCriticalSection();
+	uint8_t state = enterCriticalSection();
 	uint16_t segments = size/sizeof(Segment);
 	if(size%sizeof(Segment)){
 		segments++;
 	}
 	void* pointer = memAlgo(segments);
-	leaveCriticalSection();
+	leaveCriticalSection(state);
 	return pointer;
 }
 
 void free(uint16_t *ptr){
-	enterCriticalSection();
+	uint8_t state = enterCriticalSection();
 	MemoryHead* memoryHead = memoryHeadFromPointer(ptr);
 	
 	if(memoryHead->size > 0){
@@ -118,11 +118,11 @@ void free(uint16_t *ptr){
 		memoryHead = &theHeap[next].memoryHead;
 		memoryHead->prev = prev;
 	}
-	leaveCriticalSection();
+	leaveCriticalSection(state);
 }
 
 uint8_t memcopy(uint16_t *origin, uint16_t *destination){
-	enterCriticalSection();
+	uint8_t state = enterCriticalSection();
 	MemoryHead* originHead = memoryHeadFromPointer(origin);
 	MemoryHead* destinationHead = memoryHeadFromPointer(destination);
 	
@@ -139,7 +139,7 @@ uint8_t memcopy(uint16_t *origin, uint16_t *destination){
 		destinationSegment++;
 		current++;
 	}	
-	leaveCriticalSection();
+	leaveCriticalSection(state);
 	return 0;
 }
 

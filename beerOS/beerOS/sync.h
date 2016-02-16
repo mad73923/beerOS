@@ -27,13 +27,8 @@ typedef volatile struct{
 extern volatile uint8_t hardwareISR;
 extern taskControlBlock* currentTask;
 
-static void __attribute__((always_inline)) enterCriticalSection(){
-	disableInterrupts();
-}
-
-static void __attribute__((always_inline)) leaveCriticalSection(){
-	enableInterrupts();
-}
+uint8_t enterCriticalSection();
+void leaveCriticalSection(uint8_t oldState);
 
 void semaphore_init(semaphore* sema, uint16_t cntInit);
 void semaphore_request(semaphore* sema);

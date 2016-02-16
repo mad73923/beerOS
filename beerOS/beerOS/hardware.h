@@ -15,6 +15,7 @@
 #ifdef __AVR_ATxmega128A1__
 
 #define DISPISRVEC TCF0_OVF_vect
+#define GLBINTFLG SREG & 0x80
 
 static void __attribute__((always_inline)) enableInterrupts(){
 	sei();
