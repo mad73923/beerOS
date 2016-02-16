@@ -79,6 +79,9 @@
     <GenerateEepFile>True</GenerateEepFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="linkedListTypes.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="memoryManagement.h">
       <SubType>compile</SubType>
     </Compile>

@@ -20,6 +20,7 @@ void placeMagicNumberOnStack(uint8_t* stack, uint16_t stackSize);
 void placeStartAdressOnStack(uint8_t* stack, void* taskFunction, uint16_t stackSize);
 
 void initTask(uint8_t prio, uint8_t* stack, void* taskFunction, uint16_t stackSize){
+	
 	if(!taskStructsAreInit){
 		initTaskStructs();
 		taskStructsAreInit = 1;

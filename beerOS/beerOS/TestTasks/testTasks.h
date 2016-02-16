@@ -12,7 +12,7 @@
 #include "../beerOSTypes.h"
 #include "../exceptions.h"
 
-#define stacksize 128
+#define stacksize 200
 
 extern void (*initNextTest)(void);
 extern void (*scheduler_init)(void);

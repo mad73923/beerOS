@@ -61,9 +61,7 @@ void memcopyTest(){
 	}
 }
 
-void memoryManagementTestTask(){
-	memoryManagement_init(firstFit);	
-	
+void memoryManagementTestTask(){	
 	alloc5_free_alloc5();	
 	memoryManagement_wipe();
 	
@@ -81,6 +79,3 @@ void memoryManagementTestTask(){
 	
 	beerOS_reboot();
 }
-
-
-

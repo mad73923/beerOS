@@ -1,17 +1,12 @@
-/*
- * sync.h
- *
- * Created: 19.11.2015 17:49:46
- *  Author: anreinha
- */ 
-
-
 #ifndef SYNC_H_
 #define SYNC_H_
 
 #include "beerOSTypes.h"
+#include "linkedList.h"
+#include "linkedListTypes.h"
 #include "scheduler.h"
 #include "hardware.h"
+
 
 typedef volatile struct{
 	LinkedList waitingTasks;
