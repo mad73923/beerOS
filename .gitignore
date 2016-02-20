@@ -17,3 +17,19 @@ Debug/
 *.avrsuo
 *.tmp
 Thumbs.db
+
+# LaTex temp files
+*.aux
+*.acn
+*.glo
+*.ist
+*.lof
+*.lot
+*.syg
+*.tdo
+*.toc
+*.xwm
+*.log
+*.bbl
+*.blg
+*.backup
