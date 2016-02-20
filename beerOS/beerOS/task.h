@@ -9,19 +9,17 @@
 #ifndef TASK_H_
 #define TASK_H_
 
-#include "hardware.h"
+#include "beerOSTypes.h"
+#include "scheduler.h"
+#include "linkedList.h"
+#include "queue.h"
+#include "sync.h"
 
-typedef enum {READY, RUNNING, WAITING, KILLED} taskstate;
+extern taskControlBlock tcb[maxNumberOfTasks];
 
-typedef volatile struct taskControlBlock{
-	volatile uint8_t prio;
-	volatile uint8_t* stack;
-	volatile uint8_t* stackBeginn;
-	volatile uint32_t stackSize;
-	volatile taskstate state;
-}taskControlBlock;
+void initTask(uint8_t prio, uint8_t* stack, void* taskFunction, uint16_t stackSize);
 
-void initTask(uint8_t prio, uint8_t* stack, void* taskFunction, uint32_t stackSize);
-extern taskControlBlock tcb[4];
+void wakeupLinkedTasks(LinkedList* syncObj);
+void queueWaitingTask(LinkedList* syncObj, taskControlBlock* newTask);
 
 #endif /* TASK_H_ */

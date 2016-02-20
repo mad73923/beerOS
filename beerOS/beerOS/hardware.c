@@ -11,14 +11,18 @@
 
 void setSystemClock32MHZ();
 void initDispatcherTimer();
+void resetDispatcherTimer();
 void startDispatcherTimer();
 void stopDispatcherTimer();
+void initInterrupts();
 
 void initHardware(){
 	
 	setSystemClock32MHZ();
 	initDispatcherTimer();
+	resetDispatcherTimer();
 	startDispatcherTimer();
+	initInterrupts();
 	enableInterrupts();
 }
 
@@ -32,28 +36,35 @@ void setSystemClock32MHZ(){
 void initDispatcherTimer(){
 	TCF0.CTRLB = TC_WGMODE_NORMAL_gc;
 	// adapt period here
-	TCF0.PER = 0xFFF;
+	// 0x7D00 = 1ms
+	// 0x5DC0 = 750us
+	// 0x4650 = 500us
+	// 0x3200 = 400us
+	// 0x1C20 = 200us
+	// 0xC80  = 100us
+	// 0x140  = 10us
+	TCF0.PER = 0x7D00;
 	TCF0.INTCTRLA = TC_OVFINTLVL_HI_gc;
+}
+
+void resetDispatcherTimer(){
+	TCF0.CNT = 0;
 }
 
 void startDispatcherTimer(){
 	// needs adaptions
-	//TCF0.CTRLA = TC_CLKSEL_DIV8_gc;
 	TCF0.CTRLA = TC_CLKSEL_DIV1_gc;
 	
+}
+
+void initInterrupts(){
+	PMIC.CTRL = PMIC_HILVLEN_bm | PMIC_MEDLVLEN_bm | PMIC_LOLVLEN_bm;
 }
 
 void stopDispatcherTimer(){
 	TCF0.CTRLA = TC_CLKSEL_OFF_gc;
 }
 
-void enableInterrupts(){
-	PMIC.CTRL = PMIC_HILVLEN_bm | PMIC_MEDLVLEN_bm | PMIC_LOLVLEN_bm;
-	sei();
-}
 
-void disableInterrupts(){
-	cli();
-}
 
 #endif // __AVR_ATxmega128A1__

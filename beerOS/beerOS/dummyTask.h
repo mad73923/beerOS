@@ -9,8 +9,8 @@
 #ifndef DUMMYTASK_H_
 #define DUMMYTASK_H_
 
+#include "beerOSTypes.h"
+
 void dummyTask();
-
-
 
 #endif /* DUMMYTASK_H_ */
