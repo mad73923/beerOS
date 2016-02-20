@@ -1,8 +1,34 @@
 \chapter{Systemübersicht}
 
-Blabla
+Für ein minimalistisches Betriebssystem werden einige Grundbausteine
+benötigt. Zunächst muss die Hardware bzw. der Chip initialisiert
+werden, indem verschiedene Frequenzquellen, Timer und die globale
+Interruptverwaltung konfiguriert werden. \todo{verweis} Bevor
+das eigentliche Betriebssystem gestartet werden kann, müssen zudem
+diverse Strukturen für die Tasks aufgestellt werden, sodass diese
+unabhängig voneinander lauffähig sind.\todo{verweis}
+Zum Starten des Systems wird mittels eines modifizierten Aufrufs
+der Dispatcher erstmalig durchlaufen und die erste Task zum Ausführen
+vorbereitet. Dabei wird auch der Scheduler aufgerufen, der, abhängig vom
+ausgewählten Algorithmus, die nächste Task bestimmt.\todo{verweis}
+
+Die soeben genannten Module würden für ein multitasking-fähiges
+Betriebssystem bereits ausreichen. Jedoch wäre sein Funktionsumfang
+sehr beschränkt. Bislang besteht noch keine Möglichkeit einer sicheren
+Interaktion zwischen zwei oder mehreren Tasks. Hierfür werden 
+z.B. kritische Bereiche oder Signale verwendet, welche das Modul
+Synchronisation bereitstellt. Die Anwendung von Wartezeiten innerhalb
+Tasks setzt eine Systemzeit vorraus. Das Modul Zeiten \todo{verweis} verwendet hierfür Trigger der Hardware.
+Eine große Erleichterung im Entwicklungsprozess (und auch 
+im späteren Anwendungsfall) ist
+die Verwendung von Collections, welche Datenpakete hantierbar 
+macht. Gleichzeitig verbessert sich die Lesbarkeit des
+Programmcodes.
 
 \section{Hardware}
+
+
+\section{Strukturen}
 
 \section{Dispatcher}
 
