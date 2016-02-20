@@ -1,0 +1,47 @@
+% Informationen ------------------------------------------------------------
+% 	Definition von globalen Parametern, die im gesamten Dokument verwendet
+% 	werden können (z.B auf dem Deckblatt etc.).
+% --------------------------------------------------------------------------
+\newcommand{\titel}{Angewandte Systemprogrammierung}
+\newcommand{\art}{AVR OS}
+\newcommand{\Fakultaet}{Name der aktuellen Fakultät}
+\newcommand{\autor}{Andreas Reinhardt}
+\newcommand{\autors}{Matthias Weis}
+\newcommand{\autorsmall}{Andreas Reinhardt, Matthias Weis}
+\newcommand{\Studiengang}{Name des aktuellen Studiengangs}
+\newcommand{\matrikelnr}{123456}
+\newcommand{\betreuer}{Daniel Urbanietz}
+\newcommand{\referent}{Prof.\,Dr. Erstkorrektor}
+\newcommand{\korreferent}{Prof.\,Dr. Zweitkorrektor}
+\newcommand{\bearbeitungszeit}{Wintersemester 15/16}
+\newcommand{\company}{\mbox{XY}}
+
+% Eigene Befehle
+\newcommand{\matlab}[1]{\lstinline[basicstyle=\ttfamily\normalsize]|#1|}
+\newcommand{\tief}[1]{$_\text{#1}$}			% Tiefstellen
+\newcommand{\hoch}[1]{$^\text{#1}$}			% Hochstellen
+
+
+% Befehle Für Abkürzungs- und Symbolverzeichnis\gls*{symb:Lambda}
+\newcommand{\symb}[1]{\glslink*{#1}{\gls*{#1}}}	% Gibt Symbol aus
+\newcommand{\abk}[1]{\glslink*{#1}{#1}}	% Gibt Abkürzung aus
+\newcommand{\addabk}[2]{\newacronym{#1}{#1}{#2}}	% Fügt Abkürzung hinzu (nur Präambel)
+
+\newcommand{\addsymb}[3] 	% Fügt Symbol hinzu (nur Präambel)
+{
+	\newglossaryentry{#1}
+	{
+		name=#2,
+		description={#3},
+		sort=symbolphi, type=symbolslist
+	}
+}
+
+% Befehle zur semantischen Auszeichnung von Text
+\newcommand{\Fachbegriff}[1]{\textit{#1}}
+
+% weitere Abkürzungen
+\newcommand{\ua}{\mbox{u.\,a.\ }}
+\newcommand{\zb}{\mbox{z.\,B.\ }}
+\newcommand{\bs}{$\backslash$}
+

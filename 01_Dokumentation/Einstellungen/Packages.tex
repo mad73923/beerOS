@@ -1,0 +1,268 @@
+% ==========================================================================
+% Anpassung Seitenlayout
+% ==========================================================================
+\usepackage[
+	automark,			% Kapitelangaben in Kopfzeile automatisch erstellen
+]{scrpage2}
+
+% ==========================================================================
+% Anpassung an deutsche Sprache
+% ==========================================================================
+\usepackage{ngerman}
+\usepackage[ngerman]{babel}
+
+% ==========================================================================
+% KOMAScriptanpassung (u.a.: Redefine von addtolist)
+% ==========================================================================
+\usepackage{scrhack}
+
+% ==========================================================================
+% für compactitem
+% ==========================================================================
+\usepackage{paralist} 
+
+% ==========================================================================
+% Einstellungen für Überschriften
+% ==========================================================================
+\usepackage[bf,big]{titlesec}	% Überschriften schlanker und größer %rm,big,compact
+\titleformat{\chapter}[display]				% Anpassen des Schriftzugs "Kapitel x"
+  {\normalfont\Huge}
+  {\chaptertitlename\ \thechapter}{12pt}{\Huge}
+  \titlespacing*{\chapter}{0cm}{-\topskip}{30pt}[0pt]
+% ==========================================================================
+% Einstellung Schriften und Umlaute
+% ==========================================================================
+\usepackage[ansinew]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{ae} % "schöneres" ß
+\usepackage{eurosym}
+\usepackage{lmodern}
+
+% ==========================================================================
+% SI-Einheiten
+% ==========================================================================
+\usepackage[locale = DE, binary-units]{siunitx}
+\DeclareSIUnit[number-unit-product = {}]\dmips{DMIPS}
+\DeclareSIUnit[number-unit-product = {}]\baud{Baud}
+
+\usepackage{icomma}
+\usepackage{nicefrac}
+% ==========================================================================
+% Einbinden von Grafiken
+% ==========================================================================
+\usepackage[dvips,final]{graphicx}
+\graphicspath{{Bilder/}} % Dort liegen die Bilder des Dokuments
+
+% ==========================================================================
+% Befehle aus AMSTeX für mathematische Symbole z.B. \boldsymbol \mathbb
+% ==========================================================================
+\usepackage{amsmath,amsfonts}
+\usepackage{amsmath, amsthm, amssymb}
+\usepackage{mathtools}
+
+% ==========================================================================
+% Einfache Definition der Zeilenabstände und Seitenränder etc.
+% ==========================================================================
+\usepackage{setspace}
+\usepackage{geometry}
+
+% ==========================================================================
+% Zum Umfließen von Bildern
+% ==========================================================================
+\usepackage{floatflt}
+\usepackage{float}    
+
+% ==========================================================================
+% Quellcode-Ausgabe
+% ==========================================================================
+\usepackage{listings}
+\usepackage{xcolor} 
+
+% ==========================================================================
+% Lange URLs umbrechen etc.
+% ==========================================================================
+\usepackage[hyphens]{url}
+
+% ==========================================================================
+% Einstellungen Bibtex
+% ==========================================================================
+\usepackage[numbers]{natbib}
+\bibliographystyle{alphadin}		%DIN-Stil des Literaturverzeichnisses
+
+% ==========================================================================
+% Zum fortlaufenden Durchnummerieren der Fußnoten
+% ==========================================================================
+\usepackage{chngcntr}
+
+% ==========================================================================
+% für lange Tabellen
+% ==========================================================================
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{ragged2e}
+\usepackage{lscape}
+
+% ==========================================================================
+% Spaltendefinition rechtsbündig mit definierter Breite
+% ==========================================================================
+\newcolumntype{w}[1]{>{\raggedleft\hspace{0pt}}p{#1}}
+
+% ==========================================================================
+% Erweiterung für Querverweise
+% ==========================================================================
+\usepackage[ngerman]{varioref}
+
+% ==========================================================================
+% Erweiterung für figures
+% ==========================================================================
+\usepackage[aboveskip=1em,belowskip=0em]{caption}
+\usepackage{subfigure}
+
+% ==========================================================================
+% Optischer Randausgleich
+% ==========================================================================
+\usepackage[tracking=true]{microtype}
+\DeclareMicrotypeSet*[tracking]{my}{font = */*/*/sc/*}
+\SetTracking{ encoding = *, shape = sc }{ 45 }
+
+% ==========================================================================
+% Auswahl der Schriftart
+% ==========================================================================
+% Arial mit euler für Mathe:
+%\usepackage[scaled=0.92]{uarial}			% Paket für Schrift Arial 
+%\renewcommand\familydefault{\sfdefault} % Umstellen auf serifenlose Schrift
+%\usepackage{eulervm}
+
+% Times mit passendem Mathe-Font
+\renewcommand{\rmdefault}{ptm}
+\usepackage{times}
+\usepackage{txfonts}
+% Kapitel im Inhaltsverzeichnis auch in Times darestellen
+\setkomafont{chapterentry}{\rmfamily\bfseries\normalsize}	
+
+% ==========================================================================
+% griechische Buchstaben
+% ==========================================================================
+\usepackage{upgreek}	
+
+% ==========================================================================
+% Mehrspaltiger Text
+% ==========================================================================
+\usepackage{multicol}
+\columnseprule 1pt	% Linie swischen Spalten
+\columnsep 15mm 	% Abstand zwischen Spaletn
+
+% ==========================================================================
+% ToDo-List
+% ==========================================================================
+\usepackage[
+%disable,   %hier wird die ToDo List deaktiviert!!!
+ngerman,
+textsize=footnotesize,
+colorinlistoftodos,
+figwidth=0.8\textwidth
+]{todonotes}
+
+% ==========================================================================
+% Draft Markierung
+% ==========================================================================
+\usepackage[
+final, 			%Aktivierung durch draft; Deaktivierung durch final
+%draft,
+allpages,
+color=gray,
+mark=\mbox{vorläufiger Entwurf zur Durchsicht},
+angle=90,
+scale=0.08,
+xcoord=-96,
+ycoord=-35
+]{draftmark}
+
+% ==========================================================================
+% Sonstiges
+% ==========================================================================
+\usepackage{pdflscape}
+\usepackage{wallpaper}
+\usepackage{ifthen}												% Bedingungen
+
+\setlength{\marginparwidth}{2cm}
+\reversemarginpar
+
+% ==========================================================================
+% Glossar, Abkürzungsverzeichnis, Symbolverzeichnis
+% ==========================================================================
+\usepackage[
+nonumberlist, %keine Seitenzahlen anzeigen
+acronym,      %ein Abkürzungsverzeichnis erstellen
+toc]      %im Inhaltsverzeichnis auf section-Ebene erscheinen
+{glossaries}
+
+% Eigene Definition Abkürzungsverzeichnis:
+\newglossarystyle{myacro}
+{
+	\renewenvironment{theglossary}{}{}
+	\renewcommand*{\glossaryheader}{}
+	\renewcommand*{\glsgroupheading}[1]{}
+	\renewcommand*{\glsgroupskip}{}
+	\renewcommand*{\glossaryentryfield}[5]
+	{
+		\begin{minipage}[t]{0.2\textwidth}
+			\glstarget{##1}{##2}~\dotfill
+		\end{minipage}
+		\begin{minipage}[t]{0.7\textwidth}
+			~##3
+		\end{minipage}
+		\vskip -0.16cm  % Abstand zwischen den Zeilen
+	}
+	\renewcommand*{\glossarysubentryfield}[6]{%
+	\glossaryentryfield{##2}{##3}{##4}{##5}{##6}}%
+}
+
+% Eigene Definition Symbolverzeichnis:
+\newglossarystyle{mysombol}
+{
+	\renewenvironment{theglossary}
+	{\begin{multicols}{2}\noindent}{\end{multicols}}
+	\renewcommand*{\glossaryheader}{}
+	\renewcommand*{\glsgroupheading}[1]{}
+	\renewcommand*{\glsgroupskip}{}
+	\renewcommand*{\glossaryentryfield}[3]
+	{\noindent
+		\begin{minipage}[t]{0.94\columnwidth}
+			\begin{minipage}[t]{0.2\columnwidth}
+				\glstarget{##1}{##2}
+			\end{minipage}
+			\begin{minipage}[t]{0.78\columnwidth}
+				##3
+			\end{minipage}
+		\end{minipage}
+		\vskip 0.01em   % Abstand zwischen den Zeilen
+	}
+	\renewcommand*{\glossarysubentryfield}[3]{%
+	\glossaryentryfield{##2}{##3}}%
+}
+%Ein eigenes Symbolverzeichnis erstellen
+\newglossary[slg]{symbolslist}{syi}{syg}{Symbolverzeichnis}
+%Den Punkt am Ende jeder Beschreibung deaktivieren
+\renewcommand*{\glspostdescription}{}
+
+% ==========================================================================
+% PDF-Optionen (Hyperref) (immer zuletzt)
+% ==========================================================================
+\usepackage[
+%colorlinks=false,
+bookmarks,
+bookmarksopen=true,
+pdftitle={\art},
+pdfauthor={\autor},
+pdfcreator={\autor},
+pdfsubject={\titel},
+pdfkeywords={\titel},
+plainpages=false,% zur korrekten Erstellung der Bookmarks
+pdfpagelabels=true,% zur korrekten Erstellung der Bookmarks
+hypertexnames=false,% zur korrekten Erstellung der Bookmarks
+breaklinks=true
+%linktocpage % Seitenzahlen anstatt Text im Inhaltsverzeichnis verlinken
+]{hyperref}
+
+\usepackage{bookmark}

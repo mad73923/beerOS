@@ -1,0 +1,122 @@
+% ==========================================================================
+% Formatvorlage für Diplomarbeiten der HS Karlsruhe und Furtwangen
+% Erstellt von Stefan Jassen, Stefan Rümmele-Werner und Manuel Sautermeister
+% ==========================================================================
+
+%==================================================================================
+% Themeauswahl
+% htwg    - HTWG Konstanz
+%==================================================================================
+\newcommand{\layoutpres}{htwg}
+
+% ==========================================================================
+% Meta-Informationen
+% Informationen über das Dokument, wie z.B. Titel, Autor, Matrikelnr. etc
+% ==========================================================================
+\input{Einstellungen/_Meta}
+
+% ==========================================================================
+% Dokumentenkopf
+% ==========================================================================
+\documentclass[
+	%12pt,								% Schriftgröße kann hier geändert werden
+	%DIV=calc,						% Neuberechnung des Satzspiegels		
+	ngerman,							% für Umlaute, Silbentrennung etc.
+	titlepage,						% es wird eine Titelseite verwendet
+	a4paper,							% Papierformat
+	%headings=normal,			% Schriftgröße in Überschriften
+	numbers=noenddot,			% Nummerierung der Überschrift erhält keinen Endpunkt
+	listof=totoc,					% Verzeichnisse im Inhaltsverzeichnis aufführen
+	bibliography=totoc,		% Literaturverzeichnis im Inhaltsverzeichnis aufführen
+	index=totoc,					% Index im Inhaltsverzeichnis aufführen
+	parskip=half,					% Absatzabstand (half/full)
+	oneside,							% Druck: Einseitig: oneside; Doppelseitig: twoside
+												% (passt Rand und Kopf-/Fußzeile an)
+	chapterprefix=true		% "Kapitel 1" statt "1. Kapitel"
+	]{scrreprt}
+	
+% ==========================================================================
+% Benötigte Packages
+% ==========================================================================
+\input{Einstellungen/Packages}
+
+% ==========================================================================
+% Seiteneinstellungen
+% ==========================================================================
+\input{Einstellungen/Seitenstil}
+
+% ==========================================================================
+% Definitionen des GLossars
+% ==========================================================================
+\include{Glossar/ABK}
+\include{Glossar/Symbol}
+\makeglossaries				% Glossar erstellen
+
+\begin{document}
+
+% ==========================================================================
+% Definitionen für Silbentrennung (Fehlerhafte Trennung von LaTex)
+% ==========================================================================
+\include{Einstellungen/Silbentrennung}
+
+% ==========================================================================
+% Deckblatt (Auswahl aus zwei verschiedenen)
+% ==========================================================================
+\pagenumbering{alph}		% Deckblatt erhällt Seitennummer a, damit Seite 1 nicht doppelt belegt ist 
+
+%\include{Cover/DeckblattAusPDF} %Deckblatt aus PDF "DeckblattAusPDF.pdf" in Ordner Cover
+%\cleardoublepage
+
+\include{Cover/Deckblatt} %normales Deckblatt
+\cleardoublepage
+
+% ==========================================================================
+% Inhaltsverzeichnis
+% ==========================================================================
+\pagenumbering{Roman}		% Seitennummer in römischen Ziffern
+\include{Inhalt/abstract}
+\tableofcontents			% Inhaltsverzeichnis einfügen
+\cleardoublepage
+
+% ==========================================================================
+% Inhalt (Einbinden der Dokumente in Ordner Inhalt)
+% ==========================================================================
+\pagenumbering{arabic} % Seitennummer in arabische Ziffern
+
+\include{Inhalt/uebersicht}
+\include{Inhalt/umsetzung}
+\include{Inhalt/tests}
+
+% ==========================================================================
+% Anhang
+% ==========================================================================
+% \appendix
+% \include{Inhalt/VorlageAnhang}
+% \cleardoublepage
+
+% ==========================================================================
+%	Literatur- Abbildung- und Abkürzungsverzeichnis
+% ==========================================================================
+%Abkürzungen ausgeben
+% \printglossary[type=\acronymtype,title=Abkürzungsverzeichnis,toctitle=Abkürzungsverzeichnis,style=myacro]
+
+%Symbole ausgeben
+% \printglossary[type=symbolslist,title=Symbolverzeichnis,toctitle=Symbolverzeichnis,style=mysombol]
+
+% \listoftables					% Tabellenverzeichnis
+
+% \listoffigures				% Abbildungsverzeichnis
+
+% \begin{RaggedRight} %Darstellung des Literaturverzeichnisses im Rausatz wegen URLs
+% \renewcommand{\bibname}{Quellenverzeichnis}	% Literaturverzeichnis umbenennen
+% \bibliography{Dokumentation}    %Dateiname der .bib Datei
+% \end{RaggedRight}
+\clearpage
+
+% ==========================================================================
+%	ToDo-Liste (kann auskommentiert werden, wenn nicht benötigt)
+% ==========================================================================
+% \listoftodos[To-do Liste]
+% \todototoc
+
+\end{document}
