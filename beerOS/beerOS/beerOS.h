@@ -11,6 +11,8 @@
 
 #include "hardware.h"
 #include "dispatcher.h"
+#include "task.h"
 
+#include "dummyTask.h"
 
 #endif /* BEEROS_H_ */
