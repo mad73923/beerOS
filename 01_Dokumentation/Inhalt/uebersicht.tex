@@ -2,11 +2,11 @@
 
 Für ein minimalistisches Betriebssystem werden einige Grundbausteine
 benötigt. Zunächst muss die Hardware bzw. der Chip initialisiert
-werden, indem verschiedene Frequenzquellen, Timer und die globale
+werden, indem verschiedene Zeitquellen, Timer und die globale
 Interruptverwaltung konfiguriert werden. \todo{verweis} Bevor
 das eigentliche Betriebssystem gestartet werden kann, müssen zudem
 diverse Strukturen für die Tasks aufgestellt werden, sodass diese
-unabhängig voneinander lauffähig sind.\todo{verweis}
+unabhängig voneinander lauffähig sind. \todo{verweis}
 Zum Starten des Systems wird mittels eines modifizierten Aufrufs
 der Dispatcher erstmalig durchlaufen und die erste Task zum Ausführen
 vorbereitet. Dabei wird auch der Scheduler aufgerufen, der, abhängig vom
@@ -26,6 +26,27 @@ macht. Gleichzeitig verbessert sich die Lesbarkeit des
 Programmcodes.
 
 \section{Hardware}
+Als Zielplattform wurde die weit verbreitete AVR-Serie von Atmel
+verwendet. Jedoch wurde während der Umsetzung darauf geachtet, 
+dass bei einem Plattformwechsel möglichst wenig Code angepasst
+werden muss. Als Entwicklungstool wurde der AVR-Simulator verwendet,
+welcher innherhalb des AVR-Studios von Atmel bereitgestellt wird.
+Als Zielbaustein wurde der ATxmega128A1 gewählt.
+
+\subsection{Zeitquellen}
+Zuallererst wird der interne Oszillator auf eine Systemfrequenz von $f_{S} = 32 \text{MHz}$ konfiguriert. Dadurch können durch
+nachgeschaltete Teiler diverse Frequenzen an weiterer
+Peripherie erzeugt werden \todo{verweis}.
+
+\subsection{Dispatcher Timer}
+Damit nach Ablauf der Zeitscheibe einer Task der Dispatcher 
+aufgerufen wird, muss ein Dispatcher Timer initialisiert werden.
+Dieser löst, unabhängig vom Ausführungszustand\todo{verweis}
+\footnote{Es sei denn, die Task befindet sich in einem kritischen 
+(Interrupt geschützten) Abschnitt} der aktuellen Task, einen 
+Interrupt aus, in dessen Service Routine der Dispatcher aufgerufen
+wird.
+
 
 
 \section{Strukturen}
