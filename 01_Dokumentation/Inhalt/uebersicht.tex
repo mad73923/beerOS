@@ -16,7 +16,7 @@ Die soeben genannten Module würden für ein multitasking-fähiges
 Betriebssystem bereits ausreichen. Jedoch wäre sein Funktionsumfang
 sehr beschränkt. Bislang besteht noch keine Möglichkeit einer sicheren
 Interaktion zwischen zwei oder mehreren Tasks. Hierfür werden 
-z.B. kritische Bereiche oder Signale verwendet, welche das Modul
+z.B. kritische Bereiche oder Signale benötigt, welche das Modul
 Synchronisation bereitstellt. Die Anwendung von Wartezeiten innerhalb
 Tasks setzt eine Systemzeit vorraus. Das Modul Zeiten \todo{verweis} verwendet hierfür Trigger der Hardware.
 Eine große Erleichterung im Entwicklungsprozess (und auch 
@@ -31,7 +31,15 @@ verwendet. Jedoch wurde während der Umsetzung darauf geachtet,
 dass bei einem Plattformwechsel möglichst wenig Code angepasst
 werden muss. Als Entwicklungstool wurde der AVR-Simulator verwendet,
 welcher innherhalb des AVR-Studios von Atmel bereitgestellt wird.
-Als Zielbaustein wurde der ATxmega128A1 gewählt.
+Als Zielbaustein wurde der \mbox{ATxmega128A1} gewählt.
+
+Die minimale Vorraussetzung an die Hardware ist ein Timer
+und ein Interruptsystem.
+Die Periode des Timers muss bekannt oder definierbar sein.
+Sind (wie im Fall vom \mbox{ATxmega128A1}) weitere Timer
+verfügbar, können diese vom Entwickler frei verwendet werden, 
+unter der Bedingung, dass der Systemtimer nicht beeinflusst 
+wird.
 
 \subsection{Zeitquellen}
 Zuallererst wird der interne Oszillator auf eine Systemfrequenz von $f_{S} = 32 \text{MHz}$ konfiguriert. Dadurch können durch
@@ -43,11 +51,64 @@ Damit nach Ablauf der Zeitscheibe einer Task der Dispatcher
 aufgerufen wird, muss ein Dispatcher Timer initialisiert werden.
 Dieser löst, unabhängig vom Ausführungszustand\todo{verweis}
 \footnote{Es sei denn, die Task befindet sich in einem kritischen 
-(Interrupt geschützten) Abschnitt} der aktuellen Task, einen 
+(Interrupt gesperrten) Abschnitt} der aktuellen Task, einen 
 Interrupt aus, in dessen Service Routine der Dispatcher aufgerufen
-wird.
+wird. Außerdem dient der Timer zur Berechnung der aktuellen
+Systemzeit.
 
+\begin{lstlisting}[language=C, label=lst:DispatcherTimer, caption=Initialisierung Dispatcher Timer]
+void initDispatcherTimer(){
+	TCF0.CTRLB = TC_WGMODE_NORMAL_gc;
+	TCF0.PER = 0x7D00;
+	TCF0.INTCTRLA = TC_OVFINTLVL_HI_gc;
+}
+\end{lstlisting}
 
+In dieser Konfiguration zählt der Timer aufwärts bis zum Wert der
+Periode (\texttt{TCF0.PER}) und wird auf 0 zurückgesetzt. 
+Gleichzeitig löst er beim Zurücksetzen einen Überlauf-Interrupt aus.
+
+Wird als Zeitquelle die Systemfrequenz $f_{S}$ ohne Vorteiler
+gewählt, so ergibt sich folgendes Intervall:
+\begin{equation}
+\begin{split}
+t_{per} = \frac{7\text{D}00_{16}}{32\text{MHz}} = 1\text{ms}
+ \end{split}
+ \label{eq:intervall}
+\end{equation}
+
+In der Annahme, dass keine kritische Abschnitte verwendet werden
+wird somit in Abständen von $t_{per}$ ein Kontextwechsel herbeigeführt. Sollten kritische Abschnitte Anwendung finden liegt
+es am Entwickler, diese möglichst kurz zu halten. Solange sie
+deutlich unter $t_{per}$ liegen gibt es keine Probleme. Bedenklich 
+wird es, wenn die Ausführung des kritischen Bereichs länger als 
+$t_{per}$ dauert,
+da hierbei ein oder im schlimmsten Fall gleich mehrere 
+Interruptsignale verloren gehen und dadurch u.a. die Systemzeit
+nicht mehr präzise ist.
+
+\subsection{Interrupts}
+Auch die Konfiguration des Interruptsystems ist nicht besonders
+aufwändig. Auf dem \mbox{ATxmega128A1} muss jediglich das
+dem Dispatcher Timer entsprechende Interuptlevel scharf gestellt
+und das globale Interruptenable gesetzt werden.
+
+Da die Funktionen zum Löschen oder Setzen des Interrupts auch
+mit dem Betreten oder Verlassen eines kritischen Abschnitts
+gleichzusetzen sind, werden sie hardwareunabhängig exportiert.
+Wichtig hierbei ist nur, dass die Funktionen inline aufgerufen
+werden, sodass im Anwendungsfall der Stack nicht manipuliert wird.
+Dies wird beim AVR-Compiler durch das Attribut 
+\texttt{always\_inline} verwirklicht.
+\begin{lstlisting}[language=C, label=lst:interruptDisEnable, caption=Export der Interruptfunktionen]
+static void __attribute__((always_inline)) enableInterrupts(){
+	sei();
+}
+
+static void __attribute__((always_inline)) disableInterrupts(){
+	cli();
+}
+\end{lstlisting}
 
 \section{Strukturen}
 
