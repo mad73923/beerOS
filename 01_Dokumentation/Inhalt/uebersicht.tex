@@ -95,7 +95,7 @@ und das globale Interruptenable gesetzt werden.
 
 Da die Funktionen zum Löschen oder Setzen des Interrupts auch
 mit dem Betreten oder Verlassen eines kritischen Abschnitts
-gleichzusetzen sind, werden sie hardwareunabhängig exportiert.
+gleichzusetzen sind, werden sie plattformunabhängig exportiert.
 Wichtig hierbei ist nur, dass die Funktionen inline aufgerufen
 werden, sodass im Anwendungsfall der Stack nicht manipuliert wird.
 Dies wird beim AVR-Compiler durch das Attribut 
@@ -111,8 +111,75 @@ static void __attribute__((always_inline)) disableInterrupts(){
 \end{lstlisting}
 
 \section{Strukturen}
+In einem multitaskingfähigen Betriebssystem müssen neben dem
+Stack für jede Task auch ein sogenannter Task-Controll-Block
+(TCB) initialisiert werden. Dieser enthält Informationen
+über den aktuellen Zustand, die Priorität\todo{verweis scheduler},
+den Stack-/pointer und Zeitangaben \todo{verweis schlafen}.
+
+\subsection{Task-Control-Block}
+Als mögliche Zustände einer Task wurden wie üblich 
+\texttt{READY}, \texttt{RUNNING}, \texttt{WAITING} und 
+\texttt{KILLED} definiert. Bei der Priorität bedeutet
+eine kleinere Zahl einen höheren Vorrang (mit 0 als
+höchsten Wert).
+\begin{lstlisting}[language=C, label=lst:TCB, caption=Task-Control-Block]
+typedef volatile struct strucTCB{
+	volatile uint8_t prio;
+	volatile uint8_t id;
+	volatile uint8_t* stackPointer;
+	volatile uint8_t* stackBeginn;
+	volatile uint16_t stackSize;
+	volatile uint32_t waitUntil;
+	volatile uint8_t tmpPrio;
+	volatile taskstate state;
+}taskControlBlock;
+\end{lstlisting}
+
+\subsection{Stack und Stackpointer}
+Zur Initialisierung eines TCB's gehört auch der eigentliche
+Stack sowie dessen Zeiger. Daher muss vor dem Start des
+Betriebsystems auch der Speicherbereich des Stacks reserviert
+und vorbereitet werden.
+
+Zur Vorbereitung eines Stacks wird an seiner ersten und letzten 
+Speicherstelle eine Magicnumber\footnote{z.B. AA$_{16} = 
+10101010_{2}$} eingefügt. Mit dieser
+soll erkannt werden, ob es zu einem Stacküberlauf gekommen ist.
+\todo{verweis dispatcher} Zudem wird an die vorletzte Stelle
+die Rücksprungadresse des Programmcodes kopiert, welcher in der
+jeweiligen Task ausgeführt werden soll. Der Task-Stackpointer
+wird daraufhin auf die Adresse x stellen überhalb der letzten
+Adresse gesetzt. Das x entspricht hierbei der Anzahl der
+CPU-Register.\todo{verweis dispatcher}
+
+Zum Starten des Systems wird bei der Starttask der Stackpointer
+nochmals verändert: Um gleich zur Rücksprungadresse bzw. 
+Startadresse des Task-Programmcodes zu gelangen, wird der
+Stackpointer direkt überhalb dieser Adresse gesetzt und
+mittels \texttt{RET}-Befehl zu selbiger gesprungen.
+\todo{naming beer??}
+\begin{lstlisting}[language=C, label=lst:systemstart, caption=Systemstart]
+void beerOS_start(taskControlBlock* firstTask, void (*scheduler_init)(void)){
+	currentTask = firstTask;
+	scheduler_init();
+	time_init();
+	firstTask->state = RUNNING;
+	mainSP = SP;
+	//set stack pointer of starting task next to taskaddress
+	SP = firstTask->stackBeginn+firstTask->stackSize-progcntOffset;
+	//start task
+	asm volatile ("ret");
+}
+\end{lstlisting}
 
 \section{Dispatcher}
+Im Betrieb soll es für jede Tasks so aussehen, als wäre sie die
+einzige im System. D.h. wird eine Task unterbrochen,
+müssen nicht nur alle Register und der CPU-Zustand gesichert,
+sondern auch der Stackpointer gespeichert und umgesetz
+werden. 
+
 
 \section{Scheduler}
 
@@ -121,3 +188,5 @@ static void __attribute__((always_inline)) disableInterrupts(){
 \section{Zeiten}
 
 \section{Collections}
+
+\section{Exceptions}
