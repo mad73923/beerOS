@@ -195,7 +195,7 @@ Stackpointer im \gls{TCB} \todo{verweis} abgelegt.
 Der Dispatcher kann in zwei unterschiedlichen Situationen
 aufgerufen werden: Entweder die Zeitscheibe der Task ist
 abgelaufen und ein Dispatcher-Timer Interrupt wird ausgelöst
-oder die Task gibt die CPU freiwillig ab. Beide Fälle müssen
+oder die Task gibt die CPU freiwillig ab\todo{s. yield}. Beide Fälle müssen
 ab dieser Stelle unterschiedlich behandelt werden. Wurde 
 der Dispatcher vom Timer ausgeführt (\texttt{hardwareISR = 1}),
 muss die Systemzeit
@@ -214,9 +214,79 @@ mittels Magicnumber den Stack auf einen Überlauf. Sollte dies
 der Fall sein, wird ein \texttt{kernelPanic}-Fehler ausgelöst. \todo{verweis exceptions}
 
 \section{Scheduler}
+Abhängig vom ausgewählten Algorithmus wählt der Scheduler
+die nächste auszuführende Task aus. Außerdem verwaltet er
+die anstehenden, lauffähigen Tasks. Zum Systemstart kann
+der gewünschte Scheduleralgorithmus ausgewählt werden. \todo{verweis systemstart}
+Zudem kann er sogar in Laufzeit geändert werden. Dazu
+muss einfach die Initialisierungsfunktion des neuen 
+Schedulers aufgerufen werden. Darin werden im System verwendete
+Funktionspointer auf die jeweiligen Algorithmenfunktionen gesetzt.
+ Daher benötigt jede Implementierung
+eines Scheduleralgorithmus folgende Funktionen:
+\begin{itemize}
+\item \texttt{void scheduler\_NextTask(void)}
+\item \texttt{void scheduler\_enqueueTask(task)}
+\item \texttt{void scheduler\_blockedByRessourceRequest(ressource)}
+\item \texttt{void scheduler\_ressourceReleased(ressource)}
+\end{itemize}
 
+Die Funktion \texttt{scheduler\_NextTask} wird bei jedem 
+Dispatcherdurchlauf aufgerufen. Sie wählt entsprechend dem
+Algorithmus die nächste Task aus der Menge der lauffähigen
+Tasks aus.
+
+\texttt{scheduler\_enqueueTask} wird dann benötigt, wenn eine
+Task in den Zustand \texttt{READY} wechselt, unabhängig davon,
+ welcher Zustand davor herrschte. So findet die Funktion u.a. beim
+Verdrängen einer Task im Dispatcher oder beim Aufwecken im 
+Zeiten-Modul \todo{verweis} Anwendung.
+
+Die Funktionen \texttt{scheduler\_blockedByRessourceRequest} und 
+\texttt{scheduler\_ressourceReleased} werden nur von wenigen 
+Scheduleralgorithmen benötigt. Im XX\todo{name?}OS sind sie
+ausschließlich im Prioritätenvererbungs-Algorithmus (PIP) zu 
+finden. \todo{verweis PIP} Sollten sie vom Algorithmus nicht
+verwendet werden müssen sie dennoch mit einem leeren Körper
+implementiert werden.
+
+\subsection{Scheduleralgorithmen}
+XX\todo{name?}OS unterstützt folgende Algorithmen:
+\begin{itemize}
+\item einfaches Round-Robin
+\item prioritätengesteuertes Round-Robin
+\item Prioritätenvererbung (PIP) \todo{verweis}
+\end{itemize}
+\textit{Mit Ausnahme von PIP soll nicht näher auf die
+Implementierung der einzelnen Algorithmen eingegangen, da 
+diese weitestgehend bekannt sind.}
+
+\subsection{Idle-Task}
+Ist keine der Tasks zum gleichen Zeitpunkt im lauffähigen 
+Zustand muss es dennoch eine Möglichkeit
+geben, dass der Dispatcher immerfort aufgerufen wird, damit
+neue lauffähige Tasks ausgewählt werden können. Die einfachste
+Umsetzung hierfür ist die Initialisierung einer sogenannten 
+Idle-Task, welche in einer Dauerschleife "freiwillig" seine Zeitscheibe beendet und dadurch den Dispatcher aufruft.
+Wichtig hierbei ist, dass die Idle-Task nie in einen blockierten
+Zustand versetzt werden darf und ihre Priorität auf das Maximum
+gesetzt wird. Letzteres verhindert, dass die Idle-Task ausgeführt
+wird, obwohl andere Tasks lauffähig sind.
+\begin{lstlisting}[language=C, label=lst:idleYield, caption=Idle-Task und yield]
+void idleTask(){
+	while(1){
+		task_yield();
+	}
+}
+void task_yield(){
+	disableInterrupts();
+	hardwareISR = 0;
+	DISPISRVEC();
+}
+\end{lstlisting}
 
 \section{Synchronisation}
+
 
 \section{Zeiten}
 
