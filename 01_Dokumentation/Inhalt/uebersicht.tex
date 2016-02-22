@@ -52,7 +52,7 @@ aufgerufen wird, muss ein Dispatcher Timer initialisiert werden.
 Dieser löst, unabhängig vom Ausführungszustand\todo{verweis}
 \footnote{Es sei denn, die Task befindet sich in einem kritischen 
 (Interrupt gesperrten) Abschnitt} der aktuellen Task, einen 
-Interrupt aus, in dessen Service Routine der Dispatcher aufgerufen
+Interrupt aus, in dessen \gls{ISR} der Dispatcher aufgerufen
 wird. Außerdem dient der Timer zur Berechnung der aktuellen
 Systemzeit.
 
@@ -104,7 +104,6 @@ Dies wird beim AVR-Compiler durch das Attribut
 static void __attribute__((always_inline)) enableInterrupts(){
 	sei();
 }
-
 static void __attribute__((always_inline)) disableInterrupts(){
 	cli();
 }
@@ -112,8 +111,8 @@ static void __attribute__((always_inline)) disableInterrupts(){
 
 \section{Strukturen}
 In einem multitaskingfähigen Betriebssystem müssen neben dem
-Stack für jede Task auch ein sogenannter Task-Controll-Block
-(TCB) initialisiert werden. Dieser enthält Informationen
+Stack für jede Task auch ein sogenannter \gls{TCB} 
+initialisiert werden. Dieser enthält Informationen
 über den aktuellen Zustand, die Priorität\todo{verweis scheduler},
 den Stack-/pointer und Zeitangaben \todo{verweis schlafen}.
 
@@ -137,7 +136,7 @@ typedef volatile struct strucTCB{
 \end{lstlisting}
 
 \subsection{Stack und Stackpointer}
-Zur Initialisierung eines TCB's gehört auch der eigentliche
+Zur Initialisierung eines \gls{TCB} gehört auch der eigentliche
 Stack sowie dessen Zeiger. Daher muss vor dem Start des
 Betriebsystems auch der Speicherbereich des Stacks reserviert
 und vorbereitet werden.
@@ -174,14 +173,48 @@ void beerOS_start(taskControlBlock* firstTask, void (*scheduler_init)(void)){
 \end{lstlisting}
 
 \section{Dispatcher}
-Im Betrieb soll es für jede Tasks so aussehen, als wäre sie die
-einzige im System. D.h. wird eine Task unterbrochen,
+Im späteren Betrieb soll es für jede Tasks so aussehen, als wäre 
+sie die einzige im System. D.h. wird eine Task unterbrochen,
 müssen nicht nur alle Register und der CPU-Zustand gesichert,
-sondern auch der Stackpointer gespeichert und umgesetz
-werden. 
+sondern auch der Stackpointer gespeichert und versetzt
+werden. Hierfür ist der Dispatcher zuständig.
+Wichtig hierbei ist, dass der Compiler keine eigenen,
+unkontrollierbaren Sicherungsversuche vornimmt, wie es
+üblicherweise der Fall ist. Um dies zu verhindern wird die 
+\gls{ISR} des Dispatchers für den AVR-Compiler mit dem Attribut 
+\texttt{ISR\_NAKED} versehen.
 
+Der erste Schritt des Dispatchers besteht darin, sämtliche
+CPU-Register auf dem Stack der aktuellen Task zu sichern.
+Die Reihenfolge wie die Register auf den Stack gepushed
+werden ist dabei nicht maßgebend, jedoch muss beim
+Widerherstellen der Task in umgekehrter Reihenfolge
+vorgegangen werden. Nach der Sicherung wird der aktuelle
+Stackpointer im \gls{TCB} \todo{verweis} abgelegt.
+
+Der Dispatcher kann in zwei unterschiedlichen Situationen
+aufgerufen werden: Entweder die Zeitscheibe der Task ist
+abgelaufen und ein Dispatcher-Timer Interrupt wird ausgelöst
+oder die Task gibt die CPU freiwillig ab. Beide Fälle müssen
+ab dieser Stelle unterschiedlich behandelt werden. Wurde 
+der Dispatcher vom Timer ausgeführt (\texttt{hardwareISR = 1}),
+muss die Systemzeit
+erhöht werden und gleichzeitig alle bis zu diesem Zeitpunkt
+schlafenden Tasks aufgeweckt werden. Im anderen Fall 
+(\texttt{hardwareISR = 0}) darf dieser Schritt nicht ausgeführt
+werden. Weiterhin muss unterschieden werden, in welchem Zustand
+sich die Task gerade befindet. Wurde sie blockiert
+(\texttt{state = WAITING}), muss nichts weiter unternommen werden.
+Ist sie jedoch noch aktiv (\texttt{state = RUNNING}) muss ihr 
+Zustand auf \texttt{state = READY} gesetzt und im Scheduler
+neu eingereiht werden.\todo{verweis scheduler}
+
+Bevor der Scheduler aufgerufen wird, überprüft der Dispatcher
+mittels Magicnumber den Stack auf einen Überlauf. Sollte dies
+der Fall sein, wird ein \texttt{kernelPanic}-Fehler ausgelöst. \todo{verweis exceptions}
 
 \section{Scheduler}
+
 
 \section{Synchronisation}
 
