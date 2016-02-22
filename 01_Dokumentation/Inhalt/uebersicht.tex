@@ -22,7 +22,7 @@ Tasks setzt eine Systemzeit vorraus. Das Modul Zeiten \todo{verweis} verwendet h
 Eine große Erleichterung im Entwicklungsprozess (und auch 
 im späteren Anwendungsfall) ist
 die Verwendung von Collections, welche Datenpakete hantierbar 
-macht. Gleichzeitig verbessert sich die Lesbarkeit des
+macht. Gleichzeitig verbessert sich mit ihnen die Lesbarkeit des
 Programmcodes.
 
 \section{Hardware}
@@ -267,7 +267,7 @@ Zustand muss es dennoch eine Möglichkeit
 geben, dass der Dispatcher immerfort aufgerufen wird, damit
 neue lauffähige Tasks ausgewählt werden können. Die einfachste
 Umsetzung hierfür ist die Initialisierung einer sogenannten 
-Idle-Task, welche in einer Dauerschleife "freiwillig" seine Zeitscheibe beendet und dadurch den Dispatcher aufruft.
+Idle-Task, welche in einer Dauerschleife "freiwillig" ihre Zeitscheibe beendet und dadurch den Dispatcher aufruft.
 Wichtig hierbei ist, dass die Idle-Task nie in einen blockierten
 Zustand versetzt werden darf und ihre Priorität auf das Maximum
 gesetzt wird. Letzteres verhindert, dass die Idle-Task ausgeführt
@@ -286,9 +286,41 @@ void task_yield(){
 \end{lstlisting}
 
 \section{Synchronisation}
+Für die Interaktion zwischen Tasks und die Verwaltung von 
+Ressourcen werden in Betriebssystemen Synchronisationsmechanismen 
+verwendet. Ihre Funktionalität baut im Grunde auf den kritischen
+Abschnitt auf, welcher Interrupts sperrt. XX\todo{name?}OS 
+unterstützt neben dem kritischen Abschnitt auch Signale und
+Semaphore (und damit auch Mutexe). 
+
+\subsection{Semaphore}
+
+
+\subsection{Signale}
 
 
 \section{Zeiten}
+Zur Verzögerung einer Task für eine bestimmte Zeit wird das
+Zeiten-Modul benötigt. Damit ist es möglich, Tasks in einen
+schlafenden Zustand (bzw. \texttt{WAITING}) in Abhängigkeit
+der Zeit zu versetzen. In der späteren Anwendung ist das z.B.
+für periodische Aktionen sehr hilfreich.
+
+Soll eine Task schlafen gelegt werden, wird im \gls{TCB} 
+(wie bereits erwähnt) ihr Status auf \texttt{WAITING} gesetzt.
+Zudem wird im Attribut \texttt{waitUntil} eingetragen bis zu 
+welchem absoluten Systemzeitpunkt sie in diesem Zustand verweilen 
+soll. Danach wird sie in einer verketteten Liste \todo{verweis} 
+aufsteigend nach \texttt{waitUntil} einsortiert. Die Sortierung
+vereinfacht das spätere Aufwecken.
+
+Wird nun der Dispatcher \todo{verweis} vom Dispatcher-Timer
+ausgelöst wird die Systemzeit inkrementiert. Aufgrund der Änderung
+muss überprüft werden, ob es Tasks gibt, die bis zu diesem
+Zeitpunkt ins Schlafen versetzt wurden. Dazu wird über die
+o.g. Liste iteriert, die entsprechenden Tasks aufgeweckt
+und zum Einsortieren in die Menge der lauffähigen Tasks an den
+Scheduler übergeben.
 
 \section{Collections}
 
