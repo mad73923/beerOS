@@ -19,27 +19,27 @@ typedef struct{
 }MemoryHead;
 \end{lstlisting}
 
-Die Bitfelder \texttt{prev} und \textt{next} geben den Index des vorherigen bzw. nächsten MemoryHead im Heap Array an.
-Durch die Limitierung auf 12 Bit können maximal $2^12$ Segmente bzw $4*2^12 = 16kb$ addresiert werden.
-Eine Implentierung ohne ein \texttt{prev} wäre auch denkbar, also eine einfach verkettete Liste, es vereinfacht aber das entfernen eines MemoryHeads aus der List wenn ein Speicherbereich freigegeben wird.
+Die Bitfelder \texttt{prev} und \texttt{next} geben den Index des vorherigen bzw. nächsten MemoryHead im Heap Array an.
+Durch die Limitierung auf 12 Bit können maximal $2^{12}$ Segmente bzw $4\cdot2^{12} = 16\text{kB}$ addresiert werden.
+Eine Implentierung ohne ein \texttt{prev} wäre auch denkbar, also eine einfach verkettete Liste, \todo{wortsalat} es vereinfacht aber das entfernen eines MemoryHeads aus der List wenn ein Speicherbereich freigegeben wird.
 Das \texttt{size} Feld gibt die Größe des zu verwaltenden Speicherbereichs an.
-Da für \texttt{size} 8 Bit bereitstehen können Speicherbereiche mit einer Größe von bis zu $4*2^8 = 1kb$ allokiert werden.
+Da für \texttt{size} 8 Bit bereitstehen können Speicherbereiche mit einer Größe von bis zu $4\cdot2^8 = 1\text{kB}$ allokiert werden.
 
-Es existiert zu jeder Zeit mindestens eine MemoryHead, und zwar das erste Segment des Heaps.
+Es existiert zu jeder Zeit mindestens ein MemoryHead: das erste Segment des Heaps.
 Dieser dient auch als Einstiegspunkt für den Speicherverwaltungsalgorithmus.
 
 \subsection{Algorithmus}
 Die Speicherverwaltung legt keinen bestimmten Algorithmus fest, sonder erlaubt es beliebige Algorithmen zu implementieren.
 Dazu stellt die Speicherverwaltung zwei Funktionen und eine Hilfsstruktur zur Verfügung.
-Mit der Funktion \texttt{memoryManagement_next} können iterativ alle freien Speicherbereiche erfragt werden, die eine angegebene Größe nicht unterschreiten.
-Die erwünschte Größe wird als Teil der Struktur \textt{MemoryRequest} übergeben.
+Mit der Funktion \texttt{memoryManagement\_next} können iterativ alle freien Speicherbereiche erfragt werden, die eine angegebene Größe nicht unterschreiten.
+Die erwünschte Größe wird als Teil der Struktur \texttt{MemoryRequest} übergeben.
 In dieser Struktur werden von der Funktion Informationen über den nächsten freien Speicherbereich gespeichert.
 Darunter die Id und die Größe des freien Speicherbereichs.
 Liefert die Funktion den Wert 0 zurück sind keine weiteren freien Speicherbereich der angegebenen Größe auf dem Heap verfügbar.
 
-Um einen Speicherbereich zu belegen steht die Funktion \texttt{memoryManagement_alloc} zur Verfügung.
-Ihr wird beim Aufrufen ebenfalls ein \textt{MemoryRequest} übergeben.
-Die in der \textt{MemoryRequest} Stuktur enthaltene Id gibt dabei an welcher Speicherbereich belegt werden soll.
+Um einen Speicherbereich zu belegen steht die Funktion \texttt{memoryManagement\_alloc} zur Verfügung.
+Ihr wird beim Aufrufen ebenfalls ein \texttt{MemoryRequest} übergeben.
+Die in der \texttt{MemoryRequest} Stuktur enthaltene Id gibt dabei an welcher Speicherbereich belegt werden soll.
 Der Rückgabewert der Funktion ist die Adresse des allokierten Speicherbereichs.
 
 Im nachfolgenden Codebeispiel \ref{lst:memAlgoBeispiel} ist der Worst Fit Algorithmus mithilfe der beiden vorgestellten Funktionen implementiert.
