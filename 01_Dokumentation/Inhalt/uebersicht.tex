@@ -339,8 +339,28 @@ und zum Einsortieren in die Menge der lauffähigen Tasks an den
 Scheduler übergeben.
 
 \section{Collections}
-Zur Vereinfachung  
-\texttt{\#ToastGibtsSpäter}
+Beim Scheduling und auch bei den synchronisation Methoden wie Signalen und Mutex sind oft Listen von Tasks zu verwalten.
+Um dies zu vereinfachen wurde eine \texttt{LinkedList} implementiert.
+
+Es handelt sich hierbei um eine gewöhnliche einfach verkettete Liste.
+Neben den Standartfunktionen, wie das Hinzufügen, Entfernen und Suchen eines Elements sind außerdem einige Hilfsfunktionen implementiert die z.B. das erste oder letzte Element einer Liste zurückgeben.
+Außerdem steht eine Iteratorfunktion zu Verfügung, die in Kombination mit einer \texttt{while}-Schleife eine Art \texttt{forEach}-Schleife ergibt.
+Ihre Anwendung ist im nachfolgenden Codebeispiel \ref{lst:listIter} demonstriert.
+
+\begin{lstlisting}[language=C, label=lst:lst:listIter, caption=Iteratorfunktion der \texttt{LinkedList}]
+int value;
+while(linkedList_iter(&linkedList, &value)){
+    handleValue(value);
+}
+\end{lstlisting}
+
+Es ist allerdings anzumerken, das die Implementierung es nur erlaubt Pointer in der \texttt{LinkedList} abzuspeicher, bzw. Datentypen, die die gleiche Größe haben.
+
+\subsection{Queue}
+Um die Verwaltung von Taskstrukturen noch weiter zu vereinfachen, wurde neben der \texttt{LinkedList} auch eine \texttt{Queue} implementiert.
+Es handelt sich hierbei um einen Wrapper um die \texttt{LinkedList}, der die von einer Queue bekannten Funktionen wie \texttt{pop} und \texttt{push} anbietet.
+Wenn möglich wurde die \texttt{Queue} im XX\todo{name?}OS verwendet.
+Sollte in der weiteren Entwicklung des Betriebssystems die \texttt{Queue} nicht mehr auf der \texttt{LinkedList} basieren, um diese etwa zu optimieren, wäre keine Anpassung des restlichen Codes nötig.  
 
 \section{Exceptions}
 \label{sect:exceptions}
