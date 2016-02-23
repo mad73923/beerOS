@@ -1,0 +1,92 @@
+% ==========================================================================
+% Zeilenabstand
+% ==========================================================================
+\onehalfspacing
+
+% ==========================================================================
+% Farbdefinitionen
+% ==========================================================================
+\definecolor{grau}{RGB}{240,240,240} %Beispielwert f¸r Grau
+
+% ==========================================================================
+% Seitenr‰nder
+% ==========================================================================
+\geometry{headsep=0.6cm}				% Abstand Text Oberkante zu Kopfzeile Unterkante
+\geometry{footskip=1.1cm}				% Abstand Text Unterkante zu Fuﬂzeile Oberkante
+\geometry{top=3.2cm}						% Abstand Text zu oberem Papierrand
+\geometry{bottom=3.7cm}					% Abstand Text zu unterem Papierrand
+\geometry{left=3.45cm}					% Abstand Text zu linkem Papierrand
+\geometry{right=2.7cm}					% Abstand Text zu rechtem Papierrand
+
+\setlength{\headheight}{1.1\baselineskip}
+
+% ==========================================================================
+% Einstellungen Kopf- und Fuﬂzeile
+% ==========================================================================
+\pagestyle{scrheadings}
+\renewcommand*{\chapterpagestyle}{scrheadings} % Kopf-/Fuﬂzeile  auf Kapitelanfang
+\renewcommand{\headfont}{\normalfont} % Schriftform der Kopfzeile
+% Kopfzeile
+\ihead[]{\upshape\headmark}
+\chead[]{}
+\ohead[]{}
+\setheadsepline{0.5pt}
+% Fuﬂzeile
+\ifthenelse{\equal{\layoutpres}{htwg}}
+{
+	\refoot[]{\raisebox{-1.0cm}{\includegraphics[height=0.9cm]{Bilder/HTWG_Logo}}}
+}{}
+\cefoot[]{\raisebox{-0.1cm}{\footnotesize{\upshape\art~\autorsmall}}}
+
+\cofoot[]{\raisebox{-0.1cm}{\footnotesize{\upshape\art~\autorsmall}}}
+
+\rofoot[]{\upshape\pagemark}
+
+\ifthenelse{\equal{\layoutpres}{htwg}}
+{
+	\lofoot[]{\raisebox{-1.0cm}{\includegraphics[height=0.9cm]{Bilder/HTWG_Logo}}}
+}{}
+\setfootsepline{0.5pt}
+
+% ==========================================================================
+% erzeugt ein wenig mehr Platz hinter einem Punkt
+% ==========================================================================
+\frenchspacing 
+
+% ==========================================================================
+% Nummerierungstiefe ausw‰hlen
+% ==========================================================================
+\setcounter{secnumdepth}{3} % Bis 1.1.1.1
+\setcounter{tocdepth}{4} % Bis 1.1.1.1
+
+% ==========================================================================
+% Schusterjungen und Hurenkinder vermeiden
+% ==========================================================================
+\clubpenalty = 10000
+\widowpenalty = 10000 
+\displaywidowpenalty = 10000
+
+% ==========================================================================
+% Definition von Farben f¸r Quellcodeausgabe
+% ==========================================================================
+\definecolor{hellgelb}{rgb}{1,1,0.9}
+\definecolor{quellcode_comment}{rgb}{0.2,0.6,0.2}
+\definecolor{quellcode_string}{rgb}{0.6,0,0.8}
+\definecolor{quellcode_background}{rgb}{0.98,0.98,0.98}
+\lstset{numbers=left,
+				backgroundcolor=\color{hellgelb},
+				breaklines=true,
+				frame=single,
+				captionpos=b,
+ 				language=C,
+ 				basicstyle=\ttfamily\color{black}\scriptsize,
+ 				keywordstyle=\color{blue},
+ 				commentstyle=\color{quellcode_comment},
+ 				stringstyle=\color{quellcode_string}}
+ 				
+\renewcommand{\lstlistingname}{Code} 				
+
+% ==========================================================================
+% Fuﬂnoten fortlaufend durchnummerieren
+% ==========================================================================
+\counterwithout{footnote}{chapter}

@@ -1,0 +1,327 @@
+\chapter{Systemübersicht}
+
+Für ein minimalistisches Betriebssystem werden einige Grundbausteine
+benötigt. Zunächst muss die Hardware bzw. der Chip initialisiert
+werden, indem verschiedene Zeitquellen, Timer und die globale
+Interruptverwaltung konfiguriert werden. \todo{verweis} Bevor
+das eigentliche Betriebssystem gestartet werden kann, müssen zudem
+diverse Strukturen für die Tasks aufgestellt werden, sodass diese
+unabhängig voneinander lauffähig sind. \todo{verweis}
+Zum Starten des Systems wird mittels eines modifizierten Aufrufs
+der Dispatcher erstmalig durchlaufen und die erste Task zum Ausführen
+vorbereitet. Dabei wird auch der Scheduler aufgerufen, der, abhängig vom
+ausgewählten Algorithmus, die nächste Task bestimmt.\todo{verweis}
+
+Die soeben genannten Module würden für ein multitasking-fähiges
+Betriebssystem bereits ausreichen. Jedoch wäre sein Funktionsumfang
+sehr beschränkt. Bislang besteht noch keine Möglichkeit einer sicheren
+Interaktion zwischen zwei oder mehreren Tasks. Hierfür werden 
+z.B. kritische Bereiche oder Signale benötigt, welche das Modul
+Synchronisation bereitstellt. Die Anwendung von Wartezeiten innerhalb
+Tasks setzt eine Systemzeit vorraus. Das Modul Zeiten \todo{verweis} verwendet hierfür Trigger der Hardware.
+Eine große Erleichterung im Entwicklungsprozess (und auch 
+im späteren Anwendungsfall) ist
+die Verwendung von Collections, welche Datenpakete hantierbar 
+macht. Gleichzeitig verbessert sich mit ihnen die Lesbarkeit des
+Programmcodes.
+
+\section{Hardware}
+Als Zielplattform wurde die weit verbreitete AVR-Serie von Atmel
+verwendet. Jedoch wurde während der Umsetzung darauf geachtet, 
+dass bei einem Plattformwechsel möglichst wenig Code angepasst
+werden muss. Als Entwicklungstool wurde der AVR-Simulator verwendet,
+welcher innherhalb des AVR-Studios von Atmel bereitgestellt wird.
+Als Zielbaustein wurde der \mbox{ATxmega128A1} gewählt.
+
+Die minimale Vorraussetzung an die Hardware ist ein Timer
+und ein Interruptsystem.
+Die Periode des Timers muss bekannt oder definierbar sein.
+Sind (wie im Fall vom \mbox{ATxmega128A1}) weitere Timer
+verfügbar, können diese vom Entwickler frei verwendet werden, 
+unter der Bedingung, dass der Systemtimer nicht beeinflusst 
+wird.
+
+\subsection{Zeitquellen}
+Zuallererst wird der interne Oszillator auf eine Systemfrequenz von $f_{S} = 32 \text{MHz}$ konfiguriert. Dadurch können durch
+nachgeschaltete Teiler diverse Frequenzen an weiterer
+Peripherie erzeugt werden \todo{verweis}.
+
+\subsection{Dispatcher Timer}
+Damit nach Ablauf der Zeitscheibe einer Task der Dispatcher 
+aufgerufen wird, muss ein Dispatcher Timer initialisiert werden.
+Dieser löst, unabhängig vom Ausführungszustand\todo{verweis}
+\footnote{Es sei denn, die Task befindet sich in einem kritischen 
+(Interrupt gesperrten) Abschnitt} der aktuellen Task, einen 
+Interrupt aus, in dessen \gls{ISR} der Dispatcher aufgerufen
+wird. Außerdem dient der Timer zur Berechnung der aktuellen
+Systemzeit.
+
+\begin{lstlisting}[language=C, label=lst:DispatcherTimer, caption=Initialisierung Dispatcher Timer]
+void initDispatcherTimer(){
+	TCF0.CTRLB = TC_WGMODE_NORMAL_gc;
+	TCF0.PER = 0x7D00;
+	TCF0.INTCTRLA = TC_OVFINTLVL_HI_gc;
+}
+\end{lstlisting}
+
+In dieser Konfiguration zählt der Timer aufwärts bis zum Wert der
+Periode (\texttt{TCF0.PER}) und wird auf 0 zurückgesetzt. 
+Gleichzeitig löst er beim Zurücksetzen einen Überlauf-Interrupt aus.
+
+Wird als Zeitquelle die Systemfrequenz $f_{S}$ ohne Vorteiler
+gewählt, so ergibt sich folgendes Intervall:
+\begin{equation}
+\begin{split}
+t_{per} = \frac{7\text{D}00_{16}}{32\text{MHz}} = 1\text{ms}
+ \end{split}
+ \label{eq:intervall}
+\end{equation}
+
+In der Annahme, dass keine kritische Abschnitte verwendet werden
+wird somit in Abständen von $t_{per}$ ein Kontextwechsel herbeigeführt. Sollten kritische Abschnitte Anwendung finden liegt
+es am Entwickler, diese möglichst kurz zu halten. Solange sie
+deutlich unter $t_{per}$ liegen gibt es keine Probleme. Bedenklich 
+wird es, wenn die Ausführung des kritischen Bereichs länger als 
+$t_{per}$ dauert,
+da hierbei ein oder im schlimmsten Fall gleich mehrere 
+Interruptsignale verloren gehen und dadurch u.a. die Systemzeit
+nicht mehr präzise ist.
+
+\subsection{Interrupts}
+Auch die Konfiguration des Interruptsystems ist nicht besonders
+aufwändig. Auf dem \mbox{ATxmega128A1} muss jediglich das
+dem Dispatcher Timer entsprechende Interuptlevel scharf gestellt
+und das globale Interruptenable gesetzt werden.
+
+Da die Funktionen zum Löschen oder Setzen des Interrupts auch
+mit dem Betreten oder Verlassen eines kritischen Abschnitts
+gleichzusetzen sind, werden sie plattformunabhängig exportiert.
+Wichtig hierbei ist nur, dass die Funktionen inline aufgerufen
+werden, sodass im Anwendungsfall der Stack nicht manipuliert wird.
+Dies wird beim AVR-Compiler durch das Attribut 
+\texttt{always\_inline} verwirklicht.
+\begin{lstlisting}[language=C, label=lst:interruptDisEnable, caption=Export der Interruptfunktionen]
+static void __attribute__((always_inline)) enableInterrupts(){
+	sei();
+}
+static void __attribute__((always_inline)) disableInterrupts(){
+	cli();
+}
+\end{lstlisting}
+
+\section{Strukturen}
+In einem multitaskingfähigen Betriebssystem müssen neben dem
+Stack für jede Task auch ein sogenannter \gls{TCB} 
+initialisiert werden. Dieser enthält Informationen
+über den aktuellen Zustand, die Priorität\todo{verweis scheduler},
+den Stack-/pointer und Zeitangaben \todo{verweis schlafen}.
+
+\subsection{Task-Control-Block}
+Als mögliche Zustände einer Task wurden wie üblich 
+\texttt{READY}, \texttt{RUNNING}, \texttt{WAITING} und 
+\texttt{KILLED} definiert. Bei der Priorität bedeutet
+eine kleinere Zahl einen höheren Vorrang (mit 0 als
+höchsten Wert).
+\begin{lstlisting}[language=C, label=lst:TCB, caption=Task-Control-Block]
+typedef volatile struct strucTCB{
+	volatile uint8_t prio;
+	volatile uint8_t id;
+	volatile uint8_t* stackPointer;
+	volatile uint8_t* stackBeginn;
+	volatile uint16_t stackSize;
+	volatile uint32_t waitUntil;
+	volatile uint8_t tmpPrio;
+	volatile taskstate state;
+}taskControlBlock;
+\end{lstlisting}
+
+\subsection{Stack und Stackpointer}
+Zur Initialisierung eines \gls{TCB} gehört auch der eigentliche
+Stack sowie dessen Zeiger. Daher muss vor dem Start des
+Betriebsystems auch der Speicherbereich des Stacks reserviert
+und vorbereitet werden.
+
+Zur Vorbereitung eines Stacks wird an seiner ersten und letzten 
+Speicherstelle eine Magicnumber\footnote{z.B. AA$_{16} = 
+10101010_{2}$} eingefügt. Mit dieser
+soll erkannt werden, ob es zu einem Stacküberlauf gekommen ist.
+\todo{verweis dispatcher} Zudem wird an die vorletzte Stelle
+die Rücksprungadresse des Programmcodes kopiert, welcher in der
+jeweiligen Task ausgeführt werden soll. Der Task-Stackpointer
+wird daraufhin auf die Adresse x stellen überhalb der letzten
+Adresse gesetzt. Das x entspricht hierbei der Anzahl der
+CPU-Register.\todo{verweis dispatcher}
+
+Zum Starten des Systems wird bei der Starttask der Stackpointer
+nochmals verändert: Um gleich zur Rücksprungadresse bzw. 
+Startadresse des Task-Programmcodes zu gelangen, wird der
+Stackpointer direkt überhalb dieser Adresse gesetzt und
+mittels \texttt{RET}-Befehl zu selbiger gesprungen.
+\todo{naming beer??}
+\begin{lstlisting}[language=C, label=lst:systemstart, caption=Systemstart]
+void beerOS_start(taskControlBlock* firstTask, void (*scheduler_init)(void)){
+	currentTask = firstTask;
+	scheduler_init();
+	time_init();
+	firstTask->state = RUNNING;
+	mainSP = SP;
+	//set stack pointer of starting task next to taskaddress
+	SP = firstTask->stackBeginn+firstTask->stackSize-progcntOffset;
+	//start task
+	asm volatile ("ret");
+}
+\end{lstlisting}
+
+\section{Dispatcher}
+Im späteren Betrieb soll es für jede Tasks so aussehen, als wäre 
+sie die einzige im System. D.h. wird eine Task unterbrochen,
+müssen nicht nur alle Register und der CPU-Zustand gesichert,
+sondern auch der Stackpointer gespeichert und versetzt
+werden. Hierfür ist der Dispatcher zuständig.
+Wichtig hierbei ist, dass der Compiler keine eigenen,
+unkontrollierbaren Sicherungsversuche vornimmt, wie es
+üblicherweise der Fall ist. Um dies zu verhindern wird die 
+\gls{ISR} des Dispatchers für den AVR-Compiler mit dem Attribut 
+\texttt{ISR\_NAKED} versehen.
+
+Der erste Schritt des Dispatchers besteht darin, sämtliche
+CPU-Register auf dem Stack der aktuellen Task zu sichern.
+Die Reihenfolge wie die Register auf den Stack gepushed
+werden ist dabei nicht maßgebend, jedoch muss beim
+Widerherstellen der Task in umgekehrter Reihenfolge
+vorgegangen werden. Nach der Sicherung wird der aktuelle
+Stackpointer im \gls{TCB} \todo{verweis} abgelegt.
+
+Der Dispatcher kann in zwei unterschiedlichen Situationen
+aufgerufen werden: Entweder die Zeitscheibe der Task ist
+abgelaufen und ein Dispatcher-Timer Interrupt wird ausgelöst
+oder die Task gibt die CPU freiwillig ab\todo{s. yield}. Beide Fälle müssen
+ab dieser Stelle unterschiedlich behandelt werden. Wurde 
+der Dispatcher vom Timer ausgeführt (\texttt{hardwareISR = 1}),
+muss die Systemzeit
+erhöht werden und gleichzeitig alle bis zu diesem Zeitpunkt
+schlafenden Tasks aufgeweckt werden. Im anderen Fall 
+(\texttt{hardwareISR = 0}) darf dieser Schritt nicht ausgeführt
+werden. Weiterhin muss unterschieden werden, in welchem Zustand
+sich die Task gerade befindet. Wurde sie blockiert
+(\texttt{state = WAITING}), muss nichts weiter unternommen werden.
+Ist sie jedoch noch aktiv (\texttt{state = RUNNING}) muss ihr 
+Zustand auf \texttt{state = READY} gesetzt und im Scheduler
+neu eingereiht werden.\todo{verweis scheduler}
+
+Bevor der Scheduler aufgerufen wird, überprüft der Dispatcher
+mittels Magicnumber den Stack auf einen Überlauf. Sollte dies
+der Fall sein, wird ein \texttt{kernelPanic}-Fehler ausgelöst. \todo{verweis exceptions}
+
+\section{Scheduler}
+Abhängig vom ausgewählten Algorithmus wählt der Scheduler
+die nächste auszuführende Task aus. Außerdem verwaltet er
+die anstehenden, lauffähigen Tasks. Zum Systemstart kann
+der gewünschte Scheduleralgorithmus ausgewählt werden. \todo{verweis systemstart}
+Zudem kann er sogar in Laufzeit geändert werden. Dazu
+muss einfach die Initialisierungsfunktion des neuen 
+Schedulers aufgerufen werden. Darin werden im System verwendete
+Funktionspointer auf die jeweiligen Algorithmenfunktionen gesetzt.
+ Daher benötigt jede Implementierung
+eines Scheduleralgorithmus folgende Funktionen:
+\begin{itemize}
+\item \texttt{void scheduler\_NextTask(void)}
+\item \texttt{void scheduler\_enqueueTask(task)}
+\item \texttt{void scheduler\_blockedByRessourceRequest(ressource)}
+\item \texttt{void scheduler\_ressourceReleased(ressource)}
+\end{itemize}
+
+Die Funktion \texttt{scheduler\_NextTask} wird bei jedem 
+Dispatcherdurchlauf aufgerufen. Sie wählt entsprechend dem
+Algorithmus die nächste Task aus der Menge der lauffähigen
+Tasks aus.
+
+\texttt{scheduler\_enqueueTask} wird dann benötigt, wenn eine
+Task in den Zustand \texttt{READY} wechselt, unabhängig davon,
+ welcher Zustand davor herrschte. So findet die Funktion u.a. beim
+Verdrängen einer Task im Dispatcher oder beim Aufwecken im 
+Zeiten-Modul \todo{verweis} Anwendung.
+
+Die Funktionen \texttt{scheduler\_blockedByRessourceRequest} und 
+\texttt{scheduler\_ressourceReleased} werden nur von wenigen 
+Scheduleralgorithmen benötigt. Im XX\todo{name?}OS sind sie
+ausschließlich im Prioritätenvererbungs-Algorithmus (PIP) zu 
+finden. \todo{verweis PIP} Sollten sie vom Algorithmus nicht
+verwendet werden müssen sie dennoch mit einem leeren Körper
+implementiert werden.
+
+\subsection{Scheduleralgorithmen}
+XX\todo{name?}OS unterstützt folgende Algorithmen:
+\begin{itemize}
+\item einfaches Round-Robin
+\item prioritätengesteuertes Round-Robin
+\item Prioritätenvererbung (PIP) \todo{verweis}
+\end{itemize}
+\textit{Mit Ausnahme von PIP soll nicht näher auf die
+Implementierung der einzelnen Algorithmen eingegangen, da 
+diese weitestgehend bekannt sind.}
+
+\subsection{Idle-Task}
+Ist keine der Tasks zum gleichen Zeitpunkt im lauffähigen 
+Zustand muss es dennoch eine Möglichkeit
+geben, dass der Dispatcher immerfort aufgerufen wird, damit
+neue lauffähige Tasks ausgewählt werden können. Die einfachste
+Umsetzung hierfür ist die Initialisierung einer sogenannten 
+Idle-Task, welche in einer Dauerschleife "freiwillig" ihre Zeitscheibe beendet und dadurch den Dispatcher aufruft.
+Wichtig hierbei ist, dass die Idle-Task nie in einen blockierten
+Zustand versetzt werden darf und ihre Priorität auf das Maximum
+gesetzt wird. Letzteres verhindert, dass die Idle-Task ausgeführt
+wird, obwohl andere Tasks lauffähig sind.
+\begin{lstlisting}[language=C, label=lst:idleYield, caption=Idle-Task und yield]
+void idleTask(){
+	while(1){
+		task_yield();
+	}
+}
+void task_yield(){
+	disableInterrupts();
+	hardwareISR = 0;
+	DISPISRVEC();
+}
+\end{lstlisting}
+
+\section{Synchronisation}
+Für die Interaktion zwischen Tasks und die Verwaltung von 
+Ressourcen werden in Betriebssystemen Synchronisationsmechanismen 
+verwendet. Ihre Funktionalität baut im Grunde auf den kritischen
+Abschnitt auf, welcher Interrupts sperrt. XX\todo{name?}OS 
+unterstützt neben dem kritischen Abschnitt auch Signale und
+Semaphore (und damit auch Mutexe). 
+
+\subsection{Semaphore}
+
+
+\subsection{Signale}
+
+
+\section{Zeiten}
+Zur Verzögerung einer Task für eine bestimmte Zeit wird das
+Zeiten-Modul benötigt. Damit ist es möglich, Tasks in einen
+schlafenden Zustand (bzw. \texttt{WAITING}) in Abhängigkeit
+der Zeit zu versetzen. In der späteren Anwendung ist das z.B.
+für periodische Aktionen sehr hilfreich.
+
+Soll eine Task schlafen gelegt werden, wird im \gls{TCB} 
+(wie bereits erwähnt) ihr Status auf \texttt{WAITING} gesetzt.
+Zudem wird im Attribut \texttt{waitUntil} eingetragen bis zu 
+welchem absoluten Systemzeitpunkt sie in diesem Zustand verweilen 
+soll. Danach wird sie in einer verketteten Liste \todo{verweis} 
+aufsteigend nach \texttt{waitUntil} einsortiert. Die Sortierung
+vereinfacht das spätere Aufwecken.
+
+Wird nun der Dispatcher \todo{verweis} vom Dispatcher-Timer
+ausgelöst wird die Systemzeit inkrementiert. Aufgrund der Änderung
+muss überprüft werden, ob es Tasks gibt, die bis zu diesem
+Zeitpunkt ins Schlafen versetzt wurden. Dazu wird über die
+o.g. Liste iteriert, die entsprechenden Tasks aufgeweckt
+und zum Einsortieren in die Menge der lauffähigen Tasks an den
+Scheduler übergeben.
+
+\section{Collections}
+
+\section{Exceptions}

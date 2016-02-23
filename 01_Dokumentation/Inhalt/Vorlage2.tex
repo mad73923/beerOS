@@ -1,0 +1,97 @@
+\chapter{zweiter Teil}
+\label{kap:Kapitel2}
+\ua \zb \bs\\ 
+Symbol Rv: \symb{Rv} (wird automatisch in das Symbolverzeichnis aufgenommen)\\
+Neuer Fachbegriff: \Fachbegriff{application specific integrated circuit}.\\
+Abkürzung \abk{ASIC} (wird automatisch in das Abk-Verzeichnis aufgenommen)\\
+
+\section{Unterüberschrift}
+\label{kap:Kapitel2:section}
+\hoch{Dieser Text ist hochgetellt}. \tief{Dieser Text ist tiefgestellt}. Dieser Text ist normal.\\
+
+Hier folgen TODO Notes: (diese können einige Warnungen und zu voll/leere Boxen erzeugen!)\\
+Text Text Text Text Text Text Text Text Text Text Text \todo{Plain todonotes.} Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text \todo[color=blue!40]{Todonote with a different color.} Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text \todo[caption={A short entry in the list of todos}]{A very long
+todonote that certainly will fill more than a single line in the
+list of todos \ldots} Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text TextText Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text \todo[inline]{Inline todonotes.}
+
+\todo[caption={A short entry in the list of todos}]{A very long
+todonote that certainly will fill more than a single line in the
+list of todos \ldots}
+
+Noch nicht vorhandene Bilder können auch gesetzt werden.
+\missingfigure[figwidth=\textwidth]{A figure I have to make \ldots}
+
+Itemize:
+\begin{itemize}
+	\item \textbf{Punkt 1:}\\
+		Text
+	\item \textbf{Punkt 2:}\\
+		Text
+\end{itemize}
+
+Dies sind verschiedenartige Formeln:\\
+Formeln innerhalb des Textes werden folgendermaßen angelegt: $a^2+b^2=c^2$. Werden Werte mit Einheiten verwendet sollte das SI-Paket verwendet, damit ein einheitliches Aussehen gewährleistet ist: $V_x=\SI{1,5}{\volt}$.
+
+Nun folgt eine einzeilige abgesetzte und nummerierte Formel:
+%normale Nummerierte einzeilige Formel
+\begin{equation}
+	\symb{f}=\frac{t_+}{T}
+	\label{eq:Formelname1}
+\end{equation}
+%symb{}, damit f im Symbolverzeichnis erscheint
+
+Auch Gleichungsfolgen sind möglich:
+%mehrzeilige Formel
+\begin{equation}
+\begin{split} 
+	U_a &= (V_{cc}-U_e)\cdot V_{ST}+U_e\\
+	&= (V_{x})\cdot V_{ST}+U_e\\
+	&= \SI{1,5}{\volt} +0,7\cdot U_e
+\end{split} 
+\label{eq:SpannungsteilerDMS}
+\end{equation}
+
+und so wir auf die Formel referenziert: siehe Gleichung \ref{eq:Formelname1}\\
+
+\newpage %Seitenumbruch
+Hier kommen aufgeteilte und gedrehte Bilder:
+\begin{figure}[t!]
+	\centering
+	\subfigure[Zeit- und amplitudenkontinuierlich]
+	{
+		\includegraphics[width=0.38\textwidth,angle=0]{Bilder/Test.jpg}
+	}
+	\hfill
+	\subfigure[Zeitkontinuierlich und amplitudendiskret]
+	{
+		\includegraphics[width=0.38\textwidth,angle=90]{Bilder/Test.jpg}
+	}
+	\subfigure[Zeitdiskret und Amplitudenkontinuierlich]
+	{
+		\includegraphics[width=0.38\textwidth,angle=180]{Bilder/Test.jpg}
+	}
+	\hfill
+	\subfigure[Zeit- und Amplitudendiskret]
+	{
+		\includegraphics[width=0.38\textwidth,angle=270]{Bilder/Test.jpg}
+	}
+	\caption[Gesamttitel Abbildungsverzeichnis]{Gesamttitel unter Bild}
+	\label{fig:Bild2}
+\end{figure}
+
+
+Nun folgt\footnote{Eine kleine Fußnote} eine Tabelle (siehe Tabelle \ref{tab:Tabellenname}):
+\begin{table}[htp]%
+	\centering
+	\begin{spacing}{1.2}
+		\begin{tabular}{|l|cc|c|}\hline
+			\textbf{Parameter} & \textbf{minimal} & \textbf{maximal} & \textbf{Einheit}\\
+			\hline\hline
+			Betriebsspannung & 12 & 24 & V\\
+			Betriebstemperatur & $-40$ & $+85$ & °C\\
+			\hline
+		\end{tabular}
+	\end{spacing}
+	\caption{Titel}
+	\label{tab:Tabellenname}
+\end{table}
