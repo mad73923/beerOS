@@ -1,1 +1,76 @@
 \chapter{Tests}
+Um die einzelnen Module des Betriebssystems unabhängig testen
+zu können wurde für den AVR-Simulator eine eigene Testbench
+entwickelt. Mit ihr ist es Möglich sämtliche Szenarien 
+durchzutesten und auf Richtigkeit zu überprüfen.
+
+Für jeden Test sollten dabei eine definierte Umgebung vorliegen,
+welche unabhängig von zuvor ausgeführten Tests sein muss.
+Dadurch kann eine flexible Wiederholbarkeit erreicht werden.
+Damit alle Tests automatisch ausgeführt werden können wird
+ein Betriebssystemneustart benötigt. Dazu wird eine Interruptsperre
+verhängt, der Dispatcher-Timer gestoppt, der Stack geleert, alle
+CPU-Register zurückgesetzt und schließlich zur Programm-Adresse
+0 gesprungen.
+
+\begin{lstlisting}[language=C, label=lst:reboot, caption=Neustart]
+void beerOS_reboot(){
+	disableInterrupts();
+	stopDispatcherTimer();
+	//clear main stack
+	while(mainSP <= RAMEND){
+		*mainSP = 0;
+		mainSP++;
+	}
+	mainCalled--;
+	SP = 0;
+	asm volatile(
+		"CLR R0\n\t"
+		[...] //clear registers
+		"BCLR 7\n\t"
+		);
+	asm volatile ("jmp 0");
+}
+\end{lstlisting}
+
+Zum Schutz vor einem fehlerhaften mehrfachen Aufrufen der 
+\texttt{main}-Funktion wurde ein Zähler implementiert. Da bei einem
+Neustart ein solcher Aufruf gewollt ist wird die Zählervariable
+\texttt{mainCalled} dekrementiert. Vor dem Start der gewrappten
+Startfunktion \texttt{run} wird abgefragt, ob der \texttt{main}-Aufruf
+gewollt ist.
+\begin{lstlisting}[language=C, label=lst:main, caption=\texttt{main}-Funktion]
+int main(void){
+	if(mainCalled){
+		kernelPanic();
+	}
+	mainCalled++;
+	return run();
+}
+\end{lstlisting}
+
+Globale Variablen werden vom Compiler in der Weise behandelt, dass
+sie beim Systemstart (Durchlauf der Programmadresse 0) 
+initialisiert werden. Jedoch ist dieser Automatismus für zwei Fälle
+nicht gewünscht:
+\begin{enumerate}
+\item Würde die o.g. Variable \texttt{mainCalled} bei jedem Aufruf
+der Programmadresse 0 initialisiert bzw. zurück gesetzt werden, so wäre die Bedingung in Zeile 2 \todo{verweis} nie gültig, obwohl
+ein Fehlerfall vorläge.
+\item Auch die Funktionspointer-Variable 
+\texttt{void (*initNextTest)(void)}, in der der nächste 
+auszuführende Test gespeichert wird, würde zurückgesetzt werden.
+Automatisiertes Testen wäre somit unmöglich.
+\end{enumerate}
+
+Abhilfe hier schafft das Attribut \texttt{(section (".noinit"))}
+welches dem Compiler vermittelt, dass diese Variablen zwar 
+angelegt, jedoch nicht initialisiert werden sollen.
+\footnote{In gewisser Weise werden sie beim ersten Start des 
+AVR-Simulators auf die angegebenen Werte initialisiert. Daher 
+entsteht beim Compilieren eine Fehlermeldung.}
+
+\begin{lstlisting}[language=C, label=lst:noinit, caption=\texttt{noinit}-Variablen]
+void (*initNextTest)(void) __attribute__ ((section (".noinit"))) = &initSemaphoreTest;
+uint8_t mainCalled __attribute__ ((section (".noinit"))) = 0;
+\end{lstlisting}
