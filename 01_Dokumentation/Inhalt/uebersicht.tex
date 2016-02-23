@@ -200,7 +200,8 @@ ab dieser Stelle unterschiedlich behandelt werden. Wurde
 der Dispatcher vom Timer ausgeführt (\texttt{hardwareISR = 1}),
 muss die Systemzeit
 erhöht werden und gleichzeitig alle bis zu diesem Zeitpunkt
-schlafenden Tasks aufgeweckt werden. Im anderen Fall 
+schlafenden Tasks aufgeweckt\todo{verweis zeiten} werden. Im 
+anderen Fall 
 (\texttt{hardwareISR = 0}) darf dieser Schritt nicht ausgeführt
 werden. Weiterhin muss unterschieden werden, in welchem Zustand
 sich die Task gerade befindet. Wurde sie blockiert
@@ -258,7 +259,7 @@ XX\todo{name?}OS unterstützt folgende Algorithmen:
 \item Prioritätenvererbung (PIP) \todo{verweis}
 \end{itemize}
 \textit{Mit Ausnahme von PIP soll nicht näher auf die
-Implementierung der einzelnen Algorithmen eingegangen, da 
+Implementierung der einzelnen Algorithmen eingegangen werden, da 
 diese weitestgehend bekannt sind.}
 
 \subsection{Idle-Task}

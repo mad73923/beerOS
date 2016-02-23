@@ -3,3 +3,72 @@
 \section{Speicherverwaltung}
 
 \section{Scheduler: Prioritätenvererbung}
+Bei der Umsetzung des Priority-Inheritance-Protocols (PIP) wurde 
+ein flexibler, selbst-lernender Ansatz erarbeitet. Dabei erweitert
+er im Grunde den prioritätengesteuerten Round-Robin Algorithmus
+um zwei Punkte:
+
+\begin{enumerate}
+\item Jede Ressource (darunter fallen auch Teile des 
+Synchronisations-Moduls) erhält jeweils eine eigene Liste.
+Darin wird vermerkt, welche Tasks die Ressource jemals freigegeben
+haben.
+\item Wird nun eine Task durch eine Ressourcenanforderung 
+blockiert, überprüft der Algorithmus, ob eine Task aus der
+in 1. genannten Liste für eine Prioritätenvererbung in Frage
+kommt.
+\end{enumerate}
+
+Diese Methode führt dazu, dass nachdem alle Tasks die benötigten
+Ressourcen mindestens einmal verwendet haben es zu keiner
+Prioritäteninversion kommen kann. Soll diese Bedingung gleich
+zu Beginn gelten, so kann optional die Freigabeliste bereits
+vom Entwickler vorgegeben werden.
+
+\subsection{Blockierung durch Ressourcenanforderung}
+Im Fall einer Blockierung wird über die o.g. Freigabeliste 
+iteriert. Als Bedingung, dass eine Prioritätenvererbung stattfindet
+muss die bevorzugte Task eine niedrigere Priorität haben und
+lauffähig sein (\texttt{state = READY}). Ist beides erfüllt,
+wird der Task temporär die Priorität der blockierten Task 
+zugewiesen und in die Menge der lauffähigen Tasks neu einsortiert.
+
+\begin{lstlisting}[language=C, label=lst:blockedTask, caption=Verwaltung einer blockierten Ressourcenanforderung]
+void prioInheritance_blockedByRessourceRequest(LinkedList* resFreedBy){
+	uint8_t length = linkedList_length(resFreedBy);
+	taskControlBlock* nextTask;
+	if(length){
+		for(uint16_t i = 0; i < length; i++){
+			linkedList_get(resFreedBy, i, &nextTask);
+			if(nextTask->state == READY && nextTask->prio > currentTask->prio){
+				nextTask->prio = currentTask->prio;
+				queue_removeItem(&prioQueue[nextTask->tmpPrio], nextTask);
+				queue_push(&prioQueue[nextTask->prio], nextTask);
+				break;
+			}
+		}
+	}
+}
+\end{lstlisting}
+
+\subsection{Freigabe einer Ressource}
+Wird bei PIP eine Ressource freigegeben, wird zunächst überprüft,
+ob die freigebende Task bereits im der Freigabeliste enthalten ist.
+Ist dies nicht der Fall, wird sie eingetragen. Wichtiger 
+jedoch muss erkannt werden, ob eine Prioritätenvererbung 
+stattgefunden hat. Falls ja, wird die Priorität auf den 
+ursprünglichen Wert (\texttt{tmpPrio}) zurückgesetzt und die Task
+verdrängt, da sie nun die Ressource nicht mehr für sich in
+Anspruch nimmt.
+
+\begin{lstlisting}[language=C, label=lst:freedTask, caption=Ressource wird freigegeben]
+void prioInheritance_ressourceReleased(LinkedList* resFreedBy){
+	if(!linkedList_contains(resFreedBy, currentTask)){
+		linkedList_append(resFreedBy, currentTask);
+	}
+	if(currentTask->tmpPrio != currentTask->prio){
+		currentTask->prio = currentTask->tmpPrio;
+		task_yield();
+	}
+}
+\end{lstlisting}
