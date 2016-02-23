@@ -323,5 +323,30 @@ und zum Einsortieren in die Menge der lauffähigen Tasks an den
 Scheduler übergeben.
 
 \section{Collections}
+Andy's Linked List is soooo geil \todo{mach hinne!}
+
+\texttt{\#ToastGibtsSpäter}
 
 \section{Exceptions}
+Im Entwicklungsprozess sind gute Debugging-Tools obligatorisch.
+Der verwendete AVR-Simulator bietet u.a. Breakpoints, Watches und
+Stacktracing an. Letzteres funktioniert allerdings nicht
+zuverlässig, weshalb eine eigene Stacktracing bzw.
+\texttt{kernelPanic}-Funktion implementiert wurde. Diese findet
+vor allem in den Tests \todo{verweis} Anwendung.
+
+\begin{lstlisting}[language=C, label=lst:kernelPanic, caption=\texttt{kernelPanic}-Exception]
+void kernelPanic(){
+	disableInterrupts();
+	uint32_t calledAt = __builtin_return_address(0);
+	while(1){
+		asm volatile ("nop");
+	}
+}
+\end{lstlisting}
+
+Zum Debugging bietet sich an, einen Breakpoint in Zeile 5 zu
+setzen. In der Variable \texttt{calledAt} kann dann die
+Rücksprungadresse ausgelesen werden. Diese wurde zuvor mithilfe
+der Compilerfunktion \texttt{\_\_builtin\_return\_address(level)}
+ermittelt.
