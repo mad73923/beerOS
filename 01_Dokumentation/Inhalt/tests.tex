@@ -5,6 +5,7 @@ zu können wurde für den AVR-Simulator eine eigene Testbench
 entwickelt. Mit ihr ist es Möglich sämtliche Szenarien 
 durchzutesten und auf Richtigkeit zu überprüfen.
 
+\section{Neustart}
 Für jeden Test sollten dabei eine definierte Umgebung vorliegen,
 welche unabhängig von zuvor ausgeführten Tests sein muss.
 Dadurch kann eine flexible Wiederholbarkeit erreicht werden.
@@ -33,7 +34,9 @@ void beerOS_reboot(){
 	asm volatile ("jmp 0");
 }
 \end{lstlisting}
+\clearpage
 
+\section{\texttt{.noinit}-Variablen}
 Zum Schutz vor einem fehlerhaften mehrfachen Aufrufen der 
 \texttt{main}-Funktion wurde ein Zähler implementiert. Da bei einem
 Neustart ein solcher Aufruf gewollt ist wird die Zählervariable
