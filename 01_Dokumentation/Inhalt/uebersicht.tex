@@ -144,7 +144,8 @@ und vorbereitet werden.
 
 Zur Vorbereitung eines Stacks wird an seiner ersten und letzten 
 Speicherstelle eine Magicnumber\footnote{z.B. AA$_{16} = 
-10101010_{2}$} eingefügt. Mit dieser
+10101010_{2}$}\todo{canary wert? comment in file} %https://en.wikipedia.org/wiki/Buffer_overflow_protection#Canaries ist die gängige bezeichnung, sollten wir das nicht auch so nennen. 
+eingefügt. Mit dieser
 soll erkannt werden, ob es zu einem Stacküberlauf gekommen ist.
 \todo{verweis dispatcher} Zudem wird an die vorletzte Stelle
 die Rücksprungadresse des Programmcodes kopiert, welcher in der
