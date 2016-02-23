@@ -37,7 +37,8 @@ Die minimale Vorraussetzung an die Hardware ist ein Timer
 und ein Interruptsystem.
 Die Periode des Timers muss bekannt oder definierbar sein.
 Sind neben dem als Systemtimer verwendeten Timer noch weitere Timer
-verfügbar (wie das beim \mbox{ATxmega128A1} der Fall ist), können diese vom Entwickler\todo{welcher entwickler, vom OS? auf OS?}frei verwendet werden, 
+verfügbar (wie das beim \mbox{ATxmega128A1} der Fall ist), können diese für andere Zwecke (sei es Anwendung oder Betriebssystem)
+frei verwendet werden, 
 unter der Bedingung, dass der Systemtimer nicht beeinflusst 
 wird.
 
@@ -77,9 +78,9 @@ t_{per} = \frac{7\text{D}00_{16}}{32\text{MHz}} = 1\text{ms}
  \label{eq:intervall}
 \end{equation}
 
-In der Annahme, dass keine kritische Abschnitte verwendet werden
-wird somit in Abständen von $t_{per}$ ein Kontextwechsel herbeigeführt. Sollten kritische Abschnitte\todo{kritische abschnitte oder interruptsperren, comment in file} %eine mutex ist doch auch ein kritischer abschnitt, bei einer mutex wird aber kein interrupt verloren oder?, es werden ja nur beim eintreten und verlassen des kritischen abschnitts die interrupts gesperrt  
-Anwendung finden liegt
+In der Annahme, dass keine Interruptsperren verwendet werden
+wird somit in Abständen von $t_{per}$ ein Kontextwechsel 
+herbeigeführt. Sollten Interruptsperren Anwendung finden liegt
 es am Entwickler, diese möglichst kurz zu halten. Solange sie
 deutlich unter $t_{per}$ liegen gibt es keine Probleme. Bedenklich 
 wird es, wenn die Ausführung des kritischen Bereichs länger als 
@@ -143,9 +144,8 @@ Betriebsystems auch der Speicherbereich des Stacks reserviert
 und vorbereitet werden.
 
 Zur Vorbereitung eines Stacks wird an seiner ersten und letzten 
-Speicherstelle eine Magicnumber\footnote{z.B. AA$_{16} = 
-10101010_{2}$}\todo{canary wert? comment in file} %https://en.wikipedia.org/wiki/Buffer_overflow_protection#Canaries ist die gängige bezeichnung, sollten wir das nicht auch so nennen. 
-eingefügt. Mit dieser
+Speicherstelle ein sogenannter Canary-Wert\footnote{z.B. AA$_{16}
+ = 10101010_{2}$} eingefügt. Mit diesem
 soll erkannt werden, ob es zu einem Stacküberlauf gekommen ist.
 \todo{verweis dispatcher} Zudem wird an die vorletzte Stelle
 die Rücksprungadresse des Programmcodes kopiert, welcher in der
@@ -272,7 +272,7 @@ neue lauffähige Tasks ausgewählt werden können. Die einfachste
 Umsetzung hierfür ist die Initialisierung einer sogenannten 
 Idle-Task, welche in einer Dauerschleife "freiwillig" ihre Zeitscheibe beendet und dadurch den Dispatcher aufruft.
 Wichtig hierbei ist, dass die Idle-Task nie in einen blockierten
-Zustand versetzt werden darf und ihre Priorität auf das Maximum\todo{maximum? niedrigste prio?}
+Zustand versetzt werden darf und ihre Priorität auf das Minimum
 gesetzt wird. Letzteres verhindert, dass die Idle-Task ausgeführt
 wird, obwohl andere Tasks lauffähig sind.
 \begin{lstlisting}[language=C, label=lst:idleYield, caption=Idle-Task und yield]
