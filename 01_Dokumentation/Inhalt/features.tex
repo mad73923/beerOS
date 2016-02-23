@@ -20,12 +20,12 @@ typedef struct{
 \end{lstlisting}
 
 Die Bitfelder \texttt{prev} und \texttt{next} geben den Index des vorherigen bzw. nächsten MemoryHead im Heap Array an.
-Durch die Limitierung auf 12 Bit können maximal $2^12$ Segmente bzw $4*2^12 = 16kb$ addresiert werden.
-Eine Implentierung ohne ein \texttt{prev} wäre auch denkbar, also eine einfach verkettete Liste, es vereinfacht aber das entfernen eines MemoryHeads aus der List wenn ein Speicherbereich freigegeben wird.
+Durch die Limitierung auf 12 Bit können maximal $2^{12}$ Segmente bzw $4\cdot2^{12} = 16\text{kB}$ addresiert werden.
+Eine Implentierung ohne ein \texttt{prev} wäre auch denkbar, also eine einfach verkettete Liste, \todo{wortsalat} es vereinfacht aber das entfernen eines MemoryHeads aus der List wenn ein Speicherbereich freigegeben wird.
 Das \texttt{size} Feld gibt die Größe des zu verwaltenden Speicherbereichs an.
-Da für \texttt{size} 8 Bit bereitstehen können Speicherbereiche mit einer Größe von bis zu $4*2^8 = 1kb$ allokiert werden.
+Da für \texttt{size} 8 Bit bereitstehen können Speicherbereiche mit einer Größe von bis zu $4\cdot2^8 = 1\text{kB}$ allokiert werden.
 
-Es existiert zu jeder Zeit mindestens eine MemoryHead, und zwar das erste Segment des Heaps.
+Es existiert zu jeder Zeit mindestens ein MemoryHead: das erste Segment des Heaps.
 Dieser dient auch als Einstiegspunkt für den Speicherverwaltungsalgorithmus.
 
 \subsection{Algorithmus}
