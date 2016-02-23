@@ -3,6 +3,7 @@
 \section{Speicherverwaltung}
 
 \section{Scheduler: Prioritätenvererbung}
+\label{sect:pip}
 Bei der Umsetzung des Priority-Inheritance-Protocols (PIP) wurde 
 ein flexibler, selbst-lernender Ansatz erarbeitet. Dabei erweitert
 er im Grunde den prioritätengesteuerten Round-Robin Algorithmus
@@ -59,7 +60,7 @@ jedoch muss erkannt werden, ob eine Prioritätenvererbung
 stattgefunden hat. Falls ja, wird die Priorität auf den 
 ursprünglichen Wert (\texttt{tmpPrio}) zurückgesetzt und die Task
 verdrängt, da sie nun die Ressource nicht mehr für sich in
-Anspruch nimmt\todo{verweis zeile 7}.
+Anspruch nimmt (s. Code \ref{lst:freedTask} Zeile 7).
 
 \begin{lstlisting}[language=C, label=lst:freedTask, caption=Ressource wird freigegeben]
 void prioInheritance_ressourceReleased(LinkedList* resFreedBy){

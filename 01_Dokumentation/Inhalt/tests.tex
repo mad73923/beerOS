@@ -1,4 +1,5 @@
 \chapter{Tests}
+\label{chap:tests}
 Um die einzelnen Module des Betriebssystems unabhängig testen
 zu können wurde für den AVR-Simulator eine eigene Testbench
 entwickelt. Mit ihr ist es Möglich sämtliche Szenarien 
@@ -55,7 +56,7 @@ initialisiert werden. Jedoch ist dieser Automatismus für zwei Fälle
 nicht gewünscht:
 \begin{enumerate}
 \item Würde die o.g. Variable \texttt{mainCalled} bei jedem Aufruf
-der Programmadresse 0 initialisiert bzw. zurück gesetzt werden, so wäre die Bedingung in Zeile 2 \todo{verweis} nie gültig, obwohl
+der Programmadresse 0 initialisiert bzw. zurück gesetzt werden, so wäre die Bedingung in Zeile 2 (Code \ref{lst:main}) nie gültig, obwohl
 ein Fehlerfall vorläge.
 \item Auch die Funktionspointer-Variable 
 \texttt{void (*initNextTest)(void)}, in der der nächste 
