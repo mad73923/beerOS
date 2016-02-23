@@ -271,7 +271,7 @@ neue lauffähige Tasks ausgewählt werden können. Die einfachste
 Umsetzung hierfür ist die Initialisierung einer sogenannten 
 Idle-Task, welche in einer Dauerschleife "freiwillig" ihre Zeitscheibe beendet und dadurch den Dispatcher aufruft.
 Wichtig hierbei ist, dass die Idle-Task nie in einen blockierten
-Zustand versetzt werden darf und ihre Priorität auf das Maximum
+Zustand versetzt werden darf und ihre Priorität auf das Maximum\todo{maximum? niedrigste prio?}
 gesetzt wird. Letzteres verhindert, dass die Idle-Task ausgeführt
 wird, obwohl andere Tasks lauffähig sind.
 \begin{lstlisting}[language=C, label=lst:idleYield, caption=Idle-Task und yield]
