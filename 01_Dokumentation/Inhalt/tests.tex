@@ -2,7 +2,7 @@
 \label{chap:tests}
 Um die einzelnen Module des Betriebssystems unabhängig testen
 zu können wurde für den AVR-Simulator eine eigene Testbench
-entwickelt. Mit ihr ist es Möglich sämtliche Szenarien 
+entwickelt. Mit ihr ist es möglich sämtliche Szenarien 
 durchzutesten und auf Richtigkeit zu überprüfen.
 
 \section{Neustart}
@@ -72,7 +72,7 @@ welches dem Compiler vermittelt, dass diese Variablen zwar
 angelegt, jedoch nicht initialisiert werden sollen.
 \footnote{In gewisser Weise werden sie beim ersten Start des 
 AVR-Simulators auf die angegebenen Werte initialisiert. Daher 
-entsteht beim Compilieren eine Fehlermeldung.}
+entsteht beim Compilieren eine Warnmeldung.}
 
 \begin{lstlisting}[language=C, label=lst:noinit, caption=\texttt{noinit}-Variablen]
 void (*initNextTest)(void) __attribute__ ((section (".noinit"))) = &initSemaphoreTest;
