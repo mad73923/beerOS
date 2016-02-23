@@ -1,15 +1,15 @@
 \chapter{Features}
 
 \section{Speicherverwaltung}
-Um dynamische Speicherallokierung zu ermöglichen, was z.B. 
-bei der LinkedList nötig ist, wurde eine Speicherverwaltung implementiert.
-Die Speicherverwaltung erlaubt es Speicherbereiche beliebiger Größe zu allokieren.
+Um dynamische Speicherallokierung zu ermï¿½glichen, was z.B. 
+bei der LinkedList nï¿½tig ist, wurde eine Speicherverwaltung implementiert.
+Die Speicherverwaltung erlaubt es Speicherbereiche beliebiger Grï¿½ï¿½e zu allokieren.
 Der von der Speicherverwaltung genutzte Heap wird durch das anlegen eines Segment-Arrays reserviert.
-Für die Segmente ist eine Größe von 4 Byte gewählt worden.
+Fï¿½r die Segmente ist eine Grï¿½ï¿½e von 4 Byte gewï¿½hlt worden.
 
 \subsection{MemoryHead}
 Zur Verwaltung der auf dem Heap vergebenen Speicherbereiche wird das vor dem jeweiligen Speicherbereich liegende Segment genutzt.
-Dieses Segment wird in einem solchen Fall MemoryHead genannt und ist folgendermaßen aufgebaut (siehe \ref{lst:memoryHead}).
+Dieses Segment wird in einem solchen Fall MemoryHead genannt und ist folgendermaï¿½en aufgebaut (siehe \ref{lst:memoryHead}).
 
 \begin{lstlisting}[language=C, label=lst:memoryHead, caption=MemoryHead Struct]
 typedef struct{
@@ -19,64 +19,63 @@ typedef struct{
 }MemoryHead;
 \end{lstlisting}
 
-Die Bitfelder \texttt{prev} und \texttt{next} geben den Index des vorherigen bzw. nächsten MemoryHead im Heap Array an.
-Durch die Limitierung auf 12 Bit können maximal $2^{12}$ Segmente bzw $4\cdot2^{12} = 16\text{kB}$ addresiert werden.
-Eine Implentierung ohne ein \texttt{prev} wäre auch denkbar, also eine einfach verkettete Liste, \todo{wortsalat} es vereinfacht aber das entfernen eines MemoryHeads aus der List wenn ein Speicherbereich freigegeben wird.
-Das \texttt{size} Feld gibt die Größe des zu verwaltenden Speicherbereichs an.
-Da für \texttt{size} 8 Bit bereitstehen können Speicherbereiche mit einer Größe von bis zu $4\cdot2^8 = 1\text{kB}$ allokiert werden.
+Die Bitfelder \texttt{prev} und \texttt{next} geben den Index des vorherigen bzw. nï¿½chsten MemoryHead im Heap Array an.
+Durch die Limitierung auf 12 Bit kï¿½nnen maximal $2^{12}$ Segmente bzw $4\cdot2^{12} = 16\text{kB}$ adressiert werden.
+Das \texttt{size} Feld gibt die Grï¿½ï¿½e des zu verwaltenden Speicherbereichs an.
+Da fï¿½r \texttt{size} 8 Bit bereitstehen kï¿½nnen Speicherbereiche mit einer Grï¿½ï¿½e von bis zu $4\cdot2^8 = 1\text{kB}$ allokiert werden.
 
 Es existiert zu jeder Zeit mindestens ein MemoryHead: das erste Segment des Heaps.
-Dieser dient auch als Einstiegspunkt für den Speicherverwaltungsalgorithmus.
+Dieser dient auch als Einstiegspunkt fï¿½r den Speicherverwaltungsalgorithmus.
 
 \subsection{Algorithmus}
 Die Speicherverwaltung legt keinen bestimmten Algorithmus fest, sonder erlaubt es beliebige Algorithmen zu implementieren.
-Dazu stellt die Speicherverwaltung zwei Funktionen und eine Hilfsstruktur zur Verfügung.
-Mit der Funktion \texttt{memoryManagement\_next} können iterativ alle freien Speicherbereiche erfragt werden, die eine angegebene Größe nicht unterschreiten.
-Die erwünschte Größe wird als Teil der Struktur \texttt{MemoryRequest} übergeben.
-In dieser Struktur werden von der Funktion Informationen über den nächsten freien Speicherbereich gespeichert.
-Darunter die Id und die Größe des freien Speicherbereichs.
-Liefert die Funktion den Wert 0 zurück sind keine weiteren freien Speicherbereich der angegebenen Größe auf dem Heap verfügbar.
+Dazu stellt die Speicherverwaltung zwei Funktionen und eine Hilfsstruktur zur Verfï¿½gung.
+Mit der Funktion \texttt{memoryManagement\_next} kï¿½nnen iterativ alle freien Speicherbereiche erfragt werden, die eine angegebene Grï¿½ï¿½e nicht unterschreiten.
+Die erwï¿½nschte Grï¿½ï¿½e wird als Teil der Struktur \texttt{MemoryRequest} ï¿½bergeben.
+In dieser Struktur werden von der Funktion Informationen ï¿½ber den nï¿½chsten freien Speicherbereich gespeichert.
+Darunter die Id und die Grï¿½ï¿½e des freien Speicherbereichs.
+Liefert die Funktion den Wert 0 zurï¿½ck sind keine weiteren freien Speicherbereich der angegebenen Grï¿½ï¿½e auf dem Heap verfï¿½gbar.
 
-Um einen Speicherbereich zu belegen steht die Funktion \texttt{memoryManagement\_alloc} zur Verfügung.
-Ihr wird beim Aufrufen ebenfalls ein \texttt{MemoryRequest} übergeben.
+Um einen Speicherbereich zu belegen steht die Funktion \texttt{memoryManagement\_alloc} zur Verfï¿½gung.
+Ihr wird beim Aufrufen ebenfalls ein \texttt{MemoryRequest} ï¿½bergeben.
 Die in der \texttt{MemoryRequest} Stuktur enthaltene Id gibt dabei an welcher Speicherbereich belegt werden soll.
-Der Rückgabewert der Funktion ist die Adresse des allokierten Speicherbereichs.
+Der Rï¿½ckgabewert der Funktion ist die Adresse des allokierten Speicherbereichs.
 
 Im nachfolgenden Codebeispiel \ref{lst:memAlgoBeispiel} ist der Worst Fit Algorithmus mithilfe der beiden vorgestellten Funktionen implementiert.
 
 \lstinputlisting[language=C, label=lst:memAlgoBeispiel, caption=Worst Fit Algorithmus]{./Quellcode/memAlgoExample.c}
 
-\section{Scheduler: Prioritätenvererbung}
+\section{Scheduler: Prioritï¿½tenvererbung}
 \label{sect:pip}
 Bei der Umsetzung des Priority-Inheritance-Protocols (PIP) wurde 
 ein flexibler, selbst-lernender Ansatz erarbeitet. Dabei erweitert
-er im Grunde den prioritätengesteuerten Round-Robin Algorithmus
+er im Grunde den prioritï¿½tengesteuerten Round-Robin Algorithmus
 um zwei Punkte:
 
 \begin{enumerate}
 \item Jede Ressource (darunter fallen auch Teile des 
-Synchronisations-Moduls) erhält jeweils eine eigene Liste.
+Synchronisations-Moduls) erhï¿½lt jeweils eine eigene Liste.
 Darin wird vermerkt, welche Tasks die Ressource jemals freigegeben
 haben.
 \item Wird nun eine Task durch eine Ressourcenanforderung 
-blockiert, überprüft der Algorithmus, ob eine Task aus der
-in 1. genannten Liste für eine Prioritätenvererbung in Frage
+blockiert, ï¿½berprï¿½ft der Algorithmus, ob eine Task aus der
+in 1. genannten Liste fï¿½r eine Prioritï¿½tenvererbung in Frage
 kommt.
 \end{enumerate}
 
-Diese Methode führt dazu, dass nachdem alle Tasks die benötigten
+Diese Methode fï¿½hrt dazu, dass nachdem alle Tasks die benï¿½tigten
 Ressourcen mindestens einmal verwendet haben es zu keiner
-Prioritäteninversion kommen kann. Soll diese Bedingung gleich
+Prioritï¿½teninversion kommen kann. Soll diese Bedingung gleich
 zu Beginn gelten, so kann optional die Freigabeliste bereits
 vom Entwickler vorgegeben werden.
 
 \subsection{Blockierung durch Ressourcenanforderung}
-Im Fall einer Blockierung wird über die o.g. Freigabeliste 
-iteriert. Als Bedingung, dass eine Prioritätenvererbung stattfindet
-muss die bevorzugte Task eine niedrigere Priorität haben und
-lauffähig sein (\texttt{state = READY}). Ist beides erfüllt,
-wird der Task temporär die Priorität der blockierten Task 
-zugewiesen und in die Menge der lauffähigen Tasks neu einsortiert.
+Im Fall einer Blockierung wird ï¿½ber die o.g. Freigabeliste 
+iteriert. Als Bedingung, dass eine Prioritï¿½tenvererbung stattfindet
+muss die bevorzugte Task eine niedrigere Prioritï¿½t haben und
+lauffï¿½hig sein (\texttt{state = READY}). Ist beides erfï¿½llt,
+wird der Task temporï¿½r die Prioritï¿½t der blockierten Task 
+zugewiesen und in die Menge der lauffï¿½higen Tasks neu einsortiert.
 
 \begin{lstlisting}[language=C, label=lst:blockedTask, caption=Verwaltung einer blockierten Ressourcenanforderung]
 void prioInheritance_blockedByRessourceRequest(LinkedList* resFreedBy){
@@ -97,13 +96,13 @@ void prioInheritance_blockedByRessourceRequest(LinkedList* resFreedBy){
 \end{lstlisting}
 
 \subsection{Freigabe einer Ressource}
-Wird bei PIP eine Ressource freigegeben, wird zunächst überprüft,
+Wird bei PIP eine Ressource freigegeben, wird zunï¿½chst ï¿½berprï¿½ft,
 ob die freigebende Task bereits im der Freigabeliste enthalten ist.
 Ist dies nicht der Fall, wird sie eingetragen. Wichtiger 
-jedoch muss erkannt werden, ob eine Prioritätenvererbung 
-stattgefunden hat. Falls ja, wird die Priorität auf den 
-ursprünglichen Wert (\texttt{tmpPrio}) zurückgesetzt und die Task
-verdrängt, da sie nun die Ressource nicht mehr für sich in
+jedoch muss erkannt werden, ob eine Prioritï¿½tenvererbung 
+stattgefunden hat. Falls ja, wird die Prioritï¿½t auf den 
+ursprï¿½nglichen Wert (\texttt{tmpPrio}) zurï¿½ckgesetzt und die Task
+verdrï¿½ngt, da sie nun die Ressource nicht mehr fï¿½r sich in
 Anspruch nimmt (s. Code \ref{lst:freedTask} Zeile 7).
 
 \begin{lstlisting}[language=C, label=lst:freedTask, caption=Ressource wird freigegeben]
