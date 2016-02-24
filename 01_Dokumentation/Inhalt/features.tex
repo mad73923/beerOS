@@ -4,7 +4,7 @@
 Um dynamische Speicherallokierung zu ermöglichen, was z.B. 
 bei der LinkedList nötig ist, wurde eine Speicherverwaltung implementiert.
 Die Speicherverwaltung erlaubt es Speicherbereiche beliebiger Größe zu allokieren.
-Der von der Speicherverwaltung genutzte Heap wird durch das anlegen eines Segment-Arrays reserviert.
+Der von der Speicherverwaltung genutzte Heap wird durch das Anlegen eines Segment-Arrays reserviert.
 Für die Segmente ist eine Größe von 4 Byte gewählt worden.
 
 \subsection{MemoryHead}
@@ -29,7 +29,7 @@ Es existiert zu jeder Zeit mindestens ein MemoryHead: das erste Segment des Heap
 Dieser dient auch als Einstiegspunkt für den Speicherverwaltungsalgorithmus.
 
 \subsection{Algorithmus}
-Die Speicherverwaltung legt keinen bestimmten Algorithmus fest, sonder erlaubt es beliebige Algorithmen zu implementieren.
+Die Speicherverwaltung legt keinen bestimmten Algorithmus fest, sondern erlaubt es beliebige Algorithmen zu implementieren.
 Dazu stellt die Speicherverwaltung zwei Funktionen und eine Hilfsstruktur zur Verfügung.
 Mit der Funktion \texttt{memoryManagement\_next} können iterativ alle freien Speicherbereiche erfragt werden, die eine angegebene Größe nicht unterschreiten.
 Die erwünschte Größe wird als Teil der Struktur \texttt{MemoryRequest} übergeben.

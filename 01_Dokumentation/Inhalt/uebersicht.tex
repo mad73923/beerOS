@@ -9,8 +9,9 @@ das eigentliche Betriebssystem gestartet werden kann, müssen zudem
 diverse Strukturen für die Tasks aufgestellt werden, sodass diese
 unabhängig voneinander lauffähig sind (s. \ref{sect:structs}).
 Zum Starten des Systems wird mittels eines modifizierten Aufrufs
-der Dispatcher (s. \ref{sect:dispatcher}) erstmalig durchlaufen und die erste Task zum Ausführen
-vorbereitet. Dabei wird auch der Scheduler aufgerufen, der, abhängig vom
+die erste Task ausgeführt und der Dispatcher 
+(s. \ref{sect:dispatcher}) erstmalig durchlaufen.
+Dabei wird auch der Scheduler aufgerufen, der, abhängig vom
 ausgewählten Algorithmus, die nächste Task bestimmt (s. \ref{sect:scheduler}).
 
 Die soeben genannten Module würden für ein multitasking-fähiges
@@ -29,11 +30,11 @@ Programmcodes.
 \section{Hardware}
 \label{sect:hardware}
 Als Zielplattform wurde die weit verbreitete AVR-Serie von Atmel
-verwendet. Jedoch wurde während der Umsetzung darauf geachtet, 
+gewählt. Jedoch wurde während der Umsetzung darauf geachtet, 
 dass bei einem Plattformwechsel möglichst wenig Code angepasst
 werden muss. Als Entwicklungstool wurde der AVR-Simulator verwendet,
 welcher innherhalb des AVR-Studios von Atmel bereitgestellt wird.
-Als Zielbaustein wurde der \mbox{ATxmega128A1} gewählt.
+Der Zielbaustein ist der \mbox{ATxmega128A1}.
 
 Die minimale Vorraussetzung an die Hardware ist ein Timer
 und ein Interruptsystem.
@@ -52,10 +53,10 @@ Peripherie erzeugt werden.
 \subsection{Dispatcher Timer}
 Damit nach Ablauf der Zeitscheibe einer Task der Dispatcher 
 aufgerufen wird, muss ein Dispatcher Timer initialisiert werden.
-Dieser löst, unabhängig vom Ausführungszustand
-\footnote{Es sei denn, die Task befindet sich in einem kritischen 
+Dieser löst, unabhängig vom Ausführungszustand\footnote{Es sei
+denn, die Task befindet sich in einem kritischen 
 (Interrupt gesperrten) Abschnitt} der aktuellen Task, einen 
-Interrupt aus, in dessen \gls{ISR} der Dispatcher aufgerufen
+Interrupt aus, in dessen \gls{ISR} der Dispatcher ausgeführt
 wird. Außerdem dient der Timer zur Berechnung der aktuellen
 Systemzeit.
 
@@ -85,7 +86,7 @@ wird somit in Abständen von $t_{per}$ ein Kontextwechsel
 herbeigeführt. Sollten Interruptsperren Anwendung finden liegt
 es am Entwickler, diese möglichst kurz zu halten. Solange sie
 deutlich unter $t_{per}$ liegen gibt es keine Probleme. Bedenklich 
-wird es, wenn die Ausführung des kritischen Bereichs länger als 
+wird es, wenn die Ausführung des interrupt-geschützten Bereichs länger als 
 $t_{per}$ dauert,
 da hierbei ein oder im schlimmsten Fall gleich mehrere 
 Interruptsignale verloren gehen und dadurch u.a. die Systemzeit
@@ -94,7 +95,7 @@ nicht mehr präzise ist.
 \subsection{Interrupts}
 Auch die Konfiguration des Interruptsystems ist nicht besonders
 aufwändig. Auf dem \mbox{ATxmega128A1} muss jediglich das
-dem Dispatcher Timer entsprechende Interuptlevel scharf gestellt
+dem Dispatcher Timer entsprechende Interruptlevel scharf gestellt
 und das globale Interruptenable gesetzt werden.
 
 Da die Funktionen zum Löschen oder Setzen des Interrupts auch
@@ -102,7 +103,7 @@ mit dem Betreten oder Verlassen eines kritischen Abschnitts
 gleichzusetzen sind, werden sie plattformunabhängig exportiert.
 Wichtig hierbei ist nur, dass die Funktionen inline aufgerufen
 werden, sodass im Anwendungsfall der Stack nicht manipuliert wird.
-Dies wird beim AVR-Compiler durch das Attribut 
+Dies wird beim AVR-Compiler mittels dem Attribut 
 \texttt{always\_inline} verwirklicht.
 \begin{lstlisting}[language=C, label=lst:interruptDisEnable, caption=Export der Interruptfunktionen]
 static void __attribute__((always_inline)) enableInterrupts(){
@@ -142,6 +143,7 @@ typedef volatile struct strucTCB{
 \end{lstlisting}
 
 \subsection{Stack und Stackpointer}
+\label{sect:stack}
 Zur Initialisierung eines \gls{TCB} gehört auch der eigentliche
 Stack sowie dessen Pointer. Daher muss vor dem Start des
 Betriebsystems auch der Speicherbereich des Stacks reserviert
@@ -221,7 +223,7 @@ neu eingereiht werden (s. \ref{sect:scheduler}).
 
 \label{sect:overflow}
 Bevor der Scheduler aufgerufen wird, überprüft der Dispatcher
-mittels Magicnumber den Stack auf einen Überlauf. Sollte dies
+mittels Canary-Wert (s. \ref{sect:stack}) den Stack auf einen Überlauf. Sollte dies
 der Fall sein, wird ein \texttt{kernelPanic}-Fehler ausgelöst 
 (s. \ref{sect:exceptions}).
 
@@ -230,7 +232,7 @@ der Fall sein, wird ein \texttt{kernelPanic}-Fehler ausgelöst
 Abhängig vom ausgewählten Algorithmus wählt der Scheduler
 die nächste auszuführende Task aus. Außerdem verwaltet er
 die anstehenden, lauffähigen Tasks. Zum Systemstart kann
-der gewünschte Scheduleralgorithmus ausgewählt werden(s. Code 
+der gewünschte Scheduleralgorithmus ausgewählt werden (s. Code 
 \ref{lst:systemstart}).
 Zudem kann er sogar in Laufzeit geändert werden. Dazu
 muss einfach die Initialisierungsfunktion des neuen 
@@ -260,7 +262,7 @@ Die Funktionen \texttt{scheduler\_blockedByRessourceRequest} und
 \texttt{scheduler\_ressourceReleased} werden nur von wenigen 
 Scheduleralgorithmen benötigt. Im AVR OS sind sie
 ausschließlich im Prioritätenvererbungs-Algorithmus (PIP) zu 
-finden. (s. \ref{sect:pip}) Sollten sie vom Algorithmus nicht
+finden (s. \ref{sect:pip}). Sollten sie vom Algorithmus nicht
 verwendet werden müssen sie dennoch mit einem leeren Körper
 implementiert werden.
 
@@ -276,7 +278,7 @@ Implementierung der einzelnen Algorithmen eingegangen werden, da
 diese weitestgehend bekannt sind.}
 
 \subsection{Idle-Task}
-Ist keine der Tasks zum gleichen Zeitpunkt im lauffähigen 
+Ist zum gleichen Zeitpunkt keine der Tasks im lauffähigen 
 Zustand muss es dennoch eine Möglichkeit
 geben, dass der Dispatcher immerfort aufgerufen wird, damit
 neue lauffähige Tasks ausgewählt werden können. Die einfachste
@@ -353,7 +355,7 @@ aufsteigend nach \texttt{waitUntil} einsortiert. Die Sortierung
 vereinfacht das spätere Aufwecken.
 
 Wird nun der Dispatcher (s. \ref{sect:dispatcher}) vom Dispatcher-Timer
-ausgelöst wird die Systemzeit inkrementiert. Aufgrund der Änderung
+ausgelöst, wird die Systemzeit inkrementiert. Aufgrund der Änderung
 muss überprüft werden, ob es Tasks gibt, die bis zu diesem
 Zeitpunkt ins Schlafen versetzt wurden. Dazu wird über die
 o.g. Liste iteriert, die entsprechenden Tasks aufgeweckt
@@ -367,7 +369,7 @@ Um dies zu vereinfachen wurde eine \texttt{LinkedList} implementiert.
 
 Es handelt sich hierbei um eine gewöhnliche einfach verkettete Liste.
 Neben den Standartfunktionen, wie das Hinzufügen, Entfernen und Suchen eines Elements sind außerdem einige Hilfsfunktionen implementiert die z.B. das erste oder letzte Element einer Liste zurückgeben.
-Außerdem steht eine Iteratorfunktion zu Verfügung, die in Kombination mit einer \texttt{while}-Schleife eine Art \texttt{forEach}-Schleife ergibt.
+Außerdem steht eine Iteratorfunktion zur Verfügung, die in Kombination mit einer \texttt{while}-Schleife eine Art \texttt{forEach}-Schleife ergibt.
 Ihre Anwendung ist im nachfolgenden Codebeispiel \ref{lst:listIter} demonstriert.
 
 \begin{lstlisting}[language=C, label=lst:listIter, caption=Iteratorfunktion der \texttt{LinkedList}]
