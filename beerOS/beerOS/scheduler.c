@@ -28,8 +28,6 @@ void beerOS_start(taskControlBlock* firstTask, void (*scheduler_init)(void)){
 	
 	scheduler_init();
 	time_init();
-	memoryManagement_preStart();
-	linkedList_preStart();
 	
 	firstTask->state = RUNNING;
 	mainSP = SP;

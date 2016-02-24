@@ -7,7 +7,6 @@ uint16_t firstMemHead = 0;
 
 memoryAlgorithm memAlgo;
 MemoryHead* memoryHeadFromPointer(uint16_t *ptr);
-semaphore memSema;
 
 void memoryManagement_initModule(memoryAlgorithm m){
 	memAlgo = m;
@@ -48,12 +47,6 @@ uint16_t memoryManagement_next(MemoryRequest *memoryRequest){
 	memoryRequest->gapSize = gap;
 	return lastIndex + 1;	
 }
-
-
-void memoryManagement_preStart(){
-	semaphore_init(&memSema, 1);
-}
-
 
 void* memoryManagement_alloc(MemoryRequest *memoryRequest){
 	uint16_t memIdBefore = memoryRequest->memId - 1;
