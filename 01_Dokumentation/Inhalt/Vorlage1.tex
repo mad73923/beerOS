@@ -1,0 +1,38 @@
+\chapter{Hauptüberschrift}
+\label{kap:Kapitel}
+
+\section{Unterüberschrift}
+\label{kap:Kapitel:Section}
+Hier kommt ein Test. Weiterer Text.\\
+Hier kommt ein Test.~Weiterer text.
+
+\subsection{UnterUnterÜberschrift}
+\label{kap:Kapitel:Section:Subsection}
+Dies ist ein normaler Text. Dies ist eine Referenz auf etwas im Quellenverzeichnis: \cite{Test}. Und so wird ein Bild referenziert: siehe Abbildung\,\ref{fig:Bildname}. Auch eine Referenzierung auf ein Kapitel geht mit \ref{kap:Kapitel:Section}.
+
+\begin{figure}[htp]
+	\centering
+	\includegraphics[width=0.5\textwidth]{Bilder/Test.jpg}
+	\caption[Titel im Abbildungsverzeichnis]{Titel unter Bild}
+	\label{fig:Bildname}
+\end{figure}
+
+Hier folgt ein Abstand von 2.5 cm:\\
+\vspace{2.5cm}
+
+So wir eine Box erstellt:\\
+
+\setlength{\fboxrule}{2pt} %Liniendicke
+\setlength{\fboxsep}{2ex} %Abstand zwischen Rahmen und Inhalt
+\begin{center}
+	\framebox[\textwidth]{
+	\begin{minipage}{0.94\textwidth}
+		Dies ist Beispielstext. Dies ist Beispielstext. Dies ist Beispielstext. Dies ist Beispielstext. Dies ist Beispielstext. Dies ist Beispielstext. Dies ist Beispielstext. Dies ist Beispielstext. Dies ist Beispielstext. Dies ist Beispielstext. Dies ist Beispielstext. Dies ist Beispielstext. Dies ist Beispielstext. Dies ist Beispielstext. Dies ist Beispielstext. Dies ist Beispielstext. 
+	\end{minipage}
+	}
+\end{center}
+
+\section{Unterüberschrift2}
+\label{kap:Kapitel:Section2}
+Quellcode kann mit dem Listing-Befehl eingebunden werden (siehe Code \ref{lst:Beispiel}):
+\lstinputlisting[language=C, label=lst:Beispiel, caption=Hello World in C]{./Quellcode/Bsp.c}

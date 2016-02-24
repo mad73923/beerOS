@@ -1,0 +1,60 @@
+\newgeometry{left=1.8cm,right=0.9cm,bottom=1.3cm,top=1.5cm}
+\thispagestyle{plain}
+\ifthenelse{\equal{\layoutpres}{htwg}}
+{
+	\ThisTileWallPaper{\paperwidth}{\paperheight}{Bilder/Cover_HTWG.pdf}
+}{}
+\begin{titlepage}	
+		\sffamily
+			\begin{minipage}[t!]{0.35\textwidth}
+			\begin{flushleft}
+				\ifthenelse{\equal{\layoutpres}{htwg}}
+				{
+					\includegraphics[width=0.75\textwidth]{Bilder/HTWG_Logo}
+				}{}
+			\end{flushleft}
+			\end{minipage}
+			\hfill
+			\begin{minipage}[t!]{0.5\textwidth}
+			\begin{flushright}
+			
+			\end{flushright}
+			\end{minipage}
+			%\vfill
+			\vskip 1cm
+			\hskip 8.5cm
+		\begin{minipage}[t!]{0.57\textwidth}
+			\begin{flushleft}
+				\hfill
+				\vskip 2cm
+				{\fontsize{45}{10}\textsc{\art}}
+				\vskip 2.7cm
+				{\Huge\titel\\}
+			\end{flushleft}
+		\end{minipage}
+			\vfill
+
+			\begin{minipage}[!b]{0.38\textwidth}
+			\hfill
+			\end{minipage}
+			\quad
+			{\normalsize
+			\begin{minipage}[!b]{0.57\textwidth}
+				\begin{minipage}[t]{0.38\textwidth}
+						Name:\\
+						\\
+						Betreuer:\\
+						Bearbeitungszeit:\\
+				\end{minipage}
+				\begin{minipage}[t]{0.57\textwidth}
+					\autor\\
+					\autors\\
+					\betreuer\\
+					\bearbeitungszeit
+				\end{minipage}
+			\end{minipage}
+			}
+%		\end{addmargin}
+	\ClearWallPaper
+\end{titlepage}
+\restoregeometry
